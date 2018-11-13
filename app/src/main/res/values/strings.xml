@@ -1,0 +1,49 @@
+<resources>
+    <string name="app_name">Agropragueiro</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- gerais -->
+    <string name="clientes">Clientes</string>
+    <string name="fazendas">Fazendas</string>
+    <string name="ok">OK</string>
+    <string name="cadastrar">Cadastrar</string>
+    <string name="nome">Nome</string>
+    <string name="uf">UF</string>
+    <string name="cidade">Cidade</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="categoria">Categoria</string>
+    <string name="n_o_existem_dados_cadastrados">Não existem dados cadastrados!</string>
+    <string name="titulo_opcoes_card">Selecione uma opção abaixo</string>
+
+    <string-array name="opcoes_cliente_card">
+        <item>Ver fazendas</item>
+        <item>Editar</item>
+        <item>Excluir</item>
+    </string-array>
+
+    <string-array name="opcoes_fazenda_card">
+        <item>Ver talhões</item>
+        <item>Editar</item>
+        <item>Excluir</item>
+    </string-array>
+
+    <!-- mensagens -->
+    <string name="sucesso">Dados cadastrados com sucesso !</string>
+    <string name="erro">Erro ao cadastrar dados !</string>
+    <string name="cancelada">Ação cancelada !</string>
+
+    <!-- cliente -->
+    <string name="cadastrar_cliente">Cadastrar Cliente</string>
+    <string name="cliente_erro_cadastro">O nome deve ter mais que 4 caracteres e a cidade mais que 2</string>
+    <string name="minimo_4_caracteres">Mínimo 4 caracteres</string>
+    <string name="minimo_2_caracteres">Mínimo 2 caracteres</string>
+    <string name="talhoes">Talhões</string>
+    <string name="amostragens">Amostragens</string>
+
+</resources>
