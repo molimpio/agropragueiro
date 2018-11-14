@@ -1,16 +1,29 @@
 package br.net.olimpiodev.agropragueiro.model;
 
-import java.io.Serializable;
+import br.net.olimpiodev.agropragueiro.utils.Utils;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.Required;
 
-public class Cliente implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class Cliente extends RealmObject {
+    @PrimaryKey
     private int id;
+
+    @Required
     private String nome;
+
+    @Required
     private String categoria;
+
+    @Required
     private String uf;
+
+    @Required
     private String cidade;
-    private int usuarioId;
+
+    @Required
+    private Integer usuarioId;
+
     private Boolean ativo;
     private Boolean sincronizado;
     private int origem;
@@ -18,6 +31,11 @@ public class Cliente implements Serializable {
     private int updatedBy;
 
     public Cliente() {
+        ativo = true;
+        sincronizado = false;
+        origem = 1;
+        lastUpdated = Utils.getDataNow();
+        updatedBy = 1; // TODO: vem do usuario logado
     }
 
     public int getId() {

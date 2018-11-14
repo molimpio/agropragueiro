@@ -1,42 +1,37 @@
 package br.net.olimpiodev.agropragueiro.adapter;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.List;
-
 import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.model.Cliente;
+import io.realm.RealmResults;
+import io.realm.RealmRecyclerViewAdapter;
 
-public class ClienteAdapter extends RecyclerView.Adapter<ClienteAdapter.ClienteViewHolder> {
+public class ClienteAdapter extends RealmRecyclerViewAdapter<Cliente, ClienteAdapter.ClienteViewHolder> {
 
-    private List<Cliente> clientes;
-    private Context context;
+    private RealmResults<Cliente> clientes;
     private static ClienteAdapter.ItemClickListener clickListener;
-    private Cliente cliente;
 
-    public ClienteAdapter(List<Cliente> clientes, Context context) {
+    public ClienteAdapter(RealmResults<Cliente> clientes) {
+        super(clientes, true);
         this.clientes = clientes;
-        this.context = context;
     }
 
-    @NonNull
     @Override
     public ClienteViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.cliente_card, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.cliente_card, viewGroup, false);
         return new ClienteViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ClienteViewHolder clienteViewHolder, int position) {
-        cliente = clientes.get(position);
+        Cliente cliente = clientes.get(position);
 
         String cidadeEstado = "Cidade: " + cliente.getCidade() + " - UF: " + cliente.getUf();
         clienteViewHolder.nome.setText(cliente.getNome());

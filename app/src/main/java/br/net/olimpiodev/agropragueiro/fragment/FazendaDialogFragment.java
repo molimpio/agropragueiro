@@ -106,12 +106,12 @@ public class FazendaDialogFragment extends DialogFragment {
         adapterUfs.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         spUfFaz.setAdapter(adapterUfs);
 
-        ClienteDao clienteDao = new ClienteDao();
-        ArrayList<Cliente> clientes = clienteDao.getIdNome();
-        ArrayAdapter<Cliente> adapterClientes = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_item, clientes);
-        adapterClientes.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-        spClienteFaz.setAdapter(adapterClientes);
+//        ClienteDao clienteDao = new ClienteDao();
+//        ArrayList<Cliente> clientes = clienteDao.getIdNome();
+//        ArrayAdapter<Cliente> adapterClientes = new ArrayAdapter<>(getContext(),
+//                android.R.layout.simple_spinner_item, clientes);
+//        adapterClientes.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+//        spClienteFaz.setAdapter(adapterClientes);
     }
 
     private void validarNomeCidade() {

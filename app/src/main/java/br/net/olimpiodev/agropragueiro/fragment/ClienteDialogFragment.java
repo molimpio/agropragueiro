@@ -126,15 +126,15 @@ public class ClienteDialogFragment extends DialogFragment {
         String uf = spUfCliente.getSelectedItem().toString().toUpperCase();
         String categoria = spCategoriaCliente.getSelectedItem().toString().toUpperCase();
 
-        Cliente cliente = new Cliente();
-        cliente.setNome(nome);
-        cliente.setCategoria(categoria);
-        cliente.setUf(uf);
-        cliente.setCidade(cidade);
-
-        ClienteDao clienteDao = new ClienteDao();
-        clienteDao.salvar(cliente);
-        Utils.showMessage(getContext(), "", 1);
+//        Cliente cliente = new Cliente();
+//        cliente.setNome(nome);
+//        cliente.setCategoria(categoria);
+//        cliente.setUf(uf);
+//        cliente.setCidade(cidade);
+//
+//        ClienteDao clienteDao = new ClienteDao();
+//        clienteDao.salvar(cliente);
+//        Utils.showMessage(getContext(), "", 1);
         alertDialog.dismiss();
     }
 

@@ -1,6 +1,5 @@
 package br.net.olimpiodev.agropragueiro.fragment;
 
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -22,13 +21,17 @@ import br.net.olimpiodev.agropragueiro.adapter.ClienteAdapter;
 import br.net.olimpiodev.agropragueiro.dao.ClienteDao;
 import br.net.olimpiodev.agropragueiro.model.Cliente;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class ClienteListaFragment extends Fragment {
 
-    public ClienteListaFragment() { }
+    public ClienteListaFragment() {
+    }
 
+    private Realm realm;
+    private RealmResults<Cliente> clientes;
     private ClienteAdapter clienteAdapter;
-    private List<Cliente> clientes;
     private RecyclerView rvClientes;
     private TextView tvListaVazia;
     private FloatingActionButton fabCadastroCliente;
@@ -52,13 +55,14 @@ public class ClienteListaFragment extends Fragment {
     }
 
     private void startRecyclerView(View view) {
-        ClienteDao clienteDao = new ClienteDao();
-        clientes = clienteDao.listar();
+        realm = Realm.getDefaultInstance();
+        ClienteDao clienteDao = new ClienteDao(getContext());
+        clientes = clienteDao.getAll();
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvClientes.setLayoutManager(layoutManager);
 
-        clienteAdapter = new ClienteAdapter(clientes, getContext());
+        clienteAdapter = new ClienteAdapter(clientes);
         rvClientes.setAdapter(clienteAdapter);
 
         clienteAdapter.setClickListener(new ClienteAdapter.ItemClickListener() {
@@ -111,7 +115,7 @@ public class ClienteListaFragment extends Fragment {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     dialogInterface.dismiss();
-                    Log.i("item", ""+i);
+                    Log.i("item", "" + i);
                 }
             });
 
