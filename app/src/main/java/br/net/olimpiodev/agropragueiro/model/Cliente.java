@@ -84,23 +84,6 @@ public class Cliente implements Serializable {
         this.sincronizado = sincronizado;
     }
 
-    @Override
-    public String toString() {
-        return "Cliente{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", categoria='" + categoria + '\'' +
-                ", uf='" + uf + '\'' +
-                ", cidade='" + cidade + '\'' +
-                ", usuarioId=" + usuarioId +
-                ", ativo=" + ativo +
-                ", sincronizado=" + sincronizado +
-                ", origem=" + origem +
-                ", lastUpdated='" + lastUpdated + '\'' +
-                ", updatedBy=" + updatedBy +
-                '}';
-    }
-
     public int getOrigem() {
         return origem;
     }
@@ -123,5 +106,31 @@ public class Cliente implements Serializable {
 
     public void setUpdatedBy(int updatedBy) {
         this.updatedBy = updatedBy;
+    }
+
+    @Override
+    public String toString() {
+        return "Cliente{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", categoria='" + categoria + '\'' +
+                ", uf='" + uf + '\'' +
+                ", cidade='" + cidade + '\'' +
+                ", usuarioId=" + usuarioId +
+                ", ativo=" + ativo +
+                ", sincronizado=" + sincronizado +
+                ", origem=" + origem +
+                ", lastUpdated='" + lastUpdated + '\'' +
+                ", updatedBy=" + updatedBy +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Cliente) {
+            Cliente c = (Cliente) obj;
+            if (c.getNome().equals(nome) && getId() == id) return true;
+        }
+        return false;
     }
 }

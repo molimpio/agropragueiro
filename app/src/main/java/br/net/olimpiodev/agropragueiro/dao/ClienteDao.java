@@ -27,6 +27,21 @@ public class ClienteDao {
         return c;
     }
 
+    public ArrayList<Cliente> getIdNome() {
+        ArrayList<Cliente> lista = new ArrayList<>();
+        Cliente c = new Cliente();
+        c.setId(1);
+        c.setNome("AGROPIRA");
+
+        Cliente c1 = new Cliente();
+        c.setId(2);
+        c1.setNome("AGROSANCA");
+
+        lista.add(c);
+        lista.add(c1);
+        return lista;
+    }
+
     public void salvar(Cliente c) {
         c.setUsuarioId(1); //TODO: vem do usuario logado
         c.setLastUpdated(Utils.getDataNow());

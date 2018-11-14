@@ -42,8 +42,8 @@ public class FazendaListaFragment extends Fragment {
         fabCadastroFazenda.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                ClienteDialogFragment cdf = new ClienteDialogFragment();
-//                cdf.show(getFragmentManager(), "frag");
+                FazendaDialogFragment fdf = new FazendaDialogFragment();
+                fdf.show(getFragmentManager(), "fragF");
             }
         });
         startRecyclerView(view);

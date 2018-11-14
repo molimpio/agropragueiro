@@ -46,4 +46,9 @@
     <string name="talhoes">Talhões</string>
     <string name="amostragens">Amostragens</string>
 
+    <!-- fazenda -->
+    <string name="cadastrar_fazenda">Cadastrar Fazenda</string>
+    <string name="cliente">Cliente</string>
+    <string name="observacao">Observação</string>
+
 </resources>
