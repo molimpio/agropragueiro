@@ -13,12 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.List;
 import java.util.Objects;
 
 import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.adapter.ClienteAdapter;
-import br.net.olimpiodev.agropragueiro.dao.ClienteDao;
 import br.net.olimpiodev.agropragueiro.model.Cliente;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 import io.realm.Realm;
@@ -26,15 +24,8 @@ import io.realm.RealmResults;
 
 public class ClienteListaFragment extends Fragment {
 
-    public ClienteListaFragment() {
-    }
-
-    private Realm realm;
-    private RealmResults<Cliente> clientes;
-    private ClienteAdapter clienteAdapter;
     private RecyclerView rvClientes;
     private TextView tvListaVazia;
-    private FloatingActionButton fabCadastroCliente;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,7 +33,7 @@ public class ClienteListaFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_cliente_lista, container, false);
         rvClientes = view.findViewById(R.id.rv_clientes);
         tvListaVazia = view.findViewById(R.id.tv_lista_vazia_cliente);
-        fabCadastroCliente = view.findViewById(R.id.fab_cadastro_cliente);
+        FloatingActionButton fabCadastroCliente = view.findViewById(R.id.fab_cadastro_cliente);
         fabCadastroCliente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -55,14 +46,14 @@ public class ClienteListaFragment extends Fragment {
     }
 
     private void startRecyclerView(View view) {
-        realm = Realm.getDefaultInstance();
-        ClienteDao clienteDao = new ClienteDao();
-        clientes = clienteDao.getAll();
+        RealmResults<Cliente> clientes = Realm.getDefaultInstance().where(Cliente.class)
+                .equalTo("ativo", true)
+                .findAll().sort("nome");
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvClientes.setLayoutManager(layoutManager);
 
-        clienteAdapter = new ClienteAdapter(clientes);
+        ClienteAdapter clienteAdapter = new ClienteAdapter(clientes);
         rvClientes.setAdapter(clienteAdapter);
 
         clienteAdapter.setClickListener(new ClienteAdapter.ItemClickListener() {

@@ -22,14 +22,11 @@ import br.net.olimpiodev.agropragueiro.utils.Utils;
 public class ClienteDialogFragment extends DialogFragment {
 
     private View view;
-    private EditText etNomeCliente;
-    private EditText etCidadeCliente;
-    private Spinner spUfCliente;
-    private Spinner spCategoriaCliente;
+    private EditText etNomeCliente, etCidadeCliente;
+    private Spinner spUfCliente, spCategoriaCliente;
     private Button btCadastrarCliente;
     private AlertDialog alertDialog;
-    private String nome;
-    private String cidade;
+    private Cliente cliente;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -39,6 +36,7 @@ public class ClienteDialogFragment extends DialogFragment {
         builder.setView(view);
         setRefs();
         alertDialog = builder.create();
+        cliente = new Cliente();
         return alertDialog;
     }
 
@@ -47,9 +45,9 @@ public class ClienteDialogFragment extends DialogFragment {
         etCidadeCliente = view.findViewById(R.id.et_cidade_cliente);
         spUfCliente = view.findViewById(R.id.sp_uf_cliente);
         spCategoriaCliente = view.findViewById(R.id.sp_categoria_cliente);
+
         Button btCancelarCliente = view.findViewById(R.id.bt_cancelar_cliente);
         btCadastrarCliente = view.findViewById(R.id.bt_cadastrar_cliente);
-        startSpinners();
 
         etNomeCliente.addTextChangedListener(new TextWatcher() {
             @Override
@@ -77,20 +75,14 @@ public class ClienteDialogFragment extends DialogFragment {
             }
         });
 
-        btCancelarCliente.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Utils.showMessage(getContext(), "", 3);
-                alertDialog.dismiss();
-            }
+        btCancelarCliente.setOnClickListener(view -> {
+            Utils.showMessage(getContext(), "", 3);
+            alertDialog.dismiss();
         });
 
-        btCadastrarCliente.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                cadastrar();
-            }
-        });
+        btCadastrarCliente.setOnClickListener(view -> cadastrar());
+
+        startSpinners();
     }
 
     private void startSpinners() {
@@ -108,10 +100,12 @@ public class ClienteDialogFragment extends DialogFragment {
     }
 
     private void validarNomeCidade() {
-        nome = etNomeCliente.getText().toString().trim().toUpperCase();
-        cidade = etCidadeCliente.getText().toString().trim().toUpperCase();
+        String nome = etNomeCliente.getText().toString().trim().toUpperCase();
+        String cidade = etCidadeCliente.getText().toString().trim().toUpperCase();
 
         if (nome.length() > 3 && cidade.length() > 1) {
+            cliente.setNome(nome);
+            cliente.setCidade(cidade);
             btCadastrarCliente.setEnabled(true);
         } else {
             btCadastrarCliente.setEnabled(false);
@@ -122,14 +116,10 @@ public class ClienteDialogFragment extends DialogFragment {
         String uf = spUfCliente.getSelectedItem().toString().toUpperCase();
         String categoria = spCategoriaCliente.getSelectedItem().toString().toUpperCase();
 
-        Cliente cliente = new Cliente();
-        cliente.setNome(nome);
         cliente.setCategoria(categoria);
         cliente.setUf(uf);
-        cliente.setCidade(cidade);
 
-        ClienteDao clienteDao = new ClienteDao();
-        clienteDao.salvar(cliente);
+        ClienteDao.salvar(cliente);
         Utils.showMessage(getContext(), "", 1);
         alertDialog.dismiss();
     }
