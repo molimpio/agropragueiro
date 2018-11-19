@@ -56,7 +56,7 @@ public class ClienteListaFragment extends Fragment {
 
     private void startRecyclerView(View view) {
         realm = Realm.getDefaultInstance();
-        ClienteDao clienteDao = new ClienteDao(getContext());
+        ClienteDao clienteDao = new ClienteDao();
         clientes = clienteDao.getAll();
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());

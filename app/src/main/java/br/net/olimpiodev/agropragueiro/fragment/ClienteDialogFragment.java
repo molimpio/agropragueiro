@@ -3,19 +3,16 @@ package br.net.olimpiodev.agropragueiro.fragment;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.dao.ClienteDao;
@@ -29,7 +26,6 @@ public class ClienteDialogFragment extends DialogFragment {
     private EditText etCidadeCliente;
     private Spinner spUfCliente;
     private Spinner spCategoriaCliente;
-    private Button btCancelarCliente;
     private Button btCadastrarCliente;
     private AlertDialog alertDialog;
     private String nome;
@@ -51,7 +47,7 @@ public class ClienteDialogFragment extends DialogFragment {
         etCidadeCliente = view.findViewById(R.id.et_cidade_cliente);
         spUfCliente = view.findViewById(R.id.sp_uf_cliente);
         spCategoriaCliente = view.findViewById(R.id.sp_categoria_cliente);
-        btCancelarCliente = view.findViewById(R.id.bt_cancelar_cliente);
+        Button btCancelarCliente = view.findViewById(R.id.bt_cancelar_cliente);
         btCadastrarCliente = view.findViewById(R.id.bt_cadastrar_cliente);
         startSpinners();
 
@@ -126,15 +122,15 @@ public class ClienteDialogFragment extends DialogFragment {
         String uf = spUfCliente.getSelectedItem().toString().toUpperCase();
         String categoria = spCategoriaCliente.getSelectedItem().toString().toUpperCase();
 
-//        Cliente cliente = new Cliente();
-//        cliente.setNome(nome);
-//        cliente.setCategoria(categoria);
-//        cliente.setUf(uf);
-//        cliente.setCidade(cidade);
-//
-//        ClienteDao clienteDao = new ClienteDao();
-//        clienteDao.salvar(cliente);
-//        Utils.showMessage(getContext(), "", 1);
+        Cliente cliente = new Cliente();
+        cliente.setNome(nome);
+        cliente.setCategoria(categoria);
+        cliente.setUf(uf);
+        cliente.setCidade(cidade);
+
+        ClienteDao clienteDao = new ClienteDao();
+        clienteDao.salvar(cliente);
+        Utils.showMessage(getContext(), "", 1);
         alertDialog.dismiss();
     }
 

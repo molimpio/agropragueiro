@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -21,6 +22,8 @@ import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.dao.ClienteDao;
 import br.net.olimpiodev.agropragueiro.model.Cliente;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class FazendaDialogFragment extends DialogFragment {
 
@@ -102,16 +105,15 @@ public class FazendaDialogFragment extends DialogFragment {
     private void startSpinners() {
         String ufs[] = {"AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"};
         ArrayAdapter<String> adapterUfs = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_item, ufs);
-        adapterUfs.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+                android.R.layout.simple_spinner_dropdown_item, ufs);
         spUfFaz.setAdapter(adapterUfs);
 
-//        ClienteDao clienteDao = new ClienteDao();
-//        ArrayList<Cliente> clientes = clienteDao.getIdNome();
-//        ArrayAdapter<Cliente> adapterClientes = new ArrayAdapter<>(getContext(),
-//                android.R.layout.simple_spinner_item, clientes);
-//        adapterClientes.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-//        spClienteFaz.setAdapter(adapterClientes);
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<Cliente> realmResults = realm.where(Cliente.class).findAll().sort("nome");
+        List<Cliente> clientes = realm.copyFromRealm(realmResults);
+        ArrayAdapter<Cliente> adapterClientes = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_spinner_dropdown_item, clientes);
+        spClienteFaz.setAdapter(adapterClientes);
     }
 
     private void validarNomeCidade() {
@@ -127,6 +129,7 @@ public class FazendaDialogFragment extends DialogFragment {
 
     private void cadastrar() {
         String uf = spUfFaz.getSelectedItem().toString().toUpperCase();
+        Log.i("item", spClienteFaz.getSelectedItem().toString() + "-" +spClienteFaz.getSelectedItemId());
 //        String categoria = spCategoriaCliente.getSelectedItem().toString().toUpperCase();
 //
 //        Cliente cliente = new Cliente();

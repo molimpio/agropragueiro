@@ -2,17 +2,27 @@ package br.net.olimpiodev.agropragueiro.utils;
 
 import android.content.Context;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import br.net.olimpiodev.agropragueiro.R;
+import br.net.olimpiodev.agropragueiro.dao.ClienteDao;
+import br.net.olimpiodev.agropragueiro.model.Cliente;
+import io.realm.RealmResults;
 
 public class Utils {
+
+    public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
+            Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
     public static void showMessage(Context context, String message, int codigo) {
         if (codigo == 1) message = context.getResources().getString(R.string.sucesso);
@@ -38,4 +48,14 @@ public class Utils {
         long tmp = Math.round(value);
         return (double) tmp / factor;
     }
+
+    public static boolean validateEmail(String emailStr) {
+        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX .matcher(emailStr);
+        return matcher.find();
+    }
+
+    public static void logar(String texto) {
+        Log.i("log", texto);
+    }
+
 }

@@ -1,30 +1,38 @@
 package br.net.olimpiodev.agropragueiro.model;
 
-import java.io.Serializable;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.Required;
 
-public class Fazenda implements Serializable {
-    private static final long serialVersionUID = 1L;
-    private int id;
+public class Fazenda extends RealmObject {
+
+    @PrimaryKey
+    private String id;
+
+    @Required
     private String nome;
+
+    @Required
     private String uf;
+
+    @Required
     private String cidade;
+
     private Double areaHa;
     private String observacao;
-    private int clienteId;
+
+    private Cliente cliente;
+
     private Boolean ativo;
     private Boolean sincronizado;
-    private int origem;
-    private String lastUpdated;
-    private int updatedBy;
 
-    public Fazenda() {
-    }
+    public Fazenda() { }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -68,12 +76,12 @@ public class Fazenda implements Serializable {
         this.observacao = observacao;
     }
 
-    public int getClienteId() {
-        return clienteId;
+    public Cliente getCliente() {
+        return cliente;
     }
 
-    public void setClienteId(int clienteId) {
-        this.clienteId = clienteId;
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 
     public Boolean getAtivo() {
@@ -92,45 +100,8 @@ public class Fazenda implements Serializable {
         this.sincronizado = sincronizado;
     }
 
-    public int getOrigem() {
-        return origem;
-    }
-
-    public void setOrigem(int origem) {
-        this.origem = origem;
-    }
-
-    public String getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(String lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
-
-    public int getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(int updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-
     @Override
     public String toString() {
-        return "Fazenda{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", uf='" + uf + '\'' +
-                ", cidade='" + cidade + '\'' +
-                ", areaHa=" + areaHa +
-                ", observacao='" + observacao + '\'' +
-                ", clienteId=" + clienteId +
-                ", ativo=" + ativo +
-                ", sincronizado=" + sincronizado +
-                ", origem=" + origem +
-                ", lastUpdated='" + lastUpdated + '\'' +
-                ", updatedBy=" + updatedBy +
-                '}';
+        return nome;
     }
 }

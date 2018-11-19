@@ -51,30 +51,30 @@ public class FazendaListaFragment extends Fragment {
     }
 
     private void startRecyclerView(View view) {
-        FazendaDao fazendaDao = new FazendaDao();
-        fazendas = fazendaDao.listar();
-
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        rvFazendas.setLayoutManager(layoutManager);
-
-        fazendaAdapter = new FazendaAdapter(fazendas, getContext());
-        rvFazendas.setAdapter(fazendaAdapter);
-
-        fazendaAdapter.setClickListener(new FazendaAdapter.ItemClickListener() {
-            @Override
-            public void onItemClick(int position, View view) {
-                if (view.getId() == R.id.btn_opoes_fc) {
-                    final Fazenda fazenda = fazendas.get(position);
-                    opcoes(fazenda);
-                }
-            }
-        });
-
-        if (Objects.requireNonNull(rvFazendas.getAdapter()).getItemCount() == 0) {
-            tvListaVazia.setVisibility(view.VISIBLE);
-        } else {
-            tvListaVazia.setVisibility(view.GONE);
-        }
+//        FazendaDao fazendaDao = new FazendaDao();
+//        fazendas = fazendaDao.listar();
+//
+//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+//        rvFazendas.setLayoutManager(layoutManager);
+//
+//        fazendaAdapter = new FazendaAdapter(fazendas, getContext());
+//        rvFazendas.setAdapter(fazendaAdapter);
+//
+//        fazendaAdapter.setClickListener(new FazendaAdapter.ItemClickListener() {
+//            @Override
+//            public void onItemClick(int position, View view) {
+//                if (view.getId() == R.id.btn_opoes_fc) {
+//                    final Fazenda fazenda = fazendas.get(position);
+//                    opcoes(fazenda);
+//                }
+//            }
+//        });
+//
+//        if (Objects.requireNonNull(rvFazendas.getAdapter()).getItemCount() == 0) {
+//            tvListaVazia.setVisibility(view.VISIBLE);
+//        } else {
+//            tvListaVazia.setVisibility(view.GONE);
+//        }
     }
 
     private void opcoes(final Fazenda fazenda) {

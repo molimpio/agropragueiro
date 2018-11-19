@@ -27,7 +27,7 @@
         android:text="@string/nome" />
 
     <EditText
-        android:hint="@string/minimo_4_caracteres"
+        android:hint="@string/minimo_quatro_caracteres"
         android:id="@+id/et_nome_cliente"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
         android:text="@string/cidade" />
 
     <EditText
-        android:hint="@string/minimo_2_caracteres"
+        android:hint="@string/minimo_dois_caracteres"
         android:id="@+id/et_cidade_cliente"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

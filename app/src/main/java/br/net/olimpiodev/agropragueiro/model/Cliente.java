@@ -1,13 +1,12 @@
 package br.net.olimpiodev.agropragueiro.model;
 
-import br.net.olimpiodev.agropragueiro.utils.Utils;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
 
 public class Cliente extends RealmObject {
     @PrimaryKey
-    private int id;
+    private String id;
 
     @Required
     private String nome;
@@ -21,28 +20,18 @@ public class Cliente extends RealmObject {
     @Required
     private String cidade;
 
-    @Required
-    private Integer usuarioId;
+    private Usuario usuario;
 
     private Boolean ativo;
     private Boolean sincronizado;
-    private int origem;
-    private String lastUpdated;
-    private int updatedBy;
 
-    public Cliente() {
-        ativo = true;
-        sincronizado = false;
-        origem = 1;
-        lastUpdated = Utils.getDataNow();
-        updatedBy = 1; // TODO: vem do usuario logado
-    }
+    public Cliente() { }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -78,12 +67,12 @@ public class Cliente extends RealmObject {
         this.cidade = cidade;
     }
 
-    public int getUsuarioId() {
-        return usuarioId;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setUsuarioId(int usuarioId) {
-        this.usuarioId = usuarioId;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     public Boolean getAtivo() {
@@ -102,53 +91,8 @@ public class Cliente extends RealmObject {
         this.sincronizado = sincronizado;
     }
 
-    public int getOrigem() {
-        return origem;
-    }
-
-    public void setOrigem(int origem) {
-        this.origem = origem;
-    }
-
-    public String getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(String lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
-
-    public int getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(int updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-
     @Override
     public String toString() {
-        return "Cliente{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", categoria='" + categoria + '\'' +
-                ", uf='" + uf + '\'' +
-                ", cidade='" + cidade + '\'' +
-                ", usuarioId=" + usuarioId +
-                ", ativo=" + ativo +
-                ", sincronizado=" + sincronizado +
-                ", origem=" + origem +
-                ", lastUpdated='" + lastUpdated + '\'' +
-                ", updatedBy=" + updatedBy +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof Cliente) {
-            Cliente c = (Cliente) obj;
-            if (c.getNome().equals(nome) && getId() == id) return true;
-        }
-        return false;
+        return nome;
     }
 }
