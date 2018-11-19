@@ -10,10 +10,12 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Realm.init(this);
+
         RealmConfiguration config = new RealmConfiguration.Builder()
                 .name("database.realm")
                 .schemaVersion(1)
                 .build();
+//        Realm.deleteRealm(config);
         Realm.setDefaultConfiguration(config);
     }
 

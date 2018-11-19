@@ -139,6 +139,7 @@ public class FazendaDialogFragment extends DialogFragment {
 
         fazenda.setUf(uf);
         fazenda.setObservacao(obs);
+        fazenda.setAreaHa(0.00);
 
         FazendaDao.salvar(fazenda);
         Utils.showMessage(getContext(), "", 1);
