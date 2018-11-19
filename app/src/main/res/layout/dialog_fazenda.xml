@@ -44,29 +44,49 @@
         android:layout_height="wrap_content"
         android:inputType="text" />
 
-    <TextView
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/uf" />
-
-    <Spinner
-        android:id="@+id/sp_uf_faz"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="@string/cidade" />
+        android:orientation="horizontal">
 
-    <EditText
-        android:id="@+id/et_cidade_faz"
-        android:hint="@string/minimo_dois_caracteres"
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_weight="0.5"
+            android:text="@string/uf" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_weight="1.5"
+            android:text="@string/cidade" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text" />
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/sp_uf_faz"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_weight="0.5" />
+
+        <EditText
+            android:id="@+id/et_cidade_faz"
+            android:hint="@string/minimo_dois_caracteres"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_weight="1.5" />
+
+    </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"

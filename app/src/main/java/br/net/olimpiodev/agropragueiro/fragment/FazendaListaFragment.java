@@ -13,24 +13,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.List;
 import java.util.Objects;
 
 import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.adapter.FazendaAdapter;
-import br.net.olimpiodev.agropragueiro.dao.FazendaDao;
 import br.net.olimpiodev.agropragueiro.model.Fazenda;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class FazendaListaFragment extends Fragment {
 
-    public FazendaListaFragment() { }
-
-    private FazendaAdapter fazendaAdapter;
-    private List<Fazenda> fazendas;
     private RecyclerView rvFazendas;
     private TextView tvListaVazia;
-    private FloatingActionButton fabCadastroFazenda;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,43 +33,42 @@ public class FazendaListaFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_fazenda_lista, container, false);
         rvFazendas = view.findViewById(R.id.rv_fazendas);
         tvListaVazia = view.findViewById(R.id.tv_lista_vazia_fazenda);
-        fabCadastroFazenda = view.findViewById(R.id.fab_cadastro_fazenda);
-        fabCadastroFazenda.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FazendaDialogFragment fdf = new FazendaDialogFragment();
-                fdf.show(getFragmentManager(), "fragF");
-            }
+
+        FloatingActionButton fabCadastroFazenda = view.findViewById(R.id.fab_cadastro_fazenda);
+        fabCadastroFazenda.setOnClickListener(view1 -> {
+            FazendaDialogFragment fdf = new FazendaDialogFragment();
+            fdf.show(getFragmentManager(), "fragF");
         });
         startRecyclerView(view);
         return view;
     }
 
     private void startRecyclerView(View view) {
-//        FazendaDao fazendaDao = new FazendaDao();
-//        fazendas = fazendaDao.listar();
-//
-//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-//        rvFazendas.setLayoutManager(layoutManager);
-//
-//        fazendaAdapter = new FazendaAdapter(fazendas, getContext());
-//        rvFazendas.setAdapter(fazendaAdapter);
-//
-//        fazendaAdapter.setClickListener(new FazendaAdapter.ItemClickListener() {
-//            @Override
-//            public void onItemClick(int position, View view) {
-//                if (view.getId() == R.id.btn_opoes_fc) {
-//                    final Fazenda fazenda = fazendas.get(position);
-//                    opcoes(fazenda);
-//                }
-//            }
-//        });
-//
-//        if (Objects.requireNonNull(rvFazendas.getAdapter()).getItemCount() == 0) {
-//            tvListaVazia.setVisibility(view.VISIBLE);
-//        } else {
-//            tvListaVazia.setVisibility(view.GONE);
-//        }
+        RealmResults<Fazenda> fazendas = Realm.getDefaultInstance().where(Fazenda.class)
+                .equalTo("ativo", true)
+                .findAll().sort("nome");
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        rvFazendas.setLayoutManager(layoutManager);
+
+        FazendaAdapter fazendaAdapter = new FazendaAdapter(fazendas, getContext());
+        rvFazendas.setAdapter(fazendaAdapter);
+
+        fazendaAdapter.setClickListener(new FazendaAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(int position, View view) {
+                if (view.getId() == R.id.btn_opoes_fc) {
+                    final Fazenda fazenda = fazendas.get(position);
+                    opcoes(fazenda);
+                }
+            }
+        });
+
+        if (Objects.requireNonNull(rvFazendas.getAdapter()).getItemCount() == 0) {
+            tvListaVazia.setVisibility(view.VISIBLE);
+        } else {
+            tvListaVazia.setVisibility(view.GONE);
+        }
     }
 
     private void opcoes(final Fazenda fazenda) {

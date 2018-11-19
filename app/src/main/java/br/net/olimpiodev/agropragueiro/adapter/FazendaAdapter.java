@@ -40,14 +40,14 @@ public class FazendaAdapter extends RecyclerView.Adapter<FazendaAdapter.FazendaV
     @Override
     public void onBindViewHolder(@NonNull FazendaViewHolder fazendaViewHolder, int position) {
         fazenda = fazendas.get(position);
-//        ClienteDao clienteDao = new ClienteDao();
-
         String cidadeEstado = "Cidade: " + fazenda.getCidade() + " - UF: " + fazenda.getUf();
-//        String cliente = clienteDao.getClienteById(fazenda.getClienteId()).getNome();
-        String area = "Área(ha): " + String.valueOf(Utils.round(fazenda.getAreaHa(), 2));
+        String area = "Área(ha): ";
+        if (fazenda.getAreaHa() != null) {
+            area += String.valueOf(Utils.round(fazenda.getAreaHa(), 2));
+        }
 
         fazendaViewHolder.nome.setText(fazenda.getNome());
-//        fazendaViewHolder.cliente.setText("");
+        fazendaViewHolder.cliente.setText(fazenda.getCliente().getNome());
         fazendaViewHolder.nomeCidadeEstado.setText(cidadeEstado);
         fazendaViewHolder.area.setText(area);
     }

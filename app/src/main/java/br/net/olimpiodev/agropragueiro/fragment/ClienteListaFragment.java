@@ -33,13 +33,11 @@ public class ClienteListaFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_cliente_lista, container, false);
         rvClientes = view.findViewById(R.id.rv_clientes);
         tvListaVazia = view.findViewById(R.id.tv_lista_vazia_cliente);
+
         FloatingActionButton fabCadastroCliente = view.findViewById(R.id.fab_cadastro_cliente);
-        fabCadastroCliente.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ClienteDialogFragment cdf = new ClienteDialogFragment();
-                cdf.show(getFragmentManager(), "frag");
-            }
+        fabCadastroCliente.setOnClickListener(view1 -> {
+            ClienteDialogFragment cdf = new ClienteDialogFragment();
+            cdf.show(getFragmentManager(), "frag");
         });
         startRecyclerView(view);
         return view;

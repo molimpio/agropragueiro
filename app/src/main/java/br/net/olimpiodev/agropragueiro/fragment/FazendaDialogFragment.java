@@ -1,26 +1,26 @@
 package br.net.olimpiodev.agropragueiro.fragment;
 
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.dao.ClienteDao;
+import br.net.olimpiodev.agropragueiro.dao.FazendaDao;
 import br.net.olimpiodev.agropragueiro.model.Cliente;
+import br.net.olimpiodev.agropragueiro.model.Fazenda;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -28,16 +28,12 @@ import io.realm.RealmResults;
 public class FazendaDialogFragment extends DialogFragment {
 
     private View view;
-    private EditText etNomeFaz;
-    private EditText etCidadeFaz;
-    private EditText etObsFaz;
-    private Spinner spUfFaz;
-    private Spinner spClienteFaz;
-    private Button btCancelarFaz;
+    private EditText etNomeFaz, etCidadeFaz, etObsFaz;
+    private Spinner spUfFaz, spClienteFaz;
     private Button btCadastrarFaz;
     private AlertDialog alertDialog;
-    private String nome;
-    private String cidade;
+    private Fazenda fazenda;
+    private RealmResults<Cliente> realmResults;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -47,6 +43,7 @@ public class FazendaDialogFragment extends DialogFragment {
         builder.setView(view);
         setRefs();
         alertDialog = builder.create();
+        fazenda = new Fazenda();
         return alertDialog;
     }
 
@@ -56,9 +53,20 @@ public class FazendaDialogFragment extends DialogFragment {
         etObsFaz = view.findViewById(R.id.et_obs_faz);
         spUfFaz = view.findViewById(R.id.sp_uf_faz);
         spClienteFaz = view.findViewById(R.id.sp_cliente_faz);
-        btCancelarFaz = view.findViewById(R.id.bt_cancelar_faz);
+        spClienteFaz.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                fazenda.setCliente(realmResults.get(position));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        Button btCancelarFaz = view.findViewById(R.id.bt_cancelar_faz);
         btCadastrarFaz = view.findViewById(R.id.bt_cadastrar_faz);
-        startSpinners();
 
         etNomeFaz.addTextChangedListener(new TextWatcher() {
             @Override
@@ -86,20 +94,14 @@ public class FazendaDialogFragment extends DialogFragment {
             }
         });
 
-        btCancelarFaz.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Utils.showMessage(getContext(), "", 3);
-                alertDialog.dismiss();
-            }
+        btCancelarFaz.setOnClickListener(view -> {
+            Utils.showMessage(getContext(), "", 3);
+            alertDialog.dismiss();
         });
 
-        btCadastrarFaz.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                cadastrar();
-            }
-        });
+        btCadastrarFaz.setOnClickListener(view -> cadastrar());
+
+        startSpinners();
     }
 
     private void startSpinners() {
@@ -109,18 +111,22 @@ public class FazendaDialogFragment extends DialogFragment {
         spUfFaz.setAdapter(adapterUfs);
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<Cliente> realmResults = realm.where(Cliente.class).findAll().sort("nome");
+        realmResults = realm.where(Cliente.class)
+                .findAll().sort("nome");
         List<Cliente> clientes = realm.copyFromRealm(realmResults);
+
         ArrayAdapter<Cliente> adapterClientes = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_dropdown_item, clientes);
         spClienteFaz.setAdapter(adapterClientes);
     }
 
     private void validarNomeCidade() {
-        nome = etNomeFaz.getText().toString().trim().toUpperCase();
-        cidade = etCidadeFaz.getText().toString().trim().toUpperCase();
+        String nome = etNomeFaz.getText().toString().trim().toUpperCase();
+        String cidade = etCidadeFaz.getText().toString().trim().toUpperCase();
 
         if (nome.length() > 3 && cidade.length() > 1) {
+            fazenda.setNome(nome);
+            fazenda.setCidade(cidade);
             btCadastrarFaz.setEnabled(true);
         } else {
             btCadastrarFaz.setEnabled(false);
@@ -129,19 +135,14 @@ public class FazendaDialogFragment extends DialogFragment {
 
     private void cadastrar() {
         String uf = spUfFaz.getSelectedItem().toString().toUpperCase();
-        Log.i("item", spClienteFaz.getSelectedItem().toString() + "-" +spClienteFaz.getSelectedItemId());
-//        String categoria = spCategoriaCliente.getSelectedItem().toString().toUpperCase();
-//
-//        Cliente cliente = new Cliente();
-//        cliente.setNome(nome);
-//        cliente.setCategoria(categoria);
-//        cliente.setUf(uf);
-//        cliente.setCidade(cidade);
-//
-//        ClienteDao clienteDao = new ClienteDao();
-//        clienteDao.salvar(cliente);
-//        Utils.showMessage(getContext(), "", 1);
-//        alertDialog.dismiss();
+        String obs = etObsFaz.getText().toString().trim().toUpperCase();
+
+        fazenda.setUf(uf);
+        fazenda.setObservacao(obs);
+
+        FazendaDao.salvar(fazenda);
+        Utils.showMessage(getContext(), "", 1);
+        alertDialog.dismiss();
     }
 
 }
