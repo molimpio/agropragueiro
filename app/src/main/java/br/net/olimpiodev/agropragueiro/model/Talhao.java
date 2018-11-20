@@ -1,10 +1,13 @@
 package br.net.olimpiodev.agropragueiro.model;
 
+import java.io.Serializable;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
 
-public class Talhao extends RealmObject {
+public class Talhao extends RealmObject implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @PrimaryKey
     private String id;

@@ -38,11 +38,7 @@ public class TalhaoListaFragment extends Fragment {
         tvListaVazia = view.findViewById(R.id.tv_lista_vazia_talhao);
 
         FloatingActionButton fabCadastroTalhao = view.findViewById(R.id.fab_cadastro_talhao);
-        fabCadastroTalhao.setOnClickListener(view1 -> {
-            TalhaoCadastroFragment tcf = new TalhaoCadastroFragment();
-            FragmentManager fm = getFragmentManager();
-            fm.beginTransaction().replace(R.id.frg_principal, tcf).commit();
-        });
+        fabCadastroTalhao.setOnClickListener(view1 -> openCadastro(null));
         startRecyclerView(view);
         return view;
     }
@@ -72,6 +68,19 @@ public class TalhaoListaFragment extends Fragment {
         }
     }
 
+    private void openCadastro(Talhao talhao) {
+        TalhaoCadastroFragment tcf = new TalhaoCadastroFragment();
+
+        if (talhao != null) {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(getResources().getString(R.string.talhao_param), talhao);
+            tcf.setArguments(bundle);
+        }
+
+        FragmentManager fm = getFragmentManager();
+        fm.beginTransaction().replace(R.id.frg_principal, tcf).commit();
+    }
+
     private void opcoes(final Talhao talhao) {
         try {
             final String[] OPCOES = getResources().getStringArray(R.array.opcoes_talhao_card);
@@ -82,25 +91,23 @@ public class TalhaoListaFragment extends Fragment {
 
             builder.setSingleChoiceItems(OPCOES, 3, (dialog, item) -> {
                         switch (item) {
+                            case 0:
+                                // contorno
+                                break;
                             case 1:
-                                // ver talhoes
+                                // amostragens
                                 break;
                             case 2:
-                                // editar
+                                dialog.dismiss();
+                                openCadastro(talhao);
                                 break;
                             case 3:
-                                // excluir
+                                //excluir
                                 break;
                         }
                     });
 
-            String ok = getResources().getString(R.string.ok);
             String cancelar = getResources().getString(R.string.cancelar);
-
-            builder.setPositiveButton(ok, (dialogInterface, i) -> {
-                dialogInterface.dismiss();
-                Log.i("item", ""+i);
-            });
 
             builder.setNegativeButton(cancelar, (dialogInterface, i) -> {
                 dialogInterface.dismiss();
@@ -111,7 +118,7 @@ public class TalhaoListaFragment extends Fragment {
             alertDialog.setCanceledOnTouchOutside(true);
             alertDialog.show();
         } catch (Exception ex) {
-            Log.i("erro", ex.getMessage());
+            Utils.logar(ex.getMessage());
         }
     }
 

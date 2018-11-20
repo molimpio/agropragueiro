@@ -67,6 +67,7 @@
     <!-- talhao -->
     <string name="fazenda">Fazenda</string>
     <string name="cadastrar_talhao">Cadastrar Talhão</string>
+    <string name="talhao_param">Talhao_Param</string>
     <string-array name="opcoes_talhao_card">
         <item>Contorno</item>
         <item>Amostragens</item>

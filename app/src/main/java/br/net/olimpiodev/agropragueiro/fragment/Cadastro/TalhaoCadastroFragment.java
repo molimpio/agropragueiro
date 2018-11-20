@@ -18,6 +18,7 @@ import android.widget.Spinner;
 import java.util.List;
 
 import br.net.olimpiodev.agropragueiro.R;
+import br.net.olimpiodev.agropragueiro.dao.FazendaDao;
 import br.net.olimpiodev.agropragueiro.dao.TalhaoDao;
 import br.net.olimpiodev.agropragueiro.model.Fazenda;
 import br.net.olimpiodev.agropragueiro.model.Talhao;
@@ -39,6 +40,8 @@ public class TalhaoCadastroFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_talhao_cadastro, container, false);
         setRefs(view);
         talhao = new Talhao();
+        Bundle bundle = this.getArguments();
+        getArgumentos(bundle);
         return view;
     }
 
@@ -137,6 +140,24 @@ public class TalhaoCadastroFragment extends Fragment {
 
     private void openMapa() {
 
+    }
+
+    private void getArgumentos(Bundle bundle) {
+        try {
+            if (bundle != null) {
+                String keyBundle = getResources().getString(R.string.talhao_param);
+                Talhao t = (Talhao) bundle.getSerializable(keyBundle);
+                talhao.setId(t.getId());
+                talhao.setNome(t.getNome());
+                talhao.setObservacao(t.getObservacao());
+
+                etNomeTalhao.setText(talhao.getNome());
+                etObservacao.setText(talhao.getObservacao());
+                spFazenda.setSelection(FazendaDao.getIndex(realmResults, talhao.getFazenda()));
+            }
+        } catch (Exception e) {
+
+        }
     }
 
 }
