@@ -103,6 +103,10 @@ public class TalhaoCadastroFragment extends Fragment {
             btnNovo.setVisibility(View.INVISIBLE);
         });
 
+        startSpinners();
+    }
+
+    private void startSpinners() {
         Realm realm = Realm.getDefaultInstance();
         realmResults = realm.where(Fazenda.class)
                 .findAll().sort("nome");

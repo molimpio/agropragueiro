@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,7 +18,7 @@ import java.util.Objects;
 
 import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.adapter.FazendaAdapter;
-import br.net.olimpiodev.agropragueiro.fragment.Cadastro.FazendaDialogFragment;
+import br.net.olimpiodev.agropragueiro.fragment.Cadastro.FazendaCadastroFragment;
 import br.net.olimpiodev.agropragueiro.model.Fazenda;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 import io.realm.Realm;
@@ -37,8 +38,9 @@ public class FazendaListaFragment extends Fragment {
 
         FloatingActionButton fabCadastroFazenda = view.findViewById(R.id.fab_cadastro_fazenda);
         fabCadastroFazenda.setOnClickListener(view1 -> {
-            FazendaDialogFragment fdf = new FazendaDialogFragment();
-            fdf.show(getFragmentManager(), "fragF");
+            FazendaCadastroFragment fdf = new FazendaCadastroFragment();
+            FragmentManager fm = getFragmentManager();
+            fm.beginTransaction().replace(R.id.frg_principal, fdf).commit();
         });
         startRecyclerView(view);
         return view;

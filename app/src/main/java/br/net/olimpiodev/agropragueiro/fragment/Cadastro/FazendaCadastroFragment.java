@@ -1,13 +1,12 @@
 package br.net.olimpiodev.agropragueiro.fragment.Cadastro;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -17,7 +16,6 @@ import android.widget.Spinner;
 import java.util.List;
 
 import br.net.olimpiodev.agropragueiro.R;
-import br.net.olimpiodev.agropragueiro.dao.ClienteDao;
 import br.net.olimpiodev.agropragueiro.dao.FazendaDao;
 import br.net.olimpiodev.agropragueiro.model.Cliente;
 import br.net.olimpiodev.agropragueiro.model.Fazenda;
@@ -25,31 +23,53 @@ import br.net.olimpiodev.agropragueiro.utils.Utils;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-public class FazendaDialogFragment extends DialogFragment {
+public class FazendaCadastroFragment extends Fragment {
 
-    private View view;
     private EditText etNomeFaz, etCidadeFaz, etObsFaz;
     private Spinner spUfFaz, spClienteFaz;
-    private Button btCadastrarFaz;
-    private AlertDialog alertDialog;
+    private Button btnCadastrarFaz, btnNovo;
     private Fazenda fazenda;
     private RealmResults<Cliente> realmResults;
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        view = inflater.inflate(R.layout.dialog_fazenda, null);
-        builder.setView(view);
-        setRefs();
-        alertDialog = builder.create();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_fazenda_cadastro, container,false);
+        setRefs(view);
         fazenda = new Fazenda();
-        return alertDialog;
+        return view;
     }
 
-    private void setRefs() {
+    private void setRefs(View view) {
         etNomeFaz = view.findViewById(R.id.et_nome_faz);
+        etNomeFaz.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                validarNomeCidade();
+            }
+        });
+        etNomeFaz.requestFocus();
+
         etCidadeFaz = view.findViewById(R.id.et_cidade_faz);
+        etCidadeFaz.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                validarNomeCidade();
+            }
+        });
+
         etObsFaz = view.findViewById(R.id.et_obs_faz);
         spUfFaz = view.findViewById(R.id.sp_uf_faz);
         spClienteFaz = view.findViewById(R.id.sp_cliente_faz);
@@ -66,40 +86,27 @@ public class FazendaDialogFragment extends DialogFragment {
         });
 
         Button btCancelarFaz = view.findViewById(R.id.bt_cancelar_faz);
-        btCadastrarFaz = view.findViewById(R.id.bt_cadastrar_faz);
+        btCancelarFaz.setOnClickListener(view1 ->
+                getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit()
+        );
 
-        etNomeFaz.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+        btnCadastrarFaz = view.findViewById(R.id.bt_cadastrar_faz);
+        btnCadastrarFaz.setOnClickListener(view1 -> cadastrar());
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                validarNomeCidade();
-            }
+        btnNovo = view.findViewById(R.id.btn_novo_fazenda);
+        btnNovo.setOnClickListener(view1 -> {
+            etNomeFaz.setEnabled(true);
+            etNomeFaz.requestFocus();
+            etCidadeFaz.setEnabled(true);
+            etObsFaz.setEnabled(true);
+            etNomeFaz.setText("");
+            etCidadeFaz.setText("");
+            etObsFaz.setText("");
+            spClienteFaz.setEnabled(true);
+            spUfFaz.setEnabled(true);
+            btnCadastrarFaz.setEnabled(false);
+            btnNovo.setVisibility(View.INVISIBLE);
         });
-
-        etCidadeFaz.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                validarNomeCidade();
-            }
-        });
-
-        btCancelarFaz.setOnClickListener(view -> {
-            Utils.showMessage(getContext(), "", 3);
-            alertDialog.dismiss();
-        });
-
-        btCadastrarFaz.setOnClickListener(view -> cadastrar());
 
         startSpinners();
     }
@@ -127,9 +134,9 @@ public class FazendaDialogFragment extends DialogFragment {
         if (nome.length() > 3 && cidade.length() > 1) {
             fazenda.setNome(nome);
             fazenda.setCidade(cidade);
-            btCadastrarFaz.setEnabled(true);
+            btnCadastrarFaz.setEnabled(true);
         } else {
-            btCadastrarFaz.setEnabled(false);
+            btnCadastrarFaz.setEnabled(false);
         }
     }
 
@@ -143,7 +150,14 @@ public class FazendaDialogFragment extends DialogFragment {
 
         FazendaDao.salvar(fazenda);
         Utils.showMessage(getContext(), "", 1);
-        alertDialog.dismiss();
+
+        etNomeFaz.setEnabled(false);
+        etCidadeFaz.setEnabled(false);
+        etObsFaz.setEnabled(false);
+        spClienteFaz.setEnabled(false);
+        spUfFaz.setEnabled(false);
+        btnCadastrarFaz.setEnabled(false);
+        btnNovo.setVisibility(View.VISIBLE);
     }
 
 }
