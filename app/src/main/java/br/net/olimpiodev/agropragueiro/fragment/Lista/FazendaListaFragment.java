@@ -37,11 +37,7 @@ public class FazendaListaFragment extends Fragment {
         tvListaVazia = view.findViewById(R.id.tv_lista_vazia_fazenda);
 
         FloatingActionButton fabCadastroFazenda = view.findViewById(R.id.fab_cadastro_fazenda);
-        fabCadastroFazenda.setOnClickListener(view1 -> {
-            FazendaCadastroFragment fdf = new FazendaCadastroFragment();
-            FragmentManager fm = getFragmentManager();
-            fm.beginTransaction().replace(R.id.frg_principal, fdf).commit();
-        });
+        fabCadastroFazenda.setOnClickListener(view1 -> openCadastro(null));
         startRecyclerView(view);
         return view;
     }
@@ -71,6 +67,19 @@ public class FazendaListaFragment extends Fragment {
         }
     }
 
+    private void openCadastro(Fazenda fazenda) {
+        FazendaCadastroFragment fdf = new FazendaCadastroFragment();
+
+        if (fazenda != null) {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(getResources().getString(R.string.fazenda_param), fazenda);
+            fdf.setArguments(bundle);
+        }
+
+        FragmentManager fm = getFragmentManager();
+        fm.beginTransaction().replace(R.id.frg_principal, fdf).commit();
+    }
+
     private void opcoes(final Fazenda fazenda) {
         try {
             final String[] OPCOES = getResources().getStringArray(R.array.opcoes_fazenda_card);
@@ -79,48 +88,33 @@ public class FazendaListaFragment extends Fragment {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle(dialogTitle);
 
-            builder.setSingleChoiceItems(
-                    OPCOES, 3, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int item) {
-                            switch (item) {
-                                case 1:
-                                    // ver talhoes
-                                    break;
-                                case 2:
-                                    // editar
-                                    break;
-                                case 3:
-                                    // excluir
-                                    break;
-                            }
+            builder.setSingleChoiceItems(OPCOES, 3, (dialog, item) -> {
+                        switch (item) {
+                            case 0:
+                                // ver talhoes
+                                break;
+                            case 1:
+                                dialog.dismiss();
+                                openCadastro(fazenda);
+                                break;
+                            case 2:
+                                // excluir
+                                break;
                         }
                     });
 
-            String ok = getResources().getString(R.string.ok);
             String cancelar = getResources().getString(R.string.cancelar);
 
-            builder.setPositiveButton(ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.dismiss();
-                    Log.i("item", ""+i);
-                }
-            });
-
-            builder.setNegativeButton(cancelar, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.dismiss();
-                    Utils.showMessage(getContext(), "", 3);
-                }
+            builder.setNegativeButton(cancelar, (dialogInterface, i) -> {
+                dialogInterface.dismiss();
+                Utils.showMessage(getContext(), "", 3);
             });
 
             AlertDialog alertDialog = builder.create();
             alertDialog.setCanceledOnTouchOutside(true);
             alertDialog.show();
         } catch (Exception ex) {
-            Log.i("erro", ex.getMessage());
+            Utils.logar(ex.getMessage());
         }
     }
 

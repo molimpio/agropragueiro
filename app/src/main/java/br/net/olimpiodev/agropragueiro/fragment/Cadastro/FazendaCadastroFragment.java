@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import java.util.List;
 
 import br.net.olimpiodev.agropragueiro.R;
+import br.net.olimpiodev.agropragueiro.dao.ClienteDao;
 import br.net.olimpiodev.agropragueiro.dao.FazendaDao;
 import br.net.olimpiodev.agropragueiro.model.Cliente;
 import br.net.olimpiodev.agropragueiro.model.Fazenda;
@@ -30,6 +31,7 @@ public class FazendaCadastroFragment extends Fragment {
     private Button btnCadastrarFaz, btnNovo;
     private Fazenda fazenda;
     private RealmResults<Cliente> realmResults;
+    private String ufs[];
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,6 +39,8 @@ public class FazendaCadastroFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_fazenda_cadastro, container,false);
         setRefs(view);
         fazenda = new Fazenda();
+        Bundle bundle = this.getArguments();
+        getArgumentos(bundle);
         return view;
     }
 
@@ -112,7 +116,7 @@ public class FazendaCadastroFragment extends Fragment {
     }
 
     private void startSpinners() {
-        String ufs[] = {"AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"};
+        ufs = getResources().getStringArray(R.array.estados);
         ArrayAdapter<String> adapterUfs = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_dropdown_item, ufs);
         spUfFaz.setAdapter(adapterUfs);
@@ -158,6 +162,27 @@ public class FazendaCadastroFragment extends Fragment {
         spUfFaz.setEnabled(false);
         btnCadastrarFaz.setEnabled(false);
         btnNovo.setVisibility(View.VISIBLE);
+    }
+
+    private void getArgumentos(Bundle bundle) {
+        try {
+            if (bundle != null) {
+                String keyBundle = getResources().getString(R.string.fazenda_param);
+                Fazenda f = (Fazenda) bundle.getSerializable(keyBundle);
+                fazenda.setId(f.getId());
+                fazenda.setNome(f.getNome());
+                fazenda.setCidade(f.getCidade());
+                fazenda.setObservacao(f.getObservacao());
+
+                etNomeFaz.setText(fazenda.getNome());
+                etCidadeFaz.setText(fazenda.getCidade());
+                etObsFaz.setText(fazenda.getObservacao());
+                spUfFaz.setSelection(Utils.getIndex(ufs, fazenda.getUf()));
+                spClienteFaz.setSelection(ClienteDao.getIndex(realmResults, fazenda.getCliente()));
+            }
+        } catch (Exception e) {
+
+        }
     }
 
 }

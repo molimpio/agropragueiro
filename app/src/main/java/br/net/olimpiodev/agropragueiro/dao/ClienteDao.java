@@ -4,7 +4,9 @@ import java.util.UUID;
 
 import br.net.olimpiodev.agropragueiro.model.Cliente;
 import br.net.olimpiodev.agropragueiro.model.Usuario;
+import br.net.olimpiodev.agropragueiro.utils.Utils;
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class ClienteDao {
 
@@ -19,5 +21,18 @@ public class ClienteDao {
         cliente.setUsuario(usuario);
 
         realm.executeTransaction(realm1 -> realm1.copyToRealmOrUpdate(cliente));
+    }
+
+    public static int getIndex(RealmResults<Cliente> clientes, Cliente cliente) {
+        int index = 0;
+
+        for (int i=0; i < clientes.size(); i++) {
+            if (clientes.get(i).getNome().equals(cliente.getNome())) {
+                index = i;
+                break;
+            }
+        }
+
+        return index;
     }
 }
