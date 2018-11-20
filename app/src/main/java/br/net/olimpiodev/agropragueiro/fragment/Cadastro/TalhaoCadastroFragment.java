@@ -64,6 +64,7 @@ public class TalhaoCadastroFragment extends Fragment {
 
             }
         });
+
         etObservacao = view.findViewById(R.id.et_obs_talhao);
 
         spFazenda = view.findViewById(R.id.sp_fazendas_talhao);

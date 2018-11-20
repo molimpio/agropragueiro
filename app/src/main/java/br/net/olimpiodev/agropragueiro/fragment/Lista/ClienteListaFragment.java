@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,7 +18,7 @@ import java.util.Objects;
 
 import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.adapter.ClienteAdapter;
-import br.net.olimpiodev.agropragueiro.fragment.Cadastro.ClienteDialogFragment;
+import br.net.olimpiodev.agropragueiro.fragment.Cadastro.ClienteCadastroFragment;
 import br.net.olimpiodev.agropragueiro.model.Cliente;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 import io.realm.Realm;
@@ -37,8 +38,9 @@ public class ClienteListaFragment extends Fragment {
 
         FloatingActionButton fabCadastroCliente = view.findViewById(R.id.fab_cadastro_cliente);
         fabCadastroCliente.setOnClickListener(view1 -> {
-            ClienteDialogFragment cdf = new ClienteDialogFragment();
-            cdf.show(getFragmentManager(), "frag");
+            ClienteCadastroFragment cdf = new ClienteCadastroFragment();
+            FragmentManager fm = getFragmentManager();
+            fm.beginTransaction().replace(R.id.frg_principal, cdf).commit();
         });
         startRecyclerView(view);
         return view;

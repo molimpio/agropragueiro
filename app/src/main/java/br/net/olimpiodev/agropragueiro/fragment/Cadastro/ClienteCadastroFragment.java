@@ -1,14 +1,13 @@
 package br.net.olimpiodev.agropragueiro.fragment.Cadastro;
 
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,36 +18,25 @@ import br.net.olimpiodev.agropragueiro.dao.ClienteDao;
 import br.net.olimpiodev.agropragueiro.model.Cliente;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 
-public class ClienteDialogFragment extends DialogFragment {
+public class ClienteCadastroFragment extends Fragment {
 
-    private View view;
     private EditText etNomeCliente, etCidadeCliente;
     private Spinner spUfCliente, spCategoriaCliente;
-    private Button btCadastrarCliente;
-    private AlertDialog alertDialog;
+    private Button btCadastrarCliente, btnNovo;
     private Cliente cliente;
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        view = inflater.inflate(R.layout.dialog_cliente, null);
-        builder.setView(view);
-        setRefs();
-        alertDialog = builder.create();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                               Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_cliente_cadastro, container, false);
+        setRefs(view);
         cliente = new Cliente();
-        return alertDialog;
+        return view;
     }
 
-    private void setRefs() {
+    private void setRefs(View view) {
         etNomeCliente = view.findViewById(R.id.et_nome_cliente);
-        etCidadeCliente = view.findViewById(R.id.et_cidade_cliente);
-        spUfCliente = view.findViewById(R.id.sp_uf_cliente);
-        spCategoriaCliente = view.findViewById(R.id.sp_categoria_cliente);
-
-        Button btCancelarCliente = view.findViewById(R.id.bt_cancelar_cliente);
-        btCadastrarCliente = view.findViewById(R.id.bt_cadastrar_cliente);
-
+        etNomeCliente.requestFocus();
         etNomeCliente.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
@@ -62,6 +50,7 @@ public class ClienteDialogFragment extends DialogFragment {
             }
         });
 
+        etCidadeCliente = view.findViewById(R.id.et_cidade_cliente);
         etCidadeCliente.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
@@ -75,12 +64,28 @@ public class ClienteDialogFragment extends DialogFragment {
             }
         });
 
-        btCancelarCliente.setOnClickListener(view -> {
-            Utils.showMessage(getContext(), "", 3);
-            alertDialog.dismiss();
-        });
+        spUfCliente = view.findViewById(R.id.sp_uf_cliente);
+        spCategoriaCliente = view.findViewById(R.id.sp_categoria_cliente);
 
-        btCadastrarCliente.setOnClickListener(view -> cadastrar());
+        Button btCancelarCliente = view.findViewById(R.id.bt_cancelar_cliente);
+        btCancelarCliente.setOnClickListener(view1 ->
+            getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit()
+        );
+
+        btCadastrarCliente = view.findViewById(R.id.bt_cadastrar_cliente);
+        btCadastrarCliente.setOnClickListener(view1-> cadastrar());
+
+        btnNovo = view.findViewById(R.id.btn_novo_cliente);
+        btnNovo.setOnClickListener(view1 -> {
+            etNomeCliente.setEnabled(true);
+            etCidadeCliente.setEnabled(true);
+            etNomeCliente.setText("");
+            etCidadeCliente.setText("");
+            spCategoriaCliente.setEnabled(true);
+            spUfCliente.setEnabled(true);
+            btnNovo.setVisibility(View.INVISIBLE);
+            etNomeCliente.requestFocus();
+        });
 
         startSpinners();
     }
@@ -118,10 +123,17 @@ public class ClienteDialogFragment extends DialogFragment {
 
         cliente.setCategoria(categoria);
         cliente.setUf(uf);
-
         ClienteDao.salvar(cliente);
+
         Utils.showMessage(getContext(), "", 1);
-        alertDialog.dismiss();
+
+        etNomeCliente.setEnabled(false);
+        etCidadeCliente.setEnabled(false);
+        spUfCliente.setEnabled(false);
+        spCategoriaCliente.setEnabled(false);
+        btCadastrarCliente.setEnabled(false);
+        btnNovo.setVisibility(View.VISIBLE);
+
     }
 
 }
