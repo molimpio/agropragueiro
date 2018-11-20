@@ -21,6 +21,8 @@
     <string name="n_o_existem_dados_cadastrados">Não existem dados cadastrados!</string>
     <string name="titulo_opcoes_card">Selecione uma opção abaixo</string>
     <string name="observacao">Observação</string>
+    <string name="contorno">Contorno</string>
+    <string name="novo">Novo</string>
 
     <!-- hints -->
     <string name="minimo_dois_caracteres">Mínimo 2 caracteres</string>
@@ -60,5 +62,15 @@
     <string name="senha">Senha</string>
     <string name="nome_completo">Nome Completo</string>
     <string name="email_valido">O email deve ser válido</string>
+
+    <!-- talhao -->
+    <string name="fazenda">Fazenda</string>
+    <string name="cadastrar_talhao">Cadastrar Talhão</string>
+    <string-array name="opcoes_talhao_card">
+        <item>Contorno</item>
+        <item>Amostragens</item>
+        <item>Editar</item>
+        <item>Excluir</item>
+    </string-array>
 
 </resources>

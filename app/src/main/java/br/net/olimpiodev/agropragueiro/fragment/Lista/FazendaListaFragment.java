@@ -1,4 +1,4 @@
-package br.net.olimpiodev.agropragueiro.fragment;
+package br.net.olimpiodev.agropragueiro.fragment.Lista;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -17,6 +17,7 @@ import java.util.Objects;
 
 import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.adapter.FazendaAdapter;
+import br.net.olimpiodev.agropragueiro.fragment.Cadastro.FazendaDialogFragment;
 import br.net.olimpiodev.agropragueiro.model.Fazenda;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 import io.realm.Realm;
@@ -51,16 +52,13 @@ public class FazendaListaFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvFazendas.setLayoutManager(layoutManager);
 
-        FazendaAdapter fazendaAdapter = new FazendaAdapter(fazendas, getContext());
+        FazendaAdapter fazendaAdapter = new FazendaAdapter(fazendas);
         rvFazendas.setAdapter(fazendaAdapter);
 
-        fazendaAdapter.setClickListener(new FazendaAdapter.ItemClickListener() {
-            @Override
-            public void onItemClick(int position, View view) {
-                if (view.getId() == R.id.btn_opoes_fc) {
-                    final Fazenda fazenda = fazendas.get(position);
-                    opcoes(fazenda);
-                }
+        fazendaAdapter.setClickListener((position, view1) -> {
+            if (view1.getId() == R.id.btn_opoes_fc) {
+                final Fazenda fazenda = fazendas.get(position);
+                opcoes(fazenda);
             }
         });
 

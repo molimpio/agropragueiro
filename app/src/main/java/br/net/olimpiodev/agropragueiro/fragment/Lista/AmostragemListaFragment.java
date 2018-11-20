@@ -1,4 +1,4 @@
-package br.net.olimpiodev.agropragueiro.fragment;
+package br.net.olimpiodev.agropragueiro.fragment.Lista;
 
 
 import android.os.Bundle;

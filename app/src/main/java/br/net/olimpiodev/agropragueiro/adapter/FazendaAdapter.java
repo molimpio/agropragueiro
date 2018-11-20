@@ -21,25 +21,22 @@ import br.net.olimpiodev.agropragueiro.utils.Utils;
 public class FazendaAdapter extends RecyclerView.Adapter<FazendaAdapter.FazendaViewHolder> {
 
     private List<Fazenda> fazendas;
-    private Context context;
     private static FazendaAdapter.ItemClickListener clickListener;
-    private Fazenda fazenda;
 
-    public FazendaAdapter(List<Fazenda> fazendas, Context context) {
+    public FazendaAdapter(List<Fazenda> fazendas) {
         this.fazendas = fazendas;
-        this.context = context;
     }
 
     @NonNull
     @Override
     public FazendaViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.fazenda_card, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fazenda_card, viewGroup, false);
         return new FazendaViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull FazendaViewHolder fazendaViewHolder, int position) {
-        fazenda = fazendas.get(position);
+        Fazenda fazenda = fazendas.get(position);
         String cidadeEstado = "Cidade: " + fazenda.getCidade() + " - UF: " + fazenda.getUf();
         String area = "Área(ha): " + String.valueOf(Utils.round(fazenda.getAreaHa(), 2));
 

@@ -21,7 +21,7 @@ import io.realm.RealmResults;
 
 public class Utils {
 
-    public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
+    private static final Pattern VALID_EMAIL_ADDRESS_REGEX =
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
     public static void showMessage(Context context, String message, int codigo) {
@@ -29,7 +29,7 @@ public class Utils {
         if (codigo == 2) message = context.getResources().getString(R.string.erro);
         if (codigo == 3) message = context.getResources().getString(R.string.cancelada);
 
-        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
     public static String getDataNow() {

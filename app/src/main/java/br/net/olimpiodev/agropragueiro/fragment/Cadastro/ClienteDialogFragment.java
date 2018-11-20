@@ -1,4 +1,4 @@
-package br.net.olimpiodev.agropragueiro.fragment;
+package br.net.olimpiodev.agropragueiro.fragment.Cadastro;
 
 
 import android.app.AlertDialog;

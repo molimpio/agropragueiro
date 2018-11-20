@@ -15,7 +15,7 @@ public class MyApplication extends Application {
                 .name("database.realm")
                 .schemaVersion(1)
                 .build();
-//        Realm.deleteRealm(config);
+        //Realm.deleteRealm(config);
         Realm.setDefaultConfiguration(config);
     }
 

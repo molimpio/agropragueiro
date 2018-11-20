@@ -1,4 +1,4 @@
-package br.net.olimpiodev.agropragueiro.fragment;
+package br.net.olimpiodev.agropragueiro.fragment.Lista;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -17,6 +17,7 @@ import java.util.Objects;
 
 import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.adapter.ClienteAdapter;
+import br.net.olimpiodev.agropragueiro.fragment.Cadastro.ClienteDialogFragment;
 import br.net.olimpiodev.agropragueiro.model.Cliente;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 import io.realm.Realm;

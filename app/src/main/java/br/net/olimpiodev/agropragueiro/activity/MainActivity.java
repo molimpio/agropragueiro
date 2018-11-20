@@ -12,10 +12,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import br.net.olimpiodev.agropragueiro.R;
-import br.net.olimpiodev.agropragueiro.fragment.AmostragemListaFragment;
-import br.net.olimpiodev.agropragueiro.fragment.ClienteListaFragment;
-import br.net.olimpiodev.agropragueiro.fragment.FazendaListaFragment;
-import br.net.olimpiodev.agropragueiro.fragment.TalhaoListaFragment;
+import br.net.olimpiodev.agropragueiro.fragment.Lista.AmostragemListaFragment;
+import br.net.olimpiodev.agropragueiro.fragment.Lista.ClienteListaFragment;
+import br.net.olimpiodev.agropragueiro.fragment.Lista.FazendaListaFragment;
+import br.net.olimpiodev.agropragueiro.fragment.Lista.TalhaoListaFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
