@@ -24,6 +24,8 @@ public class ClienteCadastroFragment extends Fragment {
     private Spinner spUfCliente, spCategoriaCliente;
     private Button btCadastrarCliente, btnNovo;
     private Cliente cliente;
+    private String ufs[];
+    private String categorias[];
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -31,6 +33,8 @@ public class ClienteCadastroFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_cliente_cadastro, container, false);
         setRefs(view);
         cliente = new Cliente();
+        Bundle bundle = this.getArguments();
+        getArgumentos(bundle);
         return view;
     }
 
@@ -91,13 +95,13 @@ public class ClienteCadastroFragment extends Fragment {
     }
 
     private void startSpinners() {
-        String ufs[] = {"AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"};
+        ufs = getResources().getStringArray(R.array.estados);
         ArrayAdapter<String> adapterUfs = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_item, ufs);
         adapterUfs.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         spUfCliente.setAdapter(adapterUfs);
 
-        String categorias[] = {"Agricultor", "Consultor", "Empresa"};
+        categorias = getResources().getStringArray(R.array.categorias_cliente);
         ArrayAdapter<String> adapterCategorias = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_item, categorias);
         adapterCategorias.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
@@ -133,7 +137,26 @@ public class ClienteCadastroFragment extends Fragment {
         spCategoriaCliente.setEnabled(false);
         btCadastrarCliente.setEnabled(false);
         btnNovo.setVisibility(View.VISIBLE);
-
     }
 
+    private void getArgumentos(Bundle bundle) {
+        try {
+            if (bundle != null) {
+                String keyBundle = getResources().getString(R.string.cliente_param);
+                Cliente c = (Cliente) bundle.getSerializable(keyBundle);
+                cliente.setId(c.getId());
+                cliente.setNome(c.getNome());
+                cliente.setCidade(c.getCidade());
+                cliente.setUf(c.getUf());
+                cliente.setCategoria(c.getCategoria());
+
+                etNomeCliente.setText(cliente.getNome());
+                etCidadeCliente.setText(cliente.getCidade());
+                spUfCliente.setSelection(Utils.getIndex(ufs, cliente.getUf()));
+                spCategoriaCliente.setSelection(Utils.getIndex(categorias, cliente.getCategoria()));
+            }
+        } catch (Exception e) {
+
+        }
+    }
 }

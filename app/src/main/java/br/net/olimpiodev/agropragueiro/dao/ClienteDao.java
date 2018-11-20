@@ -12,7 +12,8 @@ public class ClienteDao {
         Realm realm = Realm.getDefaultInstance();
         Usuario usuario = realm.where(Usuario.class).findFirst();
 
-        cliente.setId(UUID.randomUUID().toString());
+        if (cliente.getId() == null) cliente.setId(UUID.randomUUID().toString());
+
         cliente.setAtivo(true);
         cliente.setSincronizado(false);
         cliente.setUsuario(usuario);

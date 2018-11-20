@@ -49,6 +49,7 @@
     <!-- fazenda -->
     <string name="cadastrar_fazenda">Cadastrar Fazenda</string>
     <string name="cliente">Cliente</string>
+    <string name="cliente_param">Cliente_Param</string>
     <string-array name="opcoes_fazenda_card">
         <item>Ver talhões</item>
         <item>Editar</item>

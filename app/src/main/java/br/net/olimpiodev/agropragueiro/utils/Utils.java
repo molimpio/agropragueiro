@@ -58,4 +58,16 @@ public class Utils {
         Log.i("log", texto);
     }
 
+    public static int getIndex(String array[], String search) {
+        int index = 0;
+
+        for (int i=0; i < array.length; i++) {
+            if (array[i].equals(search)) {
+                index = i;
+                break;
+            }
+        }
+        return index;
+    }
+
 }

@@ -1,14 +1,12 @@
 package br.net.olimpiodev.agropragueiro.fragment.Lista;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,16 +35,12 @@ public class ClienteListaFragment extends Fragment {
         tvListaVazia = view.findViewById(R.id.tv_lista_vazia_cliente);
 
         FloatingActionButton fabCadastroCliente = view.findViewById(R.id.fab_cadastro_cliente);
-        fabCadastroCliente.setOnClickListener(view1 -> {
-            ClienteCadastroFragment cdf = new ClienteCadastroFragment();
-            FragmentManager fm = getFragmentManager();
-            fm.beginTransaction().replace(R.id.frg_principal, cdf).commit();
-        });
-        startRecyclerView(view);
+        fabCadastroCliente.setOnClickListener(view1 -> openCadastro(null));
+        startRecyclerView();
         return view;
     }
 
-    private void startRecyclerView(View view) {
+    private void startRecyclerView() {
         RealmResults<Cliente> clientes = Realm.getDefaultInstance().where(Cliente.class)
                 .equalTo("ativo", true)
                 .findAll().sort("nome");
@@ -57,21 +51,31 @@ public class ClienteListaFragment extends Fragment {
         ClienteAdapter clienteAdapter = new ClienteAdapter(clientes);
         rvClientes.setAdapter(clienteAdapter);
 
-        clienteAdapter.setClickListener(new ClienteAdapter.ItemClickListener() {
-            @Override
-            public void onItemClick(int position, View view) {
-                if (view.getId() == R.id.btn_opoes_cc) {
-                    final Cliente cliente = clientes.get(position);
-                    opcoes(cliente);
-                }
+        clienteAdapter.setClickListener((position, view1) -> {
+            if (view1.getId() == R.id.btn_opoes_cc) {
+                final Cliente cliente = clientes.get(position);
+                opcoes(cliente);
             }
         });
 
         if (Objects.requireNonNull(rvClientes.getAdapter()).getItemCount() == 0) {
-            tvListaVazia.setVisibility(view.VISIBLE);
+            tvListaVazia.setVisibility(View.VISIBLE);
         } else {
-            tvListaVazia.setVisibility(view.GONE);
+            tvListaVazia.setVisibility(View.GONE);
         }
+    }
+
+    private void openCadastro(Cliente cliente) {
+        ClienteCadastroFragment cdf = new ClienteCadastroFragment();
+
+        if (cliente != null) {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(getResources().getString(R.string.cliente_param), cliente);
+            cdf.setArguments(bundle);
+        }
+
+        FragmentManager fm = getFragmentManager();
+        fm.beginTransaction().replace(R.id.frg_principal, cdf).commit();
     }
 
     private void opcoes(final Cliente cliente) {
@@ -82,49 +86,33 @@ public class ClienteListaFragment extends Fragment {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle(dialogTitle);
 
-            builder.setSingleChoiceItems(
-                    OPCOES, 3, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int item) {
-                            switch (item) {
-                                case 1:
-                                    // ver fazendas
-                                    break;
-                                case 2:
-                                    // editar
-                                    break;
-                                case 3:
-                                    // excluir
-                                    break;
-                            }
+            builder.setSingleChoiceItems(OPCOES, 3, (dialog, item) -> {
+                        switch (item) {
+                            case 0:
+                                // ver fazendas
+                                break;
+                            case 1:
+                                dialog.dismiss();
+                                openCadastro(cliente);
+                                break;
+                            case 2:
+                                // excluir
+                                break;
                         }
                     });
 
-            String ok = getResources().getString(R.string.ok);
             String cancelar = getResources().getString(R.string.cancelar);
 
-            builder.setPositiveButton(ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.dismiss();
-                    Log.i("item", "" + i);
-                }
-            });
-
-            builder.setNegativeButton(cancelar, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.dismiss();
-                    Utils.showMessage(getContext(), "", 3);
-                }
+            builder.setNegativeButton(cancelar, (dialogInterface, i) -> {
+                dialogInterface.dismiss();
+                Utils.showMessage(getContext(), "", 3);
             });
 
             AlertDialog alertDialog = builder.create();
             alertDialog.setCanceledOnTouchOutside(true);
             alertDialog.show();
         } catch (Exception ex) {
-            Log.i("erro", ex.getMessage());
+            Utils.logar(ex.getMessage());
         }
     }
-
 }
