@@ -9,30 +9,24 @@ import java.io.Serializable;
 
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
-@Entity(tableName = "talhoes",
+@Entity(tableName = "pontos_amostragem",
         foreignKeys = @ForeignKey(
-                entity = Fazenda.class, parentColumns = "id",
-                childColumns = "fazenda_id", onUpdate = CASCADE
+                entity = Amostragens.class, parentColumns = "id",
+                childColumns = "amostragem_id", onUpdate = CASCADE
         )
 )
-public class Talhao implements Serializable {
+public class PontosAmostragem implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @PrimaryKey(autoGenerate = true)
     private int id;
-    private String nome;
-    private String contorno = "";
-    private Double areaHa = 0.00;
+    private Double latitude;
+    private Double longitude;
     private Boolean ativo = true;
     private Boolean sincronizado = false;
 
-    @ColumnInfo(name = "fazenda_id")
-    private int fazendaId;
+    @ColumnInfo(name = "amostragem_id")
+    private int amostragemId;
 
-    public Talhao() { }
-
-    @Override
-    public String toString() {
-        return nome;
-    }
+    public PontosAmostragem() { }
 }

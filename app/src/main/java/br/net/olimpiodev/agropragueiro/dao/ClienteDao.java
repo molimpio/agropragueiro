@@ -24,15 +24,6 @@ public class ClienteDao {
         realm.executeTransaction(realm1 -> cliente.getFazendas().add(fazenda));
     }
 
-    public static RealmResults<Fazenda> getFazendasByCliente(Cliente cliente) {
-        RealmResults<Cliente> clientes = Realm.getDefaultInstance().where(Cliente.class)
-                .equalTo("id", cliente.getId())
-                .equalTo("ativo", true)
-                
-                .findAll().sort("nome");
-        return fazendas;
-    }
-
     public static int getIndex(RealmResults<Cliente> clientes, Cliente cliente) {
         int index = 0;
 

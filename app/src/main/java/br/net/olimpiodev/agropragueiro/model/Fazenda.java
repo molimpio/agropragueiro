@@ -1,107 +1,35 @@
 package br.net.olimpiodev.agropragueiro.model;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.PrimaryKey;
+
 import java.io.Serializable;
 
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
-import io.realm.annotations.Required;
+import static android.arch.persistence.room.ForeignKey.CASCADE;
 
-public class Fazenda extends RealmObject implements Serializable {
+@Entity(tableName = "fazendas",
+        foreignKeys = @ForeignKey(
+                entity = Cliente.class, parentColumns = "id",
+                childColumns = "cliente_id", onUpdate = CASCADE
+        )
+)
+public class Fazenda implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @PrimaryKey
-    private String id;
-
-    @Required
+    @PrimaryKey(autoGenerate = true)
+    private int id;
     private String nome;
-
-    @Required
     private String uf;
-
-    @Required
     private String cidade;
+    private Boolean ativo = true;
+    private Boolean sincronizado = false;
 
-    private Double areaHa;
-    private String observacao;
-
-    private Cliente cliente;
-
-    private Boolean ativo;
-    private Boolean sincronizado;
+    @ColumnInfo(name = "cliente_id")
+    private int clienteId;
 
     public Fazenda() { }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getUf() {
-        return uf;
-    }
-
-    public void setUf(String uf) {
-        this.uf = uf;
-    }
-
-    public String getCidade() {
-        return cidade;
-    }
-
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
-    }
-
-    public Double getAreaHa() {
-        return areaHa;
-    }
-
-    public void setAreaHa(Double areaHa) {
-        this.areaHa = areaHa;
-    }
-
-    public String getObservacao() {
-        return observacao;
-    }
-
-    public void setObservacao(String observacao) {
-        this.observacao = observacao;
-    }
-
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
-
-    public Boolean getAtivo() {
-        return ativo;
-    }
-
-    public void setAtivo(Boolean ativo) {
-        this.ativo = ativo;
-    }
-
-    public Boolean getSincronizado() {
-        return sincronizado;
-    }
-
-    public void setSincronizado(Boolean sincronizado) {
-        this.sincronizado = sincronizado;
-    }
 
     @Override
     public String toString() {
