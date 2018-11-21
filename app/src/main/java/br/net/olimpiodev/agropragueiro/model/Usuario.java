@@ -5,7 +5,7 @@ import android.arch.persistence.room.PrimaryKey;
 
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 
-@Entity (tableName = "usuarios")
+@Entity (tableName = "usuario")
 public class Usuario {
 
     @PrimaryKey (autoGenerate = true)

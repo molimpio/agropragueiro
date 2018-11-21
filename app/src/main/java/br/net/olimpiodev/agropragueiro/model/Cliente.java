@@ -7,7 +7,7 @@ import android.arch.persistence.room.PrimaryKey;
 
 import java.io.Serializable;
 
-@Entity(tableName = "clientes",
+@Entity(tableName = "cliente",
         foreignKeys = @ForeignKey(
                 entity = Usuario.class, parentColumns = "id",
                 childColumns = "usuario_id"

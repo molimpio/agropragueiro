@@ -9,13 +9,13 @@ import java.io.Serializable;
 
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
-@Entity(tableName = "amostragens",
+@Entity(tableName = "amostragem",
         foreignKeys = @ForeignKey(
                 entity = Talhao.class, parentColumns = "id",
                 childColumns = "talhao_id", onUpdate = CASCADE
         )
 )
-public class Amostragens implements Serializable {
+public class Amostragem implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @PrimaryKey(autoGenerate = true)
@@ -30,7 +30,7 @@ public class Amostragens implements Serializable {
     @ColumnInfo(name = "talhao_id")
     private int talhaoId;
 
-    public Amostragens() { }
+    public Amostragem() { }
 
     @Override
     public String toString() {

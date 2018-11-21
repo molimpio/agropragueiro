@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
-@Entity(tableName = "talhoes",
+@Entity(tableName = "talhao",
         foreignKeys = @ForeignKey(
                 entity = Fazenda.class, parentColumns = "id",
                 childColumns = "fazenda_id", onUpdate = CASCADE

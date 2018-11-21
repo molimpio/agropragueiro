@@ -7,29 +7,26 @@ import android.arch.persistence.room.PrimaryKey;
 
 import java.io.Serializable;
 
-import br.net.olimpiodev.agropragueiro.utils.Utils;
-
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
-@Entity(tableName = "fotos_registro",
+@Entity(tableName = "ponto_amostragem",
         foreignKeys = @ForeignKey(
-                entity = PontosAmostragemRegistro.class, parentColumns = "id",
-                childColumns = "ponto_amostragem_registro_id", onUpdate = CASCADE
+                entity = Amostragem.class, parentColumns = "id",
+                childColumns = "amostragem_id", onUpdate = CASCADE
         )
 )
-public class FotosRegistro implements Serializable {
+public class PontoAmostragem implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @PrimaryKey(autoGenerate = true)
     private int id;
-    private String nome;
-    private String observacao;
-    private String data = Utils.getDataNow();
+    private Double latitude;
+    private Double longitude;
     private Boolean ativo = true;
     private Boolean sincronizado = false;
 
-    @ColumnInfo(name = "ponto_amostragem_registro_id")
-    private int pontoAmostragemRegistroId;
+    @ColumnInfo(name = "amostragem_id")
+    private int amostragemId;
 
-    public FotosRegistro() { }
+    public PontoAmostragem() { }
 }
