@@ -30,6 +30,7 @@ public class FazendaCadastroFragment extends Fragment {
     private Spinner spUfFaz, spClienteFaz;
     private Button btnCadastrarFaz, btnNovo;
     private Fazenda fazenda;
+    private Cliente cliente;
     private RealmResults<Cliente> realmResults;
     private String ufs[];
 
@@ -80,6 +81,7 @@ public class FazendaCadastroFragment extends Fragment {
         spClienteFaz.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                cliente = realmResults.get(position);
                 fazenda.setCliente(realmResults.get(position));
             }
 
@@ -153,6 +155,8 @@ public class FazendaCadastroFragment extends Fragment {
         fazenda.setAreaHa(0.00);
 
         FazendaDao.salvar(fazenda);
+        ClienteDao.adicionarFazenda(cliente, fazenda);
+
         Utils.showMessage(getContext(), "", 1);
 
         etNomeFaz.setEnabled(false);

@@ -2,6 +2,7 @@ package br.net.olimpiodev.agropragueiro.dao;
 
 import java.util.UUID;
 
+import br.net.olimpiodev.agropragueiro.model.Cliente;
 import br.net.olimpiodev.agropragueiro.model.Fazenda;
 import io.realm.Realm;
 import io.realm.RealmResults;

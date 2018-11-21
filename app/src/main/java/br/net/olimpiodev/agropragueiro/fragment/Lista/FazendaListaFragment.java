@@ -18,7 +18,9 @@ import java.util.Objects;
 
 import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.adapter.FazendaAdapter;
+import br.net.olimpiodev.agropragueiro.dao.ClienteDao;
 import br.net.olimpiodev.agropragueiro.fragment.Cadastro.FazendaCadastroFragment;
+import br.net.olimpiodev.agropragueiro.model.Cliente;
 import br.net.olimpiodev.agropragueiro.model.Fazenda;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 import io.realm.Realm;
@@ -28,6 +30,7 @@ public class FazendaListaFragment extends Fragment {
 
     private RecyclerView rvFazendas;
     private TextView tvListaVazia;
+    private RealmResults<Fazenda> fazendas;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,15 +41,12 @@ public class FazendaListaFragment extends Fragment {
 
         FloatingActionButton fabCadastroFazenda = view.findViewById(R.id.fab_cadastro_fazenda);
         fabCadastroFazenda.setOnClickListener(view1 -> openCadastro(null));
-        startRecyclerView(view);
+        Bundle bundle = this.getArguments();
+        getArgumentos(bundle, view);
         return view;
     }
 
     private void startRecyclerView(View view) {
-        RealmResults<Fazenda> fazendas = Realm.getDefaultInstance().where(Fazenda.class)
-                .equalTo("ativo", true)
-                .findAll().sort("nome");
-
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvFazendas.setLayoutManager(layoutManager);
 
@@ -113,6 +113,24 @@ public class FazendaListaFragment extends Fragment {
             AlertDialog alertDialog = builder.create();
             alertDialog.setCanceledOnTouchOutside(true);
             alertDialog.show();
+        } catch (Exception ex) {
+            Utils.logar(ex.getMessage());
+        }
+    }
+
+    private void getArgumentos(Bundle bundle, View view) {
+        try {
+            if (bundle != null) {
+                String keyBundle = getResources().getString(R.string.cliente_param);
+                Cliente cliente = (Cliente) bundle.getSerializable(keyBundle);
+                fazendas = ClienteDao.getFazendasByCliente(cliente);
+            } else {
+                fazendas = Realm.getDefaultInstance().where(Fazenda.class)
+                        .equalTo("ativo", true)
+                        .findAll().sort("nome");
+            }
+
+            startRecyclerView(view);
         } catch (Exception ex) {
             Utils.logar(ex.getMessage());
         }

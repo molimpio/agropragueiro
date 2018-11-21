@@ -78,6 +78,15 @@ public class ClienteListaFragment extends Fragment {
         fm.beginTransaction().replace(R.id.frg_principal, cdf).commit();
     }
 
+    private void openListaFazendas(Cliente cliente) {
+        FazendaListaFragment flf = new FazendaListaFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(getResources().getString(R.string.cliente_param), cliente);
+        flf.setArguments(bundle);
+        FragmentManager fm = getFragmentManager();
+        fm.beginTransaction().replace(R.id.frg_principal, flf).commit();
+    }
+
     private void opcoes(final Cliente cliente) {
         try {
             final String[] OPCOES = getResources().getStringArray(R.array.opcoes_cliente_card);
@@ -89,7 +98,8 @@ public class ClienteListaFragment extends Fragment {
             builder.setSingleChoiceItems(OPCOES, 3, (dialog, item) -> {
                         switch (item) {
                             case 0:
-                                // ver fazendas
+                                dialog.dismiss();
+                                openListaFazendas(cliente);
                                 break;
                             case 1:
                                 dialog.dismiss();

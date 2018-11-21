@@ -89,6 +89,7 @@ public class ClienteCadastroFragment extends Fragment {
             spUfCliente.setEnabled(true);
             btnNovo.setVisibility(View.INVISIBLE);
             etNomeCliente.requestFocus();
+            cliente = new Cliente();
         });
 
         startSpinners();
