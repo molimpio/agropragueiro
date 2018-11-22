@@ -20,7 +20,6 @@ import java.util.List;
 
 import br.net.olimpiodev.agropragueiro.AppDatabase;
 import br.net.olimpiodev.agropragueiro.R;
-import br.net.olimpiodev.agropragueiro.dao.ClienteDao;
 import br.net.olimpiodev.agropragueiro.model.Cliente;
 import br.net.olimpiodev.agropragueiro.model.Usuario;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
@@ -39,6 +38,7 @@ public class ClienteCadastroFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_cliente_cadastro, container, false);
         setRefs(view);
         cliente = new Cliente();
+        cliente.setId(0);
         Bundle bundle = this.getArguments();
         getArgumentos(bundle);
         return view;
@@ -94,6 +94,7 @@ public class ClienteCadastroFragment extends Fragment {
             btnNovo.setVisibility(View.INVISIBLE);
             etNomeCliente.requestFocus();
             cliente = new Cliente();
+            cliente.setId(0);
         });
 
         startSpinners();
@@ -132,7 +133,8 @@ public class ClienteCadastroFragment extends Fragment {
                         AppDatabase.class, AppDatabase.DB_NAME).build();
                 List<Usuario> usuario = db.usuarioDao().getUsuario();
                 cliente.setUsuarioId(usuario.get(0).getId());
-                db.clienteDao().insert(cliente);
+                if (cliente.getId() == 0) db.clienteDao().insert(cliente);
+                else db.clienteDao().update(cliente);
                 return null;
             }
         }.execute();
@@ -147,23 +149,21 @@ public class ClienteCadastroFragment extends Fragment {
     }
 
     private void getArgumentos(Bundle bundle) {
-//        try {
-//            if (bundle != null) {
-//                String keyBundle = getResources().getString(R.string.cliente_param);
-//                Cliente c = (Cliente) bundle.getSerializable(keyBundle);
-//                cliente.setId(c.getId());
-//                cliente.setNome(c.getNome());
-//                cliente.setCidade(c.getCidade());
-//                cliente.setUf(c.getUf());
-//                cliente.setCategoria(c.getCategoria());
-//
-//                etNomeCliente.setText(cliente.getNome());
-//                etCidadeCliente.setText(cliente.getCidade());
-//                spUfCliente.setSelection(Utils.getIndex(ufs, cliente.getUf()));
-//                spCategoriaCliente.setSelection(Utils.getIndex(categorias, cliente.getCategoria()));
-//            }
-//        } catch (Exception e) {
-//
-//        }
+        try {
+            if (bundle != null) {
+                String keyBundle = getResources().getString(R.string.cliente_param);
+                Cliente c = (Cliente) bundle.getSerializable(keyBundle);
+                cliente.setId(c.getId());
+                cliente.setNome(c.getNome());
+                cliente.setCidade(c.getCidade());
+                cliente.setUf(c.getUf());
+
+                etNomeCliente.setText(cliente.getNome());
+                etCidadeCliente.setText(cliente.getCidade());
+                spUfCliente.setSelection(Utils.getIndex(ufs, cliente.getUf()));
+            }
+        } catch (Exception e) {
+
+        }
     }
 }
