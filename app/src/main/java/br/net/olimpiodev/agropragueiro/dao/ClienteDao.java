@@ -1,39 +1,22 @@
 package br.net.olimpiodev.agropragueiro.dao;
 
+import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
+
+import java.util.List;
+
 import br.net.olimpiodev.agropragueiro.model.Cliente;
-import br.net.olimpiodev.agropragueiro.model.Fazenda;
-import br.net.olimpiodev.agropragueiro.model.Usuario;
-import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmResults;
 
-public class ClienteDao {
+@Dao
+public interface ClienteDao {
+    @Insert
+    public void insert(Cliente... cliente);
 
-    public static void salvar(Cliente cliente) {
-        Realm realm = Realm.getDefaultInstance();
-        Usuario usuario = realm.where(Usuario.class).findFirst();
-        cliente.setAtivo(true);
-        cliente.setSincronizado(false);
-        cliente.setUsuario(usuario);
+    @Update
+    public void update(Cliente... cliente);
 
-        realm.executeTransaction(realm1 -> realm1.copyToRealmOrUpdate(cliente));
-    }
-
-    public static void adicionarFazenda(Cliente cliente, Fazenda fazenda) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(realm1 -> cliente.getFazendas().add(fazenda));
-    }
-
-    public static int getIndex(RealmResults<Cliente> clientes, Cliente cliente) {
-        int index = 0;
-
-        for (int i=0; i < clientes.size(); i++) {
-            if (clientes.get(i).getNome().equals(cliente.getNome())) {
-                index = i;
-                break;
-            }
-        }
-
-        return index;
-    }
+    @Query("SELECT * FROM cliente WHERE ativo = :ativo")
+    public List<Cliente> getClientes(boolean ativo);
 }

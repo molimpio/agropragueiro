@@ -29,6 +29,62 @@ public class Talhao implements Serializable {
     @ColumnInfo(name = "fazenda_id")
     private int fazendaId;
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getContorno() {
+        return contorno;
+    }
+
+    public void setContorno(String contorno) {
+        this.contorno = contorno;
+    }
+
+    public Double getAreaHa() {
+        return areaHa;
+    }
+
+    public void setAreaHa(Double areaHa) {
+        this.areaHa = areaHa;
+    }
+
+    public Boolean getAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(Boolean ativo) {
+        this.ativo = ativo;
+    }
+
+    public Boolean getSincronizado() {
+        return sincronizado;
+    }
+
+    public void setSincronizado(Boolean sincronizado) {
+        this.sincronizado = sincronizado;
+    }
+
+    public int getFazendaId() {
+        return fazendaId;
+    }
+
+    public void setFazendaId(int fazendaId) {
+        this.fazendaId = fazendaId;
+    }
+
     public Talhao() { }
 
     @Override

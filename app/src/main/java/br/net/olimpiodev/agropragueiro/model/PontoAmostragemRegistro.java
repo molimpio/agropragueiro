@@ -37,4 +37,84 @@ public class PontoAmostragemRegistro implements Serializable {
     private int pontoAmostragemId;
 
     public PontoAmostragemRegistro() { }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getPraga() {
+        return praga;
+    }
+
+    public void setPraga(String praga) {
+        this.praga = praga;
+    }
+
+    public int getQtde() {
+        return qtde;
+    }
+
+    public void setQtde(int qtde) {
+        this.qtde = qtde;
+    }
+
+    public int getDanoCausado() {
+        return danoCausado;
+    }
+
+    public void setDanoCausado(int danoCausado) {
+        this.danoCausado = danoCausado;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
+
+    public Boolean getAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(Boolean ativo) {
+        this.ativo = ativo;
+    }
+
+    public Boolean getSincronizado() {
+        return sincronizado;
+    }
+
+    public void setSincronizado(Boolean sincronizado) {
+        this.sincronizado = sincronizado;
+    }
+
+    public int getPontoAmostragemId() {
+        return pontoAmostragemId;
+    }
+
+    public void setPontoAmostragemId(int pontoAmostragemId) {
+        this.pontoAmostragemId = pontoAmostragemId;
+    }
 }

@@ -113,51 +113,51 @@ public class ClienteCadastroFragment extends Fragment {
         String nome = etNomeCliente.getText().toString().trim().toUpperCase();
         String cidade = etCidadeCliente.getText().toString().trim().toUpperCase();
 
-        if (nome.length() > 3 && cidade.length() > 1) {
-            cliente.setNome(nome);
-            cliente.setCidade(cidade);
-            btCadastrarCliente.setEnabled(true);
-        } else {
-            btCadastrarCliente.setEnabled(false);
-        }
+//        if (nome.length() > 3 && cidade.length() > 1) {
+//            cliente.setNome(nome);
+//            cliente.setCidade(cidade);
+//            btCadastrarCliente.setEnabled(true);
+//        } else {
+//            btCadastrarCliente.setEnabled(false);
+//        }
     }
 
     private void cadastrar() {
-        String uf = spUfCliente.getSelectedItem().toString().toUpperCase();
-        String categoria = spCategoriaCliente.getSelectedItem().toString().toUpperCase();
-
-        cliente.setCategoria(categoria);
-        cliente.setUf(uf);
-        ClienteDao.salvar(cliente);
-
-        Utils.showMessage(getContext(), "", 1);
-
-        etNomeCliente.setEnabled(false);
-        etCidadeCliente.setEnabled(false);
-        spUfCliente.setEnabled(false);
-        spCategoriaCliente.setEnabled(false);
-        btCadastrarCliente.setEnabled(false);
-        btnNovo.setVisibility(View.VISIBLE);
+//        String uf = spUfCliente.getSelectedItem().toString().toUpperCase();
+//        String categoria = spCategoriaCliente.getSelectedItem().toString().toUpperCase();
+//
+//        cliente.setCategoria(categoria);
+//        cliente.setUf(uf);
+//        ClienteDao.salvar(cliente);
+//
+//        Utils.showMessage(getContext(), "", 1);
+//
+//        etNomeCliente.setEnabled(false);
+//        etCidadeCliente.setEnabled(false);
+//        spUfCliente.setEnabled(false);
+//        spCategoriaCliente.setEnabled(false);
+//        btCadastrarCliente.setEnabled(false);
+//        btnNovo.setVisibility(View.VISIBLE);
     }
 
     private void getArgumentos(Bundle bundle) {
-        try {
-            if (bundle != null) {
-                String keyBundle = getResources().getString(R.string.cliente_param);
-                Cliente c = (Cliente) bundle.getSerializable(keyBundle);
-                cliente.setId(c.getId());
-                cliente.setNome(c.getNome());
-                cliente.setCidade(c.getCidade());
-                cliente.setUf(c.getUf());
-                cliente.setCategoria(c.getCategoria());
-
-                etNomeCliente.setText(cliente.getNome());
-                etCidadeCliente.setText(cliente.getCidade());
-                spUfCliente.setSelection(Utils.getIndex(ufs, cliente.getUf()));
-                spCategoriaCliente.setSelection(Utils.getIndex(categorias, cliente.getCategoria()));
-            }
-        } catch (Exception e) {
-
-        }
+//        try {
+//            if (bundle != null) {
+//                String keyBundle = getResources().getString(R.string.cliente_param);
+//                Cliente c = (Cliente) bundle.getSerializable(keyBundle);
+//                cliente.setId(c.getId());
+//                cliente.setNome(c.getNome());
+//                cliente.setCidade(c.getCidade());
+//                cliente.setUf(c.getUf());
+//                cliente.setCategoria(c.getCategoria());
+//
+//                etNomeCliente.setText(cliente.getNome());
+//                etCidadeCliente.setText(cliente.getCidade());
+//                spUfCliente.setSelection(Utils.getIndex(ufs, cliente.getUf()));
+//                spCategoriaCliente.setSelection(Utils.getIndex(categorias, cliente.getCategoria()));
+//            }
+//        } catch (Exception e) {
+//
+//        }
     }
 }

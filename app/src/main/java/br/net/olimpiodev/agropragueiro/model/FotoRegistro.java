@@ -32,4 +32,60 @@ public class FotoRegistro implements Serializable {
     private int pontoAmostragemRegistroId;
 
     public FotoRegistro() { }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getObservacao() {
+        return observacao;
+    }
+
+    public void setObservacao(String observacao) {
+        this.observacao = observacao;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
+
+    public Boolean getAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(Boolean ativo) {
+        this.ativo = ativo;
+    }
+
+    public Boolean getSincronizado() {
+        return sincronizado;
+    }
+
+    public void setSincronizado(Boolean sincronizado) {
+        this.sincronizado = sincronizado;
+    }
+
+    public int getPontoAmostragemRegistroId() {
+        return pontoAmostragemRegistroId;
+    }
+
+    public void setPontoAmostragemRegistroId(int pontoAmostragemRegistroId) {
+        this.pontoAmostragemRegistroId = pontoAmostragemRegistroId;
+    }
 }

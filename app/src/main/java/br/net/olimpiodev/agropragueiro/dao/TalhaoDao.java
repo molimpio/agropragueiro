@@ -1,19 +1,27 @@
 package br.net.olimpiodev.agropragueiro.dao;
 
-import java.util.UUID;
+
+import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
+
+import java.util.List;
 
 import br.net.olimpiodev.agropragueiro.model.Talhao;
-import io.realm.Realm;
 
-public class TalhaoDao {
+@Dao
+public interface TalhaoDao {
+    @Insert
+    public void insert(Talhao... talhao);
 
-    public static void salvar(Talhao talhao) {
-        talhao.setAtivo(true);
-        talhao.setSincronizado(false);
+    @Update
+    public void update(Talhao... talhao);
 
-        if (talhao.getId() == null) talhao.setId(UUID.randomUUID().toString());
+    @Query("SELECT * FROM talhao WHERE ativo = :ativo")
+    public List<Talhao> getTalhoes(boolean ativo);
 
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(realm1 -> realm1.copyToRealmOrUpdate(talhao));
-    }
+    @Query("SELECT * FROM talhao WHERE fazenda_id = :fazendaId")
+    public List<Talhao> getTalhoesByFazendaID(int fazendaId);
+    
 }

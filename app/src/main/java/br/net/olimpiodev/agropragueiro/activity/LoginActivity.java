@@ -1,6 +1,9 @@
 package br.net.olimpiodev.agropragueiro.activity;
 
+import android.annotation.SuppressLint;
+import android.arch.persistence.room.Room;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -8,8 +11,8 @@ import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
 
+import br.net.olimpiodev.agropragueiro.AppDatabase;
 import br.net.olimpiodev.agropragueiro.R;
-import br.net.olimpiodev.agropragueiro.dao.UsuarioDao;
 import br.net.olimpiodev.agropragueiro.model.Usuario;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 
@@ -18,11 +21,15 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etNomeCompleto, etEmail, etSenha;
     private Button btnLogin;
     private Usuario usuario;
+    private AppDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        db = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, AppDatabase.DB_NAME).build();
 
         usuario = new Usuario();
 
@@ -82,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         btnLogin = findViewById(R.id.bt_login);
-        btnLogin.setOnClickListener(view -> cadastrar() );
+        btnLogin.setOnClickListener(view -> cadastrar());
     }
 
     private void validarCampos() {
@@ -100,9 +107,16 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private void cadastrar() {
-        UsuarioDao usuarioDao = new UsuarioDao();
-        usuarioDao.salvar(usuario);
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                db.usuarioDao().insert(usuario);
+                return null;
+            }
+        }.execute();
+
         Utils.showMessage(getApplicationContext(), "", 1);
         Intent mainIntent = new Intent(this, MainActivity.class);
         startActivity(mainIntent);

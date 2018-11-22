@@ -21,8 +21,6 @@ import br.net.olimpiodev.agropragueiro.dao.FazendaDao;
 import br.net.olimpiodev.agropragueiro.model.Cliente;
 import br.net.olimpiodev.agropragueiro.model.Fazenda;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
-import io.realm.Realm;
-import io.realm.RealmResults;
 
 public class FazendaCadastroFragment extends Fragment {
 
@@ -31,7 +29,7 @@ public class FazendaCadastroFragment extends Fragment {
     private Button btnCadastrarFaz, btnNovo;
     private Fazenda fazenda;
     private Cliente cliente;
-    private RealmResults<Cliente> realmResults;
+//    private RealmResults<Cliente> realmResults;
     private String ufs[];
 
     @Override
@@ -81,8 +79,8 @@ public class FazendaCadastroFragment extends Fragment {
         spClienteFaz.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                cliente = realmResults.get(position);
-                fazenda.setCliente(realmResults.get(position));
+//                cliente = realmResults.get(position);
+//                fazenda.setCliente(realmResults.get(position));
             }
 
             @Override
@@ -123,70 +121,70 @@ public class FazendaCadastroFragment extends Fragment {
                 android.R.layout.simple_spinner_dropdown_item, ufs);
         spUfFaz.setAdapter(adapterUfs);
 
-        Realm realm = Realm.getDefaultInstance();
-        realmResults = realm.where(Cliente.class)
-                .findAll().sort("nome");
-        List<Cliente> clientes = realm.copyFromRealm(realmResults);
-
-        ArrayAdapter<Cliente> adapterClientes = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_dropdown_item, clientes);
-        spClienteFaz.setAdapter(adapterClientes);
+//        Realm realm = Realm.getDefaultInstance();
+//        realmResults = realm.where(Cliente.class)
+//                .findAll().sort("nome");
+//        List<Cliente> clientes = realm.copyFromRealm(realmResults);
+//
+//        ArrayAdapter<Cliente> adapterClientes = new ArrayAdapter<>(getContext(),
+//                android.R.layout.simple_spinner_dropdown_item, clientes);
+//        spClienteFaz.setAdapter(adapterClientes);
     }
 
     private void validarNomeCidade() {
         String nome = etNomeFaz.getText().toString().trim().toUpperCase();
         String cidade = etCidadeFaz.getText().toString().trim().toUpperCase();
 
-        if (nome.length() > 3 && cidade.length() > 1) {
-            fazenda.setNome(nome);
-            fazenda.setCidade(cidade);
-            btnCadastrarFaz.setEnabled(true);
-        } else {
-            btnCadastrarFaz.setEnabled(false);
-        }
+//        if (nome.length() > 3 && cidade.length() > 1) {
+//            fazenda.setNome(nome);
+//            fazenda.setCidade(cidade);
+//            btnCadastrarFaz.setEnabled(true);
+//        } else {
+//            btnCadastrarFaz.setEnabled(false);
+//        }
     }
 
     private void cadastrar() {
         String uf = spUfFaz.getSelectedItem().toString().toUpperCase();
         String obs = etObsFaz.getText().toString().trim().toUpperCase();
 
-        fazenda.setUf(uf);
-        fazenda.setObservacao(obs);
-        fazenda.setAreaHa(0.00);
-
-        FazendaDao.salvar(fazenda);
-        ClienteDao.adicionarFazenda(cliente, fazenda);
-
-        Utils.showMessage(getContext(), "", 1);
-
-        etNomeFaz.setEnabled(false);
-        etCidadeFaz.setEnabled(false);
-        etObsFaz.setEnabled(false);
-        spClienteFaz.setEnabled(false);
-        spUfFaz.setEnabled(false);
-        btnCadastrarFaz.setEnabled(false);
-        btnNovo.setVisibility(View.VISIBLE);
+//        fazenda.setUf(uf);
+//        fazenda.setObservacao(obs);
+//        fazenda.setAreaHa(0.00);
+//
+//        FazendaDao.salvar(fazenda);
+//        ClienteDao.adicionarFazenda(cliente, fazenda);
+//
+//        Utils.showMessage(getContext(), "", 1);
+//
+//        etNomeFaz.setEnabled(false);
+//        etCidadeFaz.setEnabled(false);
+//        etObsFaz.setEnabled(false);
+//        spClienteFaz.setEnabled(false);
+//        spUfFaz.setEnabled(false);
+//        btnCadastrarFaz.setEnabled(false);
+//        btnNovo.setVisibility(View.VISIBLE);
     }
 
     private void getArgumentos(Bundle bundle) {
-        try {
-            if (bundle != null) {
-                String keyBundle = getResources().getString(R.string.fazenda_param);
-                Fazenda f = (Fazenda) bundle.getSerializable(keyBundle);
-                fazenda.setId(f.getId());
-                fazenda.setNome(f.getNome());
-                fazenda.setCidade(f.getCidade());
-                fazenda.setObservacao(f.getObservacao());
-
-                etNomeFaz.setText(fazenda.getNome());
-                etCidadeFaz.setText(fazenda.getCidade());
-                etObsFaz.setText(fazenda.getObservacao());
-                spUfFaz.setSelection(Utils.getIndex(ufs, fazenda.getUf()));
-                spClienteFaz.setSelection(ClienteDao.getIndex(realmResults, fazenda.getCliente()));
-            }
-        } catch (Exception e) {
-
-        }
+//        try {
+//            if (bundle != null) {
+//                String keyBundle = getResources().getString(R.string.fazenda_param);
+//                Fazenda f = (Fazenda) bundle.getSerializable(keyBundle);
+//                fazenda.setId(f.getId());
+//                fazenda.setNome(f.getNome());
+//                fazenda.setCidade(f.getCidade());
+//                fazenda.setObservacao(f.getObservacao());
+//
+//                etNomeFaz.setText(fazenda.getNome());
+//                etCidadeFaz.setText(fazenda.getCidade());
+//                etObsFaz.setText(fazenda.getObservacao());
+//                spUfFaz.setSelection(Utils.getIndex(ufs, fazenda.getUf()));
+//                spClienteFaz.setSelection(ClienteDao.getIndex(realmResults, fazenda.getCliente()));
+//            }
+//        } catch (Exception e) {
+//
+//        }
     }
 
 }

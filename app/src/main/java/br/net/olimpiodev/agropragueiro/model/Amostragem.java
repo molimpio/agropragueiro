@@ -32,6 +32,70 @@ public class Amostragem implements Serializable {
 
     public Amostragem() { }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public int getQtdePontos() {
+        return qtdePontos;
+    }
+
+    public void setQtdePontos(int qtdePontos) {
+        this.qtdePontos = qtdePontos;
+    }
+
+    public String getSafra() {
+        return safra;
+    }
+
+    public void setSafra(String safra) {
+        this.safra = safra;
+    }
+
+    public String getCultura() {
+        return cultura;
+    }
+
+    public void setCultura(String cultura) {
+        this.cultura = cultura;
+    }
+
+    public Boolean getAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(Boolean ativo) {
+        this.ativo = ativo;
+    }
+
+    public Boolean getSincronizado() {
+        return sincronizado;
+    }
+
+    public void setSincronizado(Boolean sincronizado) {
+        this.sincronizado = sincronizado;
+    }
+
+    public int getTalhaoId() {
+        return talhaoId;
+    }
+
+    public void setTalhaoId(int talhaoId) {
+        this.talhaoId = talhaoId;
+    }
+
     @Override
     public String toString() {
         return nome;

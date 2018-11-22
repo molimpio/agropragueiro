@@ -1,34 +1,25 @@
 package br.net.olimpiodev.agropragueiro.dao;
 
-import java.util.UUID;
+import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
-import br.net.olimpiodev.agropragueiro.model.Cliente;
+import java.util.List;
+
 import br.net.olimpiodev.agropragueiro.model.Fazenda;
-import io.realm.Realm;
-import io.realm.RealmResults;
 
-public class FazendaDao {
+@Dao
+public interface FazendaDao {
+    @Insert
+    public void insert(Fazenda... fazenda);
 
-    public static void salvar(Fazenda fazenda) {
-        fazenda.setAtivo(true);
-        fazenda.setSincronizado(false);
+    @Update
+    public void update(Fazenda... fazenda);
 
-        if (fazenda.getId() == null) fazenda.setId(UUID.randomUUID().toString());
+    @Query("SELECT * FROM fazenda WHERE ativo = :ativo")
+    public List<Fazenda> getFazendas(boolean ativo);
 
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(realm1 -> realm1.copyToRealmOrUpdate(fazenda));
-    }
-
-    public static int getIndex(RealmResults<Fazenda> fazendas, Fazenda fazenda) {
-        int index = 0;
-
-        for (int i=0; i < fazendas.size(); i++) {
-            if (fazendas.get(i).getNome().equals(fazenda.getNome())) {
-                index = i;
-                break;
-            }
-        }
-
-        return index;
-    }
+    @Query("SELECT * FROM fazenda WHERE cliente_id = :clienteId")
+    public List<Fazenda> getFazendasByClienteID(int clienteId);
 }

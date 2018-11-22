@@ -1,21 +1,18 @@
 package br.net.olimpiodev.agropragueiro.dao;
 
-import java.util.UUID;
+import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.Query;
+
+import java.util.List;
 
 import br.net.olimpiodev.agropragueiro.model.Usuario;
-import br.net.olimpiodev.agropragueiro.utils.Utils;
-import io.realm.Realm;
 
-public class UsuarioDao {
-    private Realm realm;
+@Dao
+public interface UsuarioDao {
+    @Insert
+    public void insert(Usuario... usuario);
 
-    public UsuarioDao() { }
-
-    public void salvar(Usuario usuario) {
-        usuario.setId(UUID.randomUUID().toString());
-        usuario.setData(Utils.getDataNow());
-
-        realm = Realm.getDefaultInstance();
-        realm.executeTransaction(realm -> realm.copyToRealmOrUpdate(usuario));
-    }
+    @Query("SELECT * FROM usuario limit 1")
+    public List<Usuario> getUsuario();
 }

@@ -15,9 +15,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import br.net.olimpiodev.agropragueiro.R;
-import br.net.olimpiodev.agropragueiro.dao.ClienteDao;
-import br.net.olimpiodev.agropragueiro.model.Cliente;
-import io.realm.RealmResults;
 
 public class Utils {
 
