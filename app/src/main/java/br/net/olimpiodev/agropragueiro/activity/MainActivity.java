@@ -13,6 +13,7 @@ import android.view.MenuItem;
 
 import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.fragment.Lista.AmostragemListaFragment;
+import br.net.olimpiodev.agropragueiro.fragment.Lista.ClienteListaFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -73,23 +74,23 @@ public class MainActivity extends AppCompatActivity
         FragmentManager fm = getSupportFragmentManager();
         int id = item.getItemId();
 
-//        if (id == R.id.nav_camera) {
-//            ClienteListaFragment clf = new ClienteListaFragment();
-//            fm.beginTransaction().replace(R.id.frg_principal, clf).commit();
-//        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_camera) {
+            ClienteListaFragment clf = new ClienteListaFragment();
+            fm.beginTransaction().replace(R.id.frg_principal, clf).commit();
+        } else if (id == R.id.nav_gallery) {
 //            FazendaListaFragment flf = new FazendaListaFragment();
 //            fm.beginTransaction().replace(R.id.frg_principal, flf).commit();
-//        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_slideshow) {
 //            TalhaoListaFragment tlf = new TalhaoListaFragment();
 //            fm.beginTransaction().replace(R.id.frg_principal, tlf).commit();
-//        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_manage) {
 //            AmostragemListaFragment alf = new AmostragemListaFragment();
 //            fm.beginTransaction().replace(R.id.frg_principal, alf).commit();
-//        } else if (id == R.id.nav_share) {
-//
-//        } else if (id == R.id.nav_send) {
-//
-//        }
+        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_send) {
+
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

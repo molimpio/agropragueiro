@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <array name="categorias_cliente">
-        <item>AGRICULTOR</item>
-        <item>CONSULTOR</item>
-        <item>EMPRESA</item>
-    </array>
-</resources>

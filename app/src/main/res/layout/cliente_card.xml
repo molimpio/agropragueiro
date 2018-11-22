@@ -28,19 +28,11 @@
                 tools:text="Line 1" />
 
             <TextView
-                android:id="@+id/tv_categoria_cc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:paddingTop="20dp"
-                android:textAppearance="?android:textAppearanceSmall" />
-
-            <TextView
                 android:id="@+id/tv_cidade_uf_cc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:paddingTop="40dp"
+                android:paddingTop="27dp"
                 android:textAppearance="?android:textAppearanceSmall" />
 
             <Button
@@ -48,7 +40,7 @@
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="40dp"
+                android:paddingTop="20dp"
                 android:layout_alignParentEnd="true"
                 android:drawableEnd="@mipmap/baseline_more_vert_black_24"/>
 

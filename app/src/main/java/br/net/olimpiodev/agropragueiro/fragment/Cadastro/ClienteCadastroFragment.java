@@ -1,6 +1,9 @@
 package br.net.olimpiodev.agropragueiro.fragment.Cadastro;
 
 
+import android.annotation.SuppressLint;
+import android.arch.persistence.room.Room;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -13,19 +16,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import java.util.List;
+
+import br.net.olimpiodev.agropragueiro.AppDatabase;
 import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.dao.ClienteDao;
 import br.net.olimpiodev.agropragueiro.model.Cliente;
+import br.net.olimpiodev.agropragueiro.model.Usuario;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 
 public class ClienteCadastroFragment extends Fragment {
 
     private EditText etNomeCliente, etCidadeCliente;
-    private Spinner spUfCliente, spCategoriaCliente;
+    private Spinner spUfCliente;
     private Button btCadastrarCliente, btnNovo;
     private Cliente cliente;
     private String ufs[];
-    private String categorias[];
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,7 +75,6 @@ public class ClienteCadastroFragment extends Fragment {
         });
 
         spUfCliente = view.findViewById(R.id.sp_uf_cliente);
-        spCategoriaCliente = view.findViewById(R.id.sp_categoria_cliente);
 
         Button btCancelarCliente = view.findViewById(R.id.bt_cancelar_cliente);
         btCancelarCliente.setOnClickListener(view1 ->
@@ -85,7 +90,6 @@ public class ClienteCadastroFragment extends Fragment {
             etCidadeCliente.setEnabled(true);
             etNomeCliente.setText("");
             etCidadeCliente.setText("");
-            spCategoriaCliente.setEnabled(true);
             spUfCliente.setEnabled(true);
             btnNovo.setVisibility(View.INVISIBLE);
             etNomeCliente.requestFocus();
@@ -101,43 +105,45 @@ public class ClienteCadastroFragment extends Fragment {
                 android.R.layout.simple_spinner_item, ufs);
         adapterUfs.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         spUfCliente.setAdapter(adapterUfs);
-
-        categorias = getResources().getStringArray(R.array.categorias_cliente);
-        ArrayAdapter<String> adapterCategorias = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_item, categorias);
-        adapterCategorias.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-        spCategoriaCliente.setAdapter(adapterCategorias);
     }
 
     private void validarNomeCidade() {
         String nome = etNomeCliente.getText().toString().trim().toUpperCase();
         String cidade = etCidadeCliente.getText().toString().trim().toUpperCase();
 
-//        if (nome.length() > 3 && cidade.length() > 1) {
-//            cliente.setNome(nome);
-//            cliente.setCidade(cidade);
-//            btCadastrarCliente.setEnabled(true);
-//        } else {
-//            btCadastrarCliente.setEnabled(false);
-//        }
+        if (nome.length() > 3 && cidade.length() > 1) {
+            cliente.setNome(nome);
+            cliente.setCidade(cidade);
+            btCadastrarCliente.setEnabled(true);
+        } else {
+            btCadastrarCliente.setEnabled(false);
+        }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private void cadastrar() {
-//        String uf = spUfCliente.getSelectedItem().toString().toUpperCase();
-//        String categoria = spCategoriaCliente.getSelectedItem().toString().toUpperCase();
-//
-//        cliente.setCategoria(categoria);
-//        cliente.setUf(uf);
-//        ClienteDao.salvar(cliente);
-//
-//        Utils.showMessage(getContext(), "", 1);
-//
-//        etNomeCliente.setEnabled(false);
-//        etCidadeCliente.setEnabled(false);
-//        spUfCliente.setEnabled(false);
-//        spCategoriaCliente.setEnabled(false);
-//        btCadastrarCliente.setEnabled(false);
-//        btnNovo.setVisibility(View.VISIBLE);
+        String uf = spUfCliente.getSelectedItem().toString().toUpperCase();
+        cliente.setUf(uf);
+
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                final AppDatabase db = Room.databaseBuilder(getContext(),
+                        AppDatabase.class, AppDatabase.DB_NAME).build();
+                List<Usuario> usuario = db.usuarioDao().getUsuario();
+                cliente.setUsuarioId(usuario.get(0).getId());
+                db.clienteDao().insert(cliente);
+                return null;
+            }
+        }.execute();
+
+        Utils.showMessage(getContext(), "", 1);
+
+        etNomeCliente.setEnabled(false);
+        etCidadeCliente.setEnabled(false);
+        spUfCliente.setEnabled(false);
+        btCadastrarCliente.setEnabled(false);
+        btnNovo.setVisibility(View.VISIBLE);
     }
 
     private void getArgumentos(Bundle bundle) {
