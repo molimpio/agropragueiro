@@ -24,6 +24,7 @@
                 tools:textColor="#000" />
 
             <TextView
+                android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/cliente" />
@@ -46,61 +47,28 @@
                 android:hint="@string/minimo_quatro_caracteres"
                 android:inputType="text" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            <TextView
                 android:layout_marginTop="20dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:layout_weight="0.5"
-                    android:text="@string/uf" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_weight="1.5"
-                    android:text="@string/cidade" />
-            </LinearLayout>
-
-            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
+                android:text="@string/uf" />
 
-                <Spinner
-                    android:id="@+id/sp_uf_faz"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:layout_weight="0.5" />
-
-                <EditText
-                    android:id="@+id/et_cidade_faz"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_weight="1.5"
-                    android:hint="@string/minimo_dois_caracteres" />
-
-            </LinearLayout>
+            <Spinner
+                android:id="@+id/sp_uf_faz"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="@string/observacao" />
+                android:text="@string/cidade" />
+
 
             <EditText
-                android:id="@+id/et_obs_faz"
+                android:id="@+id/et_cidade_faz"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text" />
+                android:hint="@string/minimo_dois_caracteres" />
 
             <LinearLayout
                 android:layout_width="match_parent"

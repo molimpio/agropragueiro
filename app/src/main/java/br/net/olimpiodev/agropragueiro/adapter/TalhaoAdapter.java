@@ -8,19 +8,18 @@
 //import android.widget.Button;
 //import android.widget.TextView;
 //
+//import java.util.List;
+//
 //import br.net.olimpiodev.agropragueiro.R;
 //import br.net.olimpiodev.agropragueiro.model.Talhao;
 //import br.net.olimpiodev.agropragueiro.utils.Utils;
-//import io.realm.RealmRecyclerViewAdapter;
-//import io.realm.RealmResults;
 //
-//public class TalhaoAdapter extends RealmRecyclerViewAdapter<Talhao, TalhaoAdapter.TalhaoViewHolder> {
+//public class TalhaoAdapter extends RecyclerView.Adapter<TalhaoAdapter.TalhaoViewHolder> {
 //
-//    private RealmResults<Talhao> talhoes;
+//    private List<Talhao> talhoes;
 //    private static TalhaoAdapter.ItemClickListener clickListener;
 //
-//    public TalhaoAdapter(RealmResults<Talhao> talhoes) {
-//        super(talhoes, true);
+//    public TalhaoAdapter(List<Talhao> talhoes) {
 //        this.talhoes = talhoes;
 //    }
 //

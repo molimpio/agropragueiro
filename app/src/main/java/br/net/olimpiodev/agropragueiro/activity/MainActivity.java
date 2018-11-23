@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.fragment.Lista.AmostragemListaFragment;
 import br.net.olimpiodev.agropragueiro.fragment.Lista.ClienteListaFragment;
+import br.net.olimpiodev.agropragueiro.fragment.Lista.FazendaListaFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -78,8 +79,8 @@ public class MainActivity extends AppCompatActivity
             ClienteListaFragment clf = new ClienteListaFragment();
             fm.beginTransaction().replace(R.id.frg_principal, clf).commit();
         } else if (id == R.id.nav_gallery) {
-//            FazendaListaFragment flf = new FazendaListaFragment();
-//            fm.beginTransaction().replace(R.id.frg_principal, flf).commit();
+            FazendaListaFragment flf = new FazendaListaFragment();
+            fm.beginTransaction().replace(R.id.frg_principal, flf).commit();
         } else if (id == R.id.nav_slideshow) {
 //            TalhaoListaFragment tlf = new TalhaoListaFragment();
 //            fm.beginTransaction().replace(R.id.frg_principal, tlf).commit();

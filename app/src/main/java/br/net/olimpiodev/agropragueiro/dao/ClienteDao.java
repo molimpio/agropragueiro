@@ -19,4 +19,7 @@ public interface ClienteDao {
 
     @Query("SELECT * FROM cliente WHERE ativo = :ativo")
     public List<Cliente> getClientes(boolean ativo);
+
+    @Query("SELECT * FROM cliente WHERE id = :clienteId")
+    public Cliente getClienteById(int clienteId);
 }
