@@ -21,10 +21,12 @@ public interface FazendaDao {
     @Query("SELECT * FROM fazenda WHERE ativo = :ativo")
     public List<Fazenda> getFazendas(boolean ativo);
 
-    @Query("SELECT * FROM fazenda WHERE cliente_id = :clienteId")
-    public List<Fazenda> getFazendasByClienteID(int clienteId);
+    @Query("SELECT f.id AS idFazenda, f.nome AS nomeFazenda, f.uf AS ufFazenda, f.cidade AS cidadeFazenda," +
+            " c.nome AS nomeCliente FROM fazenda AS f INNER JOIN cliente AS c ON c.id = f.cliente_id" +
+            " WHERE f.ativo = :ativo AND f.cliente_id = :clienteId")
+    public List<FazendaCliente> getFazendasByClienteID(boolean ativo, int clienteId);
 
-    @Query("SELECT f.nome AS nomeFazenda, f.uf AS ufFazenda, f.cidade AS cidadeFazenda," +
+    @Query("SELECT f.id AS idFazenda, f.nome AS nomeFazenda, f.uf AS ufFazenda, f.cidade AS cidadeFazenda," +
             " c.nome AS nomeCliente FROM fazenda AS f INNER JOIN cliente AS c ON c.id = f.cliente_id WHERE f.ativo = :ativo")
     public List<FazendaCliente> getFazendasCliente(boolean ativo);
 }

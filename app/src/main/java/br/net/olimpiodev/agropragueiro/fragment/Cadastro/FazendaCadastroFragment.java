@@ -20,8 +20,9 @@ import java.util.List;
 
 import br.net.olimpiodev.agropragueiro.AppDatabase;
 import br.net.olimpiodev.agropragueiro.R;
-import br.net.olimpiodev.agropragueiro.model.Cliente;
+import br.net.olimpiodev.agropragueiro.model.ChaveValor;
 import br.net.olimpiodev.agropragueiro.model.Fazenda;
+import br.net.olimpiodev.agropragueiro.model.FazendaCliente;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 
 public class FazendaCadastroFragment extends Fragment {
@@ -31,8 +32,8 @@ public class FazendaCadastroFragment extends Fragment {
     private Spinner spUfFaz, spClienteFaz;
     private Button btnCadastrarFaz, btnNovo;
     private Fazenda fazenda;
-    private String ufs[];
-    private List<Cliente> clienteList;
+    private List<ChaveValor> clienteList;
+    private Bundle bundle;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,14 +41,14 @@ public class FazendaCadastroFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_fazenda_cadastro, container,false);
         db = Room.databaseBuilder(getContext(), AppDatabase.class, AppDatabase.DB_NAME).build();
 
+        bundle = this.getArguments();
+
         GetClientes getClientes = new GetClientes();
         getClientes.execute();
 
         setRefs(view);
         fazenda = new Fazenda();
         fazenda.setId(0);
-        Bundle bundle = this.getArguments();
-        getArgumentos(bundle);
         return view;
     }
 
@@ -86,7 +87,7 @@ public class FazendaCadastroFragment extends Fragment {
         spClienteFaz.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                fazenda.setClienteId(clienteList.get(position).getId());
+                fazenda.setClienteId(clienteList.get(position).getChave());
             }
 
             @Override
@@ -119,13 +120,13 @@ public class FazendaCadastroFragment extends Fragment {
         });
     }
 
-    private void startSpinners(List<Cliente> clientes) {
-        ufs = getResources().getStringArray(R.array.estados);
+    private void startSpinners(List<ChaveValor> clientes) {
+        String[] ufs = getResources().getStringArray(R.array.estados);
         ArrayAdapter<String> adapterUfs = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_dropdown_item, ufs);
         spUfFaz.setAdapter(adapterUfs);
 
-        ArrayAdapter<Cliente> adapterClientes = new ArrayAdapter<>(getContext(),
+        ArrayAdapter<ChaveValor> adapterClientes = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_dropdown_item, clientes);
         spClienteFaz.setAdapter(adapterClientes);
     }
@@ -134,7 +135,7 @@ public class FazendaCadastroFragment extends Fragment {
         String nome = etNomeFaz.getText().toString().trim().toUpperCase();
         String cidade = etCidadeFaz.getText().toString().trim().toUpperCase();
 
-        if (nome.length() > 3 && cidade.length() > 1) {
+        if (nome.length() > 1 && cidade.length() > 1) {
             fazenda.setNome(nome);
             fazenda.setCidade(cidade);
             btnCadastrarFaz.setEnabled(true);
@@ -168,39 +169,42 @@ public class FazendaCadastroFragment extends Fragment {
     }
 
     private void getArgumentos(Bundle bundle) {
-//        try {
-//            if (bundle != null) {
-//                String keyBundle = getResources().getString(R.string.fazenda_param);
-//                Fazenda f = (Fazenda) bundle.getSerializable(keyBundle);
-//                fazenda.setId(f.getId());
-//                fazenda.setNome(f.getNome());
-//                fazenda.setCidade(f.getCidade());
-//                fazenda.setObservacao(f.getObservacao());
-//
-//                etNomeFaz.setText(fazenda.getNome());
-//                etCidadeFaz.setText(fazenda.getCidade());
-//                etObsFaz.setText(fazenda.getObservacao());
-//                spUfFaz.setSelection(Utils.getIndex(ufs, fazenda.getUf()));
-//                spClienteFaz.setSelection(ClienteDao.getIndex(realmResults, fazenda.getCliente()));
-//            }
-//        } catch (Exception e) {
-//
-//        }
+        try {
+            if (bundle != null) {
+                String keyBundle = getResources().getString(R.string.fazenda_param);
+                FazendaCliente fc = (FazendaCliente) bundle.getSerializable(keyBundle);
+                fazenda.setId(fc.getIdFazenda());
+                fazenda.setNome(fc.getNomeFazenda());
+                fazenda.setCidade(fc.getCidadeFazenda());
+                fazenda.setUf(fc.getUfFazenda());
+
+                etNomeFaz.setText(fazenda.getNome());
+                etCidadeFaz.setText(fazenda.getCidade());
+
+                spUfFaz.setSelection(Utils.getIndex(getResources()
+                                .getStringArray(R.array.estados), fazenda.getUf()));
+
+                spClienteFaz.setSelection(Utils.getIndexChaveValor(clienteList, fc.getNomeCliente()));
+            }
+        } catch (Exception e) {
+            Utils.logar(e.getMessage());
+        }
     }
 
     @SuppressLint("StaticFieldLeak")
-    private class GetClientes extends AsyncTask<Void, Void, List<Cliente>> {
+    private class GetClientes extends AsyncTask<Void, Void, List<ChaveValor>> {
 
         @Override
-        protected List<Cliente> doInBackground(Void... voids) {
-            List<Cliente> clientes = db.clienteDao().getClientes(true);
+        protected List<ChaveValor> doInBackground(Void... voids) {
+            List<ChaveValor> clientes = db.clienteDao().getClientesDropDown(true);
             return clientes;
         }
 
         @Override
-        protected void onPostExecute(List<Cliente> clientes) {
+        protected void onPostExecute(List<ChaveValor> clientes) {
             clienteList = clientes;
             startSpinners(clientes);
+            getArgumentos(bundle);
         }
     }
 

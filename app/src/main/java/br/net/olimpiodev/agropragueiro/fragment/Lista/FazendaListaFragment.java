@@ -21,7 +21,7 @@ import br.net.olimpiodev.agropragueiro.AppDatabase;
 import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.adapter.FazendaAdapter;
 import br.net.olimpiodev.agropragueiro.fragment.Cadastro.FazendaCadastroFragment;
-import br.net.olimpiodev.agropragueiro.model.Fazenda;
+import br.net.olimpiodev.agropragueiro.model.Cliente;
 import br.net.olimpiodev.agropragueiro.model.FazendaCliente;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 
@@ -30,6 +30,7 @@ public class FazendaListaFragment extends Fragment {
     private AppDatabase db;
     private RecyclerView rvFazendas;
     private TextView tvListaVazia;
+    private Bundle bundle;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,10 +44,11 @@ public class FazendaListaFragment extends Fragment {
         FloatingActionButton fabCadastroFazenda = view.findViewById(R.id.fab_cadastro_fazenda);
         fabCadastroFazenda.setOnClickListener(view1 -> openCadastro(null));
 
+        bundle = this.getArguments();
+        
         GetFazendas getFazendas = new GetFazendas();
         getFazendas.execute();
-        Bundle bundle = this.getArguments();
-        getArgumentos(bundle, view);
+        
         return view;
     }
 
@@ -58,14 +60,14 @@ public class FazendaListaFragment extends Fragment {
         rvFazendas.setAdapter(fazendaAdapter);
 
         fazendaAdapter.setClickListener((position, view1) -> {
-//            if (view1.getId() == R.id.btn_opoes_fc) {
-//                final Fazenda fazenda = fazendas.get(position);
-//                opcoes(fazenda);
-//            }
+            if (view1.getId() == R.id.btn_opoes_fc) {
+                final FazendaCliente fazendaCliente = fazendas.get(position);
+                opcoes(fazendaCliente);
+            }
         });
     }
 
-    private void openCadastro(Fazenda fazenda) {
+    private void openCadastro(FazendaCliente fazenda) {
         FazendaCadastroFragment fdf = new FazendaCadastroFragment();
 
         if (fazenda != null) {
@@ -78,7 +80,7 @@ public class FazendaListaFragment extends Fragment {
         fm.beginTransaction().replace(R.id.frg_principal, fdf).commit();
     }
 
-    private void opcoes(final Fazenda fazenda) {
+    private void opcoes(final FazendaCliente fazenda) {
         try {
             final String[] OPCOES = getResources().getStringArray(R.array.opcoes_fazenda_card);
             final String dialogTitle = getResources().getString(R.string.titulo_opcoes_card);
@@ -116,30 +118,24 @@ public class FazendaListaFragment extends Fragment {
         }
     }
 
-    private void getArgumentos(Bundle bundle, View view) {
-//        try {
-//            if (bundle != null) {
-//                String keyBundle = getResources().getString(R.string.cliente_param);
-//                Cliente cliente = (Cliente) bundle.getSerializable(keyBundle);
-//                fazendas = ClienteDao.getFazendasByCliente(cliente);
-//            } else {
-//                fazendas = Realm.getDefaultInstance().where(Fazenda.class)
-//                        .equalTo("ativo", true)
-//                        .findAll().sort("nome");
-//            }
-//
-//            startRecyclerView(view);
-//        } catch (Exception ex) {
-//            Utils.logar(ex.getMessage());
-//        }
-    }
-
     @SuppressLint("StaticFieldLeak")
     private class GetFazendas extends AsyncTask<Void, Void, List<FazendaCliente>> {
 
         @Override
         protected List<FazendaCliente> doInBackground(Void... voids) {
-            List<FazendaCliente> fazendas = db.fazendaDao().getFazendasCliente(true);
+            List<FazendaCliente> fazendas = null;
+
+            try {
+                if (bundle != null) {
+                    String keyBundle = getResources().getString(R.string.cliente_param);
+                    Cliente c = (Cliente) bundle.getSerializable(keyBundle);
+                    fazendas = db.fazendaDao().getFazendasByClienteID(true, c.getId());
+                } else {
+                    fazendas = db.fazendaDao().getFazendasCliente(true);
+                }
+            } catch (Exception ex) {
+              Utils.logar(ex.getMessage());  
+            }
             return fazendas;
         }
 

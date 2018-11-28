@@ -76,12 +76,12 @@ public class ClienteListaFragment extends Fragment {
     }
 
     private void openListaFazendas(Cliente cliente) {
-//        FazendaListaFragment flf = new FazendaListaFragment();
-//        Bundle bundle = new Bundle();
-//        bundle.putSerializable(getResources().getString(R.string.cliente_param), cliente);
-//        flf.setArguments(bundle);
-//        FragmentManager fm = getFragmentManager();
-//        fm.beginTransaction().replace(R.id.frg_principal, flf).commit();
+        FazendaListaFragment flf = new FazendaListaFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(getResources().getString(R.string.cliente_param), cliente);
+        flf.setArguments(bundle);
+        FragmentManager fm = getFragmentManager();
+        fm.beginTransaction().replace(R.id.frg_principal, flf).commit();
     }
 
     private void opcoes(final Cliente cliente) {

@@ -1,11 +1,23 @@
 package br.net.olimpiodev.agropragueiro.model;
 
-public class FazendaCliente {
+import java.io.Serializable;
 
+public class FazendaCliente implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    private int idFazenda;
     private String nomeFazenda;
     private String nomeCliente;
     private String ufFazenda;
     private String cidadeFazenda;
+
+    public int getIdFazenda() {
+        return idFazenda;
+    }
+
+    public void setIdFazenda(int idFazenda) {
+        this.idFazenda = idFazenda;
+    }
 
     public String getNomeFazenda() {
         return nomeFazenda;

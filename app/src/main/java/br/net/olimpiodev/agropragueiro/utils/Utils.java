@@ -1,20 +1,19 @@
 package br.net.olimpiodev.agropragueiro.utils;
 
 import android.content.Context;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import br.net.olimpiodev.agropragueiro.R;
+import br.net.olimpiodev.agropragueiro.model.ChaveValor;
 
 public class Utils {
 
@@ -60,6 +59,18 @@ public class Utils {
 
         for (int i=0; i < array.length; i++) {
             if (array[i].equals(search)) {
+                index = i;
+                break;
+            }
+        }
+        return index;
+    }
+
+    public static int getIndexChaveValor(List<ChaveValor> array, String search) {
+        int index = 0;
+
+        for (int i=0; i < array.size(); i++) {
+            if (array.get(i).getValor().equals(search)) {
                 index = i;
                 break;
             }

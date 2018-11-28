@@ -44,7 +44,7 @@
                 android:id="@+id/et_nome_faz"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/minimo_quatro_caracteres"
+                android:hint="@string/minimo_dois_caracteres"
                 android:inputType="text" />
 
             <TextView

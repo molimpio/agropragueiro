@@ -7,6 +7,7 @@ import android.arch.persistence.room.Update;
 
 import java.util.List;
 
+import br.net.olimpiodev.agropragueiro.model.ChaveValor;
 import br.net.olimpiodev.agropragueiro.model.Cliente;
 
 @Dao
@@ -22,4 +23,7 @@ public interface ClienteDao {
 
     @Query("SELECT * FROM cliente WHERE id = :clienteId")
     public Cliente getClienteById(int clienteId);
+
+    @Query("SELECT c.id AS chave, c.nome AS valor FROM cliente AS c WHERE ativo = :ativo")
+    public List<ChaveValor> getClientesDropDown(boolean ativo);
 }
