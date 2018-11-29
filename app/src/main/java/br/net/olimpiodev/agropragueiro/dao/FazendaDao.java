@@ -13,20 +13,17 @@ import br.net.olimpiodev.agropragueiro.model.FazendaCliente;
 @Dao
 public interface FazendaDao {
     @Insert
-    public void insert(Fazenda... fazenda);
+    void insert(Fazenda... fazenda);
 
     @Update
-    public void update(Fazenda... fazenda);
-
-    @Query("SELECT * FROM fazenda WHERE ativo = :ativo")
-    public List<Fazenda> getFazendas(boolean ativo);
+    void update(Fazenda... fazenda);
 
     @Query("SELECT f.id AS idFazenda, f.nome AS nomeFazenda, f.uf AS ufFazenda, f.cidade AS cidadeFazenda," +
             " c.nome AS nomeCliente FROM fazenda AS f INNER JOIN cliente AS c ON c.id = f.cliente_id" +
             " WHERE f.ativo = :ativo AND f.cliente_id = :clienteId")
-    public List<FazendaCliente> getFazendasByClienteID(boolean ativo, int clienteId);
+    List<FazendaCliente> getFazendasByClienteID(boolean ativo, int clienteId);
 
     @Query("SELECT f.id AS idFazenda, f.nome AS nomeFazenda, f.uf AS ufFazenda, f.cidade AS cidadeFazenda," +
             " c.nome AS nomeCliente FROM fazenda AS f INNER JOIN cliente AS c ON c.id = f.cliente_id WHERE f.ativo = :ativo")
-    public List<FazendaCliente> getFazendasCliente(boolean ativo);
+    List<FazendaCliente> getFazendasCliente(boolean ativo);
 }

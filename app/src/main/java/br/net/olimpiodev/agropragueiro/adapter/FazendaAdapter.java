@@ -1,11 +1,7 @@
 package br.net.olimpiodev.agropragueiro.adapter;
 
-import android.arch.persistence.room.Room;
-import android.content.Context;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,18 +11,15 @@ import android.widget.TextView;
 import java.util.List;
 
 import br.net.olimpiodev.agropragueiro.R;
-import br.net.olimpiodev.agropragueiro.model.Fazenda;
 import br.net.olimpiodev.agropragueiro.model.FazendaCliente;
 
 public class FazendaAdapter extends RecyclerView.Adapter<FazendaAdapter.FazendaViewHolder> {
 
     private List<FazendaCliente> fazendas;
-    private Context context;
     private static FazendaAdapter.ItemClickListener clickListener;
 
-    public FazendaAdapter(List<FazendaCliente> fazendas, Context context) {
+    public FazendaAdapter(List<FazendaCliente> fazendas) {
         this.fazendas = fazendas;
-        this.context = context;
     }
 
     @NonNull

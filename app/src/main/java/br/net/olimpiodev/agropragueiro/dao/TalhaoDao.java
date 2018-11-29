@@ -9,19 +9,23 @@ import android.arch.persistence.room.Update;
 import java.util.List;
 
 import br.net.olimpiodev.agropragueiro.model.Talhao;
+import br.net.olimpiodev.agropragueiro.model.TalhaoFazenda;
 
 @Dao
 public interface TalhaoDao {
     @Insert
-    public void insert(Talhao... talhao);
+    void insert(Talhao... talhao);
 
     @Update
-    public void update(Talhao... talhao);
+    void update(Talhao... talhao);
 
-    @Query("SELECT * FROM talhao WHERE ativo = :ativo")
-    public List<Talhao> getTalhoes(boolean ativo);
+    @Query("SELECT t.id AS idTalhao, t.nome AS nomeTalhao, t.areaHa, f.nome AS nomeFazenda" +
+            " FROM talhao AS t INNER JOIN fazenda AS f ON f.id = t.fazenda_id WHERE t.ativo = :ativo")
+    List<TalhaoFazenda> getTalhoesFazenda(boolean ativo);
 
-    @Query("SELECT * FROM talhao WHERE fazenda_id = :fazendaId")
-    public List<Talhao> getTalhoesByFazendaID(int fazendaId);
+    @Query("SELECT t.id AS idTalhao, t.nome AS nomeTalhao, t.areaHa, f.nome AS nomeFazenda" +
+            " FROM talhao AS t INNER JOIN fazenda AS f ON f.id = t.fazenda_id " +
+            "WHERE t.ativo = :ativo AND t.fazenda_id = :fazendaId")
+    List<TalhaoFazenda> getTalhoesByFazendaID(boolean ativo, int fazendaId);
     
 }

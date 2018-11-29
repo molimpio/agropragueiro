@@ -56,7 +56,7 @@ public class FazendaListaFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvFazendas.setLayoutManager(layoutManager);
 
-        FazendaAdapter fazendaAdapter = new FazendaAdapter(fazendas, getContext());
+        FazendaAdapter fazendaAdapter = new FazendaAdapter(fazendas);
         rvFazendas.setAdapter(fazendaAdapter);
 
         fazendaAdapter.setClickListener((position, view1) -> {
