@@ -22,6 +22,7 @@ import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.adapter.FazendaAdapter;
 import br.net.olimpiodev.agropragueiro.fragment.Cadastro.FazendaCadastroFragment;
 import br.net.olimpiodev.agropragueiro.model.Cliente;
+import br.net.olimpiodev.agropragueiro.model.Fazenda;
 import br.net.olimpiodev.agropragueiro.model.FazendaCliente;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 
@@ -80,6 +81,15 @@ public class FazendaListaFragment extends Fragment {
         fm.beginTransaction().replace(R.id.frg_principal, fdf).commit();
     }
 
+    private void openListaTalhoes(FazendaCliente fazenda) {
+        TalhaoListaFragment tlf = new TalhaoListaFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(getResources().getString(R.string.fazenda_param), fazenda);
+        tlf.setArguments(bundle);
+        FragmentManager fm = getFragmentManager();
+        fm.beginTransaction().replace(R.id.frg_principal, tlf).commit();
+    }
+
     private void opcoes(final FazendaCliente fazenda) {
         try {
             final String[] OPCOES = getResources().getStringArray(R.array.opcoes_fazenda_card);
@@ -91,7 +101,8 @@ public class FazendaListaFragment extends Fragment {
             builder.setSingleChoiceItems(OPCOES, 3, (dialog, item) -> {
                         switch (item) {
                             case 0:
-                                // ver talhoes
+                                dialog.dismiss();
+                                openListaTalhoes(fazenda);
                                 break;
                             case 1:
                                 dialog.dismiss();

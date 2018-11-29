@@ -17,13 +17,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
-import java.util.Objects;
 
 import br.net.olimpiodev.agropragueiro.AppDatabase;
 import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.adapter.TalhaoAdapter;
 import br.net.olimpiodev.agropragueiro.fragment.Cadastro.TalhaoCadastroFragment;
 import br.net.olimpiodev.agropragueiro.model.Fazenda;
+import br.net.olimpiodev.agropragueiro.model.FazendaCliente;
 import br.net.olimpiodev.agropragueiro.model.Talhao;
 import br.net.olimpiodev.agropragueiro.model.TalhaoFazenda;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
@@ -134,8 +134,8 @@ public class TalhaoListaFragment extends Fragment {
             try {
                 if (bundle != null) {
                     String keyBundle = getResources().getString(R.string.fazenda_param);
-                    Fazenda f = (Fazenda) bundle.getSerializable(keyBundle);
-                    talhoes = db.talhaoDao().getTalhoesByFazendaID(true, f.getId());
+                    FazendaCliente fc = (FazendaCliente) bundle.getSerializable(keyBundle);
+                    talhoes = db.talhaoDao().getTalhoesByFazendaID(true, fc.getIdFazenda());
                 } else {
                     talhoes = db.talhaoDao().getTalhoesFazenda(true);
                 }
