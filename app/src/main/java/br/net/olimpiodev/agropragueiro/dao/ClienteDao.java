@@ -16,14 +16,11 @@ public interface ClienteDao {
     public void insert(Cliente... cliente);
 
     @Update
-    public void update(Cliente... cliente);
+    void update(Cliente... cliente);
 
     @Query("SELECT * FROM cliente WHERE ativo = :ativo")
-    public List<Cliente> getClientes(boolean ativo);
-
-    @Query("SELECT * FROM cliente WHERE id = :clienteId")
-    public Cliente getClienteById(int clienteId);
+    List<Cliente> getClientes(boolean ativo);
 
     @Query("SELECT c.id AS chave, c.nome AS valor FROM cliente AS c WHERE ativo = :ativo")
-    public List<ChaveValor> getClientesDropDown(boolean ativo);
+    List<ChaveValor> getClientesDropDown(boolean ativo);
 }

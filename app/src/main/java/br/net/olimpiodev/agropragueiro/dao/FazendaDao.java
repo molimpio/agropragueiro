@@ -7,6 +7,7 @@ import android.arch.persistence.room.Update;
 
 import java.util.List;
 
+import br.net.olimpiodev.agropragueiro.model.ChaveValor;
 import br.net.olimpiodev.agropragueiro.model.Fazenda;
 import br.net.olimpiodev.agropragueiro.model.FazendaCliente;
 
@@ -17,6 +18,9 @@ public interface FazendaDao {
 
     @Update
     void update(Fazenda... fazenda);
+
+    @Query("SELECT f.id AS chave, f.nome AS valor FROM fazenda AS f WHERE ativo = :ativo")
+    List<ChaveValor> getFazendasDropDown(boolean ativo);
 
     @Query("SELECT f.id AS idFazenda, f.nome AS nomeFazenda, f.uf AS ufFazenda, f.cidade AS cidadeFazenda," +
             " c.nome AS nomeCliente FROM fazenda AS f INNER JOIN cliente AS c ON c.id = f.cliente_id" +

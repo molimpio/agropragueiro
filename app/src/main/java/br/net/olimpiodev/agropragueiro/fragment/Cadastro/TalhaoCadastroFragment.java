@@ -1,9 +1,11 @@
 package br.net.olimpiodev.agropragueiro.fragment.Cadastro;
 
 
+import android.annotation.SuppressLint;
+import android.arch.persistence.room.Room;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -15,31 +17,40 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+
 import java.util.List;
 
+import br.net.olimpiodev.agropragueiro.AppDatabase;
 import br.net.olimpiodev.agropragueiro.R;
-import br.net.olimpiodev.agropragueiro.dao.FazendaDao;
-import br.net.olimpiodev.agropragueiro.dao.TalhaoDao;
-import br.net.olimpiodev.agropragueiro.model.Fazenda;
+import br.net.olimpiodev.agropragueiro.model.ChaveValor;
 import br.net.olimpiodev.agropragueiro.model.Talhao;
+import br.net.olimpiodev.agropragueiro.model.TalhaoFazenda;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 
 public class TalhaoCadastroFragment extends Fragment {
 
-    private EditText etNomeTalhao, etObservacao;
+    private AppDatabase db;
+    private EditText etNomeTalhao;
     private Spinner spFazenda;
     private Button btnCadastrar, btnContorno, btnNovo;
     private Talhao talhao;
-//    private RealmResults<Fazenda> realmResults;
+    private List<ChaveValor> fazendaList;
+    private Bundle bundle;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_talhao_cadastro, container, false);
+        db = Room.databaseBuilder(getContext(), AppDatabase.class, AppDatabase.DB_NAME).build();
+
+        bundle = this.getArguments();
+
+        GetFazendas getFazendas = new GetFazendas();
+        getFazendas.execute();
+
         setRefs(view);
         talhao = new Talhao();
-        Bundle bundle = this.getArguments();
-        getArgumentos(bundle);
+        talhao.setId(0);
         return view;
     }
 
@@ -65,14 +76,13 @@ public class TalhaoCadastroFragment extends Fragment {
 
             }
         });
-
-        etObservacao = view.findViewById(R.id.et_obs_talhao);
+        etNomeTalhao.requestFocus();
 
         spFazenda = view.findViewById(R.id.sp_fazendas_talhao);
         spFazenda.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-//                talhao.setFazenda(realmResults.get(position));
+                talhao.setFazendaId(fazendaList.get(position).getChave());
             }
 
             @Override
@@ -95,45 +105,43 @@ public class TalhaoCadastroFragment extends Fragment {
         btnNovo = view.findViewById(R.id.btn_novo_talhao);
         btnNovo.setOnClickListener(view1 -> {
             etNomeTalhao.setEnabled(true);
-            etObservacao.setEnabled(true);
             spFazenda.setEnabled(true);
             etNomeTalhao.setText("");
-            etObservacao.setText("");
             btnCadastrar.setEnabled(false);
             btnContorno.setEnabled(false);
             btnNovo.setVisibility(View.INVISIBLE);
+            talhao = new Talhao();
+            talhao.setId(0);
         });
-
-        startSpinners();
     }
 
-    private void startSpinners() {
-//        Realm realm = Realm.getDefaultInstance();
-//        realmResults = realm.where(Fazenda.class)
-//                .findAll().sort("nome");
-//        List<Fazenda> fazendas = realm.copyFromRealm(realmResults);
-//
-//        ArrayAdapter<Fazenda> adapterFazendas = new ArrayAdapter<>(getContext(),
-//                android.R.layout.simple_spinner_dropdown_item, fazendas);
-//        spFazenda.setAdapter(adapterFazendas);
+    private void startSpinners(List<ChaveValor> fazendas) {
+        ArrayAdapter<ChaveValor> adapterFazendas = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_spinner_dropdown_item, fazendas);
+        spFazenda.setAdapter(adapterFazendas);
     }
 
+    @SuppressLint("StaticFieldLeak")
     private void cadastrar() {
         String nome = etNomeTalhao.getText().toString().trim().toUpperCase();
-        String obs = etObservacao.getText().toString().trim().toUpperCase();
+        talhao.setNome(nome);
 
-//        talhao.setNome(nome);
-//        talhao.setObservacao(obs);
-//        talhao.setAreaHa(0.00);
-//        TalhaoDao.salvar(talhao);
-//        Utils.showMessage(getContext(), "", 1);
-//
-//        etNomeTalhao.setEnabled(false);
-//        etObservacao.setEnabled(false);
-//        spFazenda.setEnabled(false);
-//        btnCadastrar.setEnabled(false);
-//        btnContorno.setEnabled(true);
-//        btnNovo.setVisibility(View.VISIBLE);
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                if (talhao.getId() == 0) db.talhaoDao().insert(talhao);
+                else db.talhaoDao().update(talhao);
+                return null;
+            }
+        }.execute();
+
+        Utils.showMessage(getContext(), "", 1);
+
+        etNomeTalhao.setEnabled(false);
+        spFazenda.setEnabled(false);
+        btnCadastrar.setEnabled(false);
+        btnContorno.setEnabled(true);
+        btnNovo.setVisibility(View.VISIBLE);
     }
 
     private void openMapa() {
@@ -141,21 +149,35 @@ public class TalhaoCadastroFragment extends Fragment {
     }
 
     private void getArgumentos(Bundle bundle) {
-//        try {
-//            if (bundle != null) {
-//                String keyBundle = getResources().getString(R.string.talhao_param);
-//                Talhao t = (Talhao) bundle.getSerializable(keyBundle);
-//                talhao.setId(t.getId());
-//                talhao.setNome(t.getNome());
-//                talhao.setObservacao(t.getObservacao());
-//
-//                etNomeTalhao.setText(talhao.getNome());
-//                etObservacao.setText(talhao.getObservacao());
-//                spFazenda.setSelection(FazendaDao.getIndex(realmResults, talhao.getFazenda()));
-//            }
-//        } catch (Exception e) {
-//
-//        }
+        try {
+            if (bundle != null) {
+                String keyBundle = getResources().getString(R.string.talhao_param);
+                TalhaoFazenda tf = (TalhaoFazenda) bundle.getSerializable(keyBundle);
+                talhao.setId(tf.getIdTalhao());
+                talhao.setNome(tf.getNomeTalhao());
+
+                etNomeTalhao.setText(talhao.getNome());
+                spFazenda.setSelection(Utils.getIndexChaveValor(fazendaList, tf.getNomeFazenda()));
+            }
+        } catch (Exception e) {
+            Utils.logar(e.getMessage());
+        }
     }
 
+    @SuppressLint("StaticFieldLeak")
+    private class GetFazendas extends AsyncTask<Void, Void, List<ChaveValor>> {
+
+        @Override
+        protected List<ChaveValor> doInBackground(Void... voids) {
+            List<ChaveValor> fazendas = db.fazendaDao().getFazendasDropDown(true);
+            return fazendas;
+        }
+
+        @Override
+        protected void onPostExecute(List<ChaveValor> fazendas) {
+            fazendaList = fazendas;
+            startSpinners(fazendas);
+            getArgumentos(bundle);
+        }
+    }
 }
