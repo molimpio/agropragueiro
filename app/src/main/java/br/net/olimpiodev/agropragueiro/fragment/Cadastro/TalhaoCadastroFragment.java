@@ -154,10 +154,10 @@ public class TalhaoCadastroFragment extends Fragment {
 
     private void openMapa() {
         Intent mapaIntent = new Intent(getContext(), MapaActivity.class);
-        mapaIntent.putExtra("talhaoId", talhao.getId());
+        mapaIntent.putExtra(getResources().getString(R.string.talhao_id_param), talhao.getId());
 
         if (talhao.getContorno() != null) {
-            mapaIntent.putExtra("contorno", talhao.getContorno());
+            mapaIntent.putExtra(getResources().getString(R.string.contorno_param), talhao.getContorno());
         }
         startActivity(mapaIntent);
     }

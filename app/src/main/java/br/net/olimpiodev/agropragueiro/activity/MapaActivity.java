@@ -65,12 +65,12 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
         fragmentoMapa.getMapAsync(this);
         db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, AppDatabase.DB_NAME).build();
 
-        if (getIntent().hasExtra("talhaoId")) {
-            talhaoId = (int) getIntent().getSerializableExtra("talhaoId");
+        if (getIntent().hasExtra(getResources().getString(R.string.talhao_id_param))) {
+            talhaoId = (int) getIntent().getSerializableExtra(getResources().getString(R.string.talhao_id_param));
         }
 
-        if (getIntent().hasExtra("contorno")) {
-            contorno = (String) getIntent().getSerializableExtra("contorno");
+        if (getIntent().hasExtra(getResources().getString(R.string.contorno_param))) {
+            contorno = (String) getIntent().getSerializableExtra(getResources().getString(R.string.contorno_param));
         }
     }
 
