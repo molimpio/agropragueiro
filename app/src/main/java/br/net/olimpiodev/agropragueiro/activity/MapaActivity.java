@@ -190,7 +190,9 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
                 salvarContorno();
                 return true;
             case R.id.remover:
+                //TODO: verificar pq não está apagando.
                 mapa.clear();
+                coordenadas.clear();
                 return true;
             case R.id.layers:
                 opcoesLayer();

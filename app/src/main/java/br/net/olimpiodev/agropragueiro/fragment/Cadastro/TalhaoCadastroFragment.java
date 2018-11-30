@@ -3,6 +3,7 @@ package br.net.olimpiodev.agropragueiro.fragment.Cadastro;
 
 import android.annotation.SuppressLint;
 import android.arch.persistence.room.Room;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,11 +18,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-
 import java.util.List;
 
 import br.net.olimpiodev.agropragueiro.AppDatabase;
 import br.net.olimpiodev.agropragueiro.R;
+import br.net.olimpiodev.agropragueiro.activity.MapaActivity;
 import br.net.olimpiodev.agropragueiro.fragment.Lista.TalhaoListaFragment;
 import br.net.olimpiodev.agropragueiro.model.ChaveValor;
 import br.net.olimpiodev.agropragueiro.model.Talhao;
@@ -152,7 +153,13 @@ public class TalhaoCadastroFragment extends Fragment {
     }
 
     private void openMapa() {
+        Intent mapaIntent = new Intent(getContext(), MapaActivity.class);
+        mapaIntent.putExtra("talhaoId", talhao.getId());
 
+        if (talhao.getContorno() != null) {
+            mapaIntent.putExtra("contorno", talhao.getContorno());
+        }
+        startActivity(mapaIntent);
     }
 
     private void getArgumentos(Bundle bundle) {
@@ -162,6 +169,7 @@ public class TalhaoCadastroFragment extends Fragment {
                 TalhaoFazenda tf = (TalhaoFazenda) bundle.getSerializable(keyBundle);
                 talhao.setId(tf.getIdTalhao());
                 talhao.setNome(tf.getNomeTalhao());
+                talhao.setContorno(tf.getContorno());
 
                 etNomeTalhao.setText(talhao.getNome());
                 spFazenda.setSelection(Utils.getIndexChaveValor(fazendaList, tf.getNomeFazenda()));

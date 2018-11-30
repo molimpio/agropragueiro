@@ -86,7 +86,7 @@ public class TalhaoListaFragment extends Fragment {
     private void openMapa(TalhaoFazenda talhaoFazenda) {
         Intent mapaIntent = new Intent(getContext(), MapaActivity.class);
         mapaIntent.putExtra("talhaoId", talhaoFazenda.getIdTalhao());
-        Utils.logar(talhaoFazenda.toString());
+
         if (talhaoFazenda.getContorno() != null) {
             mapaIntent.putExtra("contorno", talhaoFazenda.getContorno());
         }
