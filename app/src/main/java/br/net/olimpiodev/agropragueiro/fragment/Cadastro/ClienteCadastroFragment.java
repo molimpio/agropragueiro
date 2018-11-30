@@ -6,6 +6,7 @@ import android.arch.persistence.room.Room;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import java.util.List;
 
 import br.net.olimpiodev.agropragueiro.AppDatabase;
 import br.net.olimpiodev.agropragueiro.R;
+import br.net.olimpiodev.agropragueiro.fragment.Lista.ClienteListaFragment;
 import br.net.olimpiodev.agropragueiro.model.Cliente;
 import br.net.olimpiodev.agropragueiro.model.Usuario;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
@@ -77,8 +79,11 @@ public class ClienteCadastroFragment extends Fragment {
         spUfCliente = view.findViewById(R.id.sp_uf_cliente);
 
         Button btCancelarCliente = view.findViewById(R.id.bt_cancelar_cliente);
+
+        ClienteListaFragment clf = new ClienteListaFragment();
         btCancelarCliente.setOnClickListener(view1 ->
-            getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit()
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.frg_principal, clf).commit()
         );
 
         btCadastrarCliente = view.findViewById(R.id.bt_cadastrar_cliente);

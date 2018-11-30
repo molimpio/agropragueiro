@@ -20,6 +20,7 @@ import java.util.List;
 
 import br.net.olimpiodev.agropragueiro.AppDatabase;
 import br.net.olimpiodev.agropragueiro.R;
+import br.net.olimpiodev.agropragueiro.fragment.Lista.FazendaListaFragment;
 import br.net.olimpiodev.agropragueiro.model.ChaveValor;
 import br.net.olimpiodev.agropragueiro.model.Fazenda;
 import br.net.olimpiodev.agropragueiro.model.FazendaCliente;
@@ -98,8 +99,11 @@ public class FazendaCadastroFragment extends Fragment {
         });
 
         Button btCancelarFaz = view.findViewById(R.id.bt_cancelar_faz);
+        FazendaListaFragment flf = new FazendaListaFragment();
+
         btCancelarFaz.setOnClickListener(view1 ->
-                getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit()
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.frg_principal, flf).commit()
         );
 
         btnCadastrarFaz = view.findViewById(R.id.bt_cadastrar_faz);

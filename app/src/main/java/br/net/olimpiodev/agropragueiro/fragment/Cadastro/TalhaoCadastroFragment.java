@@ -22,6 +22,7 @@ import java.util.List;
 
 import br.net.olimpiodev.agropragueiro.AppDatabase;
 import br.net.olimpiodev.agropragueiro.R;
+import br.net.olimpiodev.agropragueiro.fragment.Lista.TalhaoListaFragment;
 import br.net.olimpiodev.agropragueiro.model.ChaveValor;
 import br.net.olimpiodev.agropragueiro.model.Talhao;
 import br.net.olimpiodev.agropragueiro.model.TalhaoFazenda;
@@ -93,8 +94,11 @@ public class TalhaoCadastroFragment extends Fragment {
         });
 
         Button btnCancelar = view.findViewById(R.id.btn_cancelar_talhao);
+        TalhaoListaFragment tlf = new TalhaoListaFragment();
+
         btnCancelar.setOnClickListener(view1 ->
-            getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit()
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.frg_principal, tlf).commit()
         );
 
         btnCadastrar = view.findViewById(R.id.btn_cadastrar_talhao);
