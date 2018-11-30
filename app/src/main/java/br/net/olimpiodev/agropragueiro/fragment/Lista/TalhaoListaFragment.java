@@ -62,20 +62,20 @@ public class TalhaoListaFragment extends Fragment {
         TalhaoAdapter talhaoAdapter = new TalhaoAdapter(talhoes);
         rvTalhoes.setAdapter(talhaoAdapter);
 
-//        talhaoAdapter.setClickListener((position, view1) -> {
-//            if (view1.getId() == R.id.btn_opoes_tc) {
-//                final Talhao talhao = talhoes.get(position);
-//                    opcoes(talhao);
-//            }
-//        });
+        talhaoAdapter.setClickListener((position, view1) -> {
+            if (view1.getId() == R.id.btn_opoes_tc) {
+                final TalhaoFazenda talhaoFazenda = talhoes.get(position);
+                    opcoes(talhaoFazenda);
+            }
+        });
     }
 
-    private void openCadastro(Talhao talhao) {
+    private void openCadastro(TalhaoFazenda talhaoFazenda) {
         TalhaoCadastroFragment tcf = new TalhaoCadastroFragment();
 
-        if (talhao != null) {
+        if (talhaoFazenda != null) {
             Bundle bundle = new Bundle();
-            bundle.putSerializable(getResources().getString(R.string.talhao_param), talhao);
+            bundle.putSerializable(getResources().getString(R.string.talhao_param), talhaoFazenda);
             tcf.setArguments(bundle);
         }
 
@@ -83,7 +83,7 @@ public class TalhaoListaFragment extends Fragment {
         fm.beginTransaction().replace(R.id.frg_principal, tcf).commit();
     }
 
-    private void opcoes(final Talhao talhao) {
+    private void opcoes(final TalhaoFazenda talhaoFazenda) {
         try {
             final String[] OPCOES = getResources().getStringArray(R.array.opcoes_talhao_card);
             final String dialogTitle = getResources().getString(R.string.titulo_opcoes_card);
@@ -101,7 +101,7 @@ public class TalhaoListaFragment extends Fragment {
                                 break;
                             case 2:
                                 dialog.dismiss();
-                                openCadastro(talhao);
+                                openCadastro(talhaoFazenda);
                                 break;
                             case 3:
                                 //excluir

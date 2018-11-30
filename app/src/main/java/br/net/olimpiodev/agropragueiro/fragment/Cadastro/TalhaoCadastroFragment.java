@@ -36,6 +36,7 @@ public class TalhaoCadastroFragment extends Fragment {
     private Talhao talhao;
     private List<ChaveValor> fazendaList;
     private Bundle bundle;
+    private int fazendaIdSelecionado;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -112,6 +113,7 @@ public class TalhaoCadastroFragment extends Fragment {
             btnNovo.setVisibility(View.INVISIBLE);
             talhao = new Talhao();
             talhao.setId(0);
+            talhao.setFazendaId(fazendaIdSelecionado);
         });
     }
 
@@ -123,6 +125,7 @@ public class TalhaoCadastroFragment extends Fragment {
 
     @SuppressLint("StaticFieldLeak")
     private void cadastrar() {
+        fazendaIdSelecionado = talhao.getFazendaId();
         String nome = etNomeTalhao.getText().toString().trim().toUpperCase();
         talhao.setNome(nome);
 
