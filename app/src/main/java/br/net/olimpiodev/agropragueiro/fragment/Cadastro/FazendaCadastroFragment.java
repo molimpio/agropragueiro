@@ -34,6 +34,7 @@ public class FazendaCadastroFragment extends Fragment {
     private Fazenda fazenda;
     private List<ChaveValor> clienteList;
     private Bundle bundle;
+    private int clienteIdSelecionado;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -117,6 +118,7 @@ public class FazendaCadastroFragment extends Fragment {
             btnNovo.setVisibility(View.INVISIBLE);
             fazenda = new Fazenda();
             fazenda.setId(0);
+            fazenda.setClienteId(clienteIdSelecionado);
         });
     }
 
@@ -146,6 +148,7 @@ public class FazendaCadastroFragment extends Fragment {
 
     @SuppressLint("StaticFieldLeak")
     private void cadastrar() {
+        clienteIdSelecionado = fazenda.getClienteId();
         String uf = spUfFaz.getSelectedItem().toString().toUpperCase();
         fazenda.setUf(uf);
 
