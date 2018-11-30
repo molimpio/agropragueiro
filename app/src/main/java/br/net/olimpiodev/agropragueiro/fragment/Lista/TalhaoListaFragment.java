@@ -83,9 +83,13 @@ public class TalhaoListaFragment extends Fragment {
         fm.beginTransaction().replace(R.id.frg_principal, tcf).commit();
     }
 
-    private void openMapa() {
+    private void openMapa(TalhaoFazenda talhaoFazenda) {
         Intent mapaIntent = new Intent(getContext(), MapaActivity.class);
-        //mapaIntent.putExtra("talhaoId", talhao.getId());
+        mapaIntent.putExtra("talhaoId", talhaoFazenda.getIdTalhao());
+        Utils.logar(talhaoFazenda.toString());
+        if (talhaoFazenda.getContorno() != null) {
+            mapaIntent.putExtra("contorno", talhaoFazenda.getContorno());
+        }
         startActivity(mapaIntent);
     }
 
@@ -101,7 +105,7 @@ public class TalhaoListaFragment extends Fragment {
                         switch (item) {
                             case 0:
                                 dialog.dismiss();
-                                openMapa();
+                                openMapa(talhaoFazenda);
                                 break;
                             case 1:
                                 // amostragens

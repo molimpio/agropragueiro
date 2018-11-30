@@ -1,9 +1,12 @@
 package br.net.olimpiodev.agropragueiro.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.arch.persistence.room.Room;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,6 +25,8 @@ import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.gson.Gson;
+import com.google.maps.android.SphericalUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,7 +35,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.net.olimpiodev.agropragueiro.AppDatabase;
 import br.net.olimpiodev.agropragueiro.R;
+import br.net.olimpiodev.agropragueiro.model.Talhao;
+import br.net.olimpiodev.agropragueiro.utils.Utils;
 
 public class MapaActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleMap.OnMapClickListener,
@@ -46,6 +54,7 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
     private String contorno;
     private List<LatLng> coordenadas = new ArrayList<>();
     private int mapaTipoSelecionado = 2;
+    private AppDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +63,15 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         SupportMapFragment fragmentoMapa = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map);
         fragmentoMapa.getMapAsync(this);
+        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, AppDatabase.DB_NAME).build();
+
+        if (getIntent().hasExtra("talhaoId")) {
+            talhaoId = (int) getIntent().getSerializableExtra("talhaoId");
+        }
+
+        if (getIntent().hasExtra("contorno")) {
+            contorno = (String) getIntent().getSerializableExtra("contorno");
+        }
     }
 
     @Override
@@ -182,15 +200,26 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     public void salvarContorno() {
-//        Gson gson = new Gson();
-//        String contorno = gson.toJson(coordenadas);
-//        TalhaoDAO talhaoDAO = new TalhaoDAO(this);
-//        Double areaHa = SphericalUtil.computeArea(coordenadas) / 10000;
-//        Double areaRound = Util.round(areaHa, 2);
-//        talhaoDAO.salvarContorno(contorno, talhaoId, areaRound);
-//        Util.toast(this, getResources().getString(R.string.contorno_cadastrado));
-//        finish();
+        Gson gson = new Gson();
+        String contorno = gson.toJson(coordenadas);
+        Double areaHa = SphericalUtil.computeArea(coordenadas) / 10000;
+        Double areaRound = Utils.round(areaHa, 2);
+
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                Talhao talhao = db.talhaoDao().getTalhaoById(talhaoId);
+                talhao.setContorno(contorno);
+                talhao.setAreaHa(areaRound);
+                db.talhaoDao().update(talhao);
+                return null;
+            }
+        }.execute();
+
+        Utils.showMessage(getApplicationContext(), "", 1);
+        finish();
     }
 
     private void exibirContornoMapa() {

@@ -19,7 +19,10 @@ public interface TalhaoDao {
     @Update
     void update(Talhao... talhao);
 
-    @Query("SELECT t.id AS idTalhao, t.nome AS nomeTalhao, t.areaHa, f.nome AS nomeFazenda" +
+    @Query("SELECT * FROM talhao WHERE id = :id")
+    Talhao getTalhaoById(int id);
+
+    @Query("SELECT t.id AS idTalhao, t.nome AS nomeTalhao, t.areaHa, t.contorno, f.nome AS nomeFazenda" +
             " FROM talhao AS t INNER JOIN fazenda AS f ON f.id = t.fazenda_id WHERE t.ativo = :ativo")
     List<TalhaoFazenda> getTalhoesFazenda(boolean ativo);
 
@@ -27,5 +30,5 @@ public interface TalhaoDao {
             " FROM talhao AS t INNER JOIN fazenda AS f ON f.id = t.fazenda_id " +
             "WHERE t.ativo = :ativo AND t.fazenda_id = :fazendaId")
     List<TalhaoFazenda> getTalhoesByFazendaID(boolean ativo, int fazendaId);
-    
+
 }
