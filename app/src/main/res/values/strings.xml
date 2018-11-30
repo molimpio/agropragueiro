@@ -1,4 +1,5 @@
 <resources>
+    <string name="google_maps_key">AIzaSyDMCmN4yHxqB3nK-yfwetS6v4RoiK8Vl34</string>
     <string name="app_name">Agropragueiro</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -23,6 +24,8 @@
     <string name="observacao">Observação</string>
     <string name="contorno">Contorno</string>
     <string name="novo">Novo</string>
+    <string name="salvar">Salvar</string>
+    <string name="remover">Remover</string>
 
     <!-- hints -->
     <string name="minimo_dois_caracteres">Mínimo 2 caracteres</string>
@@ -74,5 +77,23 @@
         <item>Editar</item>
         <item>Excluir</item>
     </string-array>
+
+    <!-- mapa -->
+    <string name="titulo_dialog">Selecione o tipo do Mapa</string>
+    <string name="titulo_dialog_ponto">Escolha ação que deseja aplicar no ponto</string>
+    <string name="basemaps">Tipos mapas</string>
+    <string-array name="mapa_types">
+        <item>Normal</item>
+        <item>Híbrido</item>
+        <item>Satélite</item>
+        <item>Terreno</item>
+    </string-array>
+
+    <string-array name="mapa_pontos">
+        <item>Remover</item>
+        <item>Mover</item>
+    </string-array>
+
+
 
 </resources>

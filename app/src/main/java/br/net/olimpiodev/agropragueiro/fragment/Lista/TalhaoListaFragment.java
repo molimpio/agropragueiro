@@ -4,6 +4,7 @@ package br.net.olimpiodev.agropragueiro.fragment.Lista;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.arch.persistence.room.Room;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -20,11 +21,10 @@ import java.util.List;
 
 import br.net.olimpiodev.agropragueiro.AppDatabase;
 import br.net.olimpiodev.agropragueiro.R;
+import br.net.olimpiodev.agropragueiro.activity.MapaActivity;
 import br.net.olimpiodev.agropragueiro.adapter.TalhaoAdapter;
 import br.net.olimpiodev.agropragueiro.fragment.Cadastro.TalhaoCadastroFragment;
-import br.net.olimpiodev.agropragueiro.model.Fazenda;
 import br.net.olimpiodev.agropragueiro.model.FazendaCliente;
-import br.net.olimpiodev.agropragueiro.model.Talhao;
 import br.net.olimpiodev.agropragueiro.model.TalhaoFazenda;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 
@@ -83,6 +83,12 @@ public class TalhaoListaFragment extends Fragment {
         fm.beginTransaction().replace(R.id.frg_principal, tcf).commit();
     }
 
+    private void openMapa() {
+        Intent mapaIntent = new Intent(getContext(), MapaActivity.class);
+        //mapaIntent.putExtra("talhaoId", talhao.getId());
+        startActivity(mapaIntent);
+    }
+
     private void opcoes(final TalhaoFazenda talhaoFazenda) {
         try {
             final String[] OPCOES = getResources().getStringArray(R.array.opcoes_talhao_card);
@@ -94,7 +100,8 @@ public class TalhaoListaFragment extends Fragment {
             builder.setSingleChoiceItems(OPCOES, 3, (dialog, item) -> {
                         switch (item) {
                             case 0:
-                                // contorno
+                                dialog.dismiss();
+                                openMapa();
                                 break;
                             case 1:
                                 // amostragens

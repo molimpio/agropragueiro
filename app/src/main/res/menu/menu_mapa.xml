@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/salvar"
+        app:showAsAction="ifRoom"
+        android:icon="@mipmap/baseline_done_white_24"
+        android:title="@string/salvar"
+        />
+    <item
+        android:id="@+id/remover"
+        app:showAsAction="ifRoom"
+        android:icon="@mipmap/baseline_clear_white_24"
+        android:title="@string/remover"
+        />
+    <item
+        android:id="@+id/layers"
+        app:showAsAction="ifRoom"
+        android:icon="@mipmap/baseline_layers_white_24"
+        android:title="@string/basemaps"
+        />
+</menu>
+
