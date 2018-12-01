@@ -11,7 +11,6 @@ import android.widget.TextView;
 import java.util.List;
 
 import br.net.olimpiodev.agropragueiro.R;
-import br.net.olimpiodev.agropragueiro.model.Talhao;
 import br.net.olimpiodev.agropragueiro.model.TalhaoFazenda;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 

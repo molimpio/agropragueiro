@@ -21,9 +21,12 @@ public class Amostragem implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private int id;
     private String nome;
+
+    @ColumnInfo(name = "qtde_pontos")
     private int qtdePontos = 0;
-    private String safra;
-    private String cultura;
+
+    private String data;
+    private String observacao;
     private Boolean ativo = true;
     private Boolean sincronizado = false;
 
@@ -56,20 +59,20 @@ public class Amostragem implements Serializable {
         this.qtdePontos = qtdePontos;
     }
 
-    public String getSafra() {
-        return safra;
+    public String getData() {
+        return data;
     }
 
-    public void setSafra(String safra) {
-        this.safra = safra;
+    public void setData(String data) {
+        this.data = data;
     }
 
-    public String getCultura() {
-        return cultura;
+    public String getObservacao() {
+        return observacao;
     }
 
-    public void setCultura(String cultura) {
-        this.cultura = cultura;
+    public void setObservacao(String observacao) {
+        this.observacao = observacao;
     }
 
     public Boolean getAtivo() {

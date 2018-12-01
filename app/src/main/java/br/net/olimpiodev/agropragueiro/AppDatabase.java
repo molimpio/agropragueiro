@@ -7,6 +7,7 @@ import android.arch.persistence.room.InvalidationTracker;
 import android.arch.persistence.room.RoomDatabase;
 import android.support.annotation.NonNull;
 
+import br.net.olimpiodev.agropragueiro.dao.AmostragemDao;
 import br.net.olimpiodev.agropragueiro.dao.ClienteDao;
 import br.net.olimpiodev.agropragueiro.dao.FazendaDao;
 import br.net.olimpiodev.agropragueiro.dao.TalhaoDao;
@@ -37,6 +38,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract ClienteDao clienteDao();
     public abstract FazendaDao fazendaDao();
     public abstract TalhaoDao talhaoDao();
+    public abstract AmostragemDao amostragemDao();
 
     @NonNull
     @Override

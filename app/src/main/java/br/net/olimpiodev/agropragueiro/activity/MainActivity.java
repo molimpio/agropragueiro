@@ -1,8 +1,8 @@
 package br.net.olimpiodev.agropragueiro.activity;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -86,8 +86,8 @@ public class MainActivity extends AppCompatActivity
             TalhaoListaFragment tlf = new TalhaoListaFragment();
             fm.beginTransaction().replace(R.id.frg_principal, tlf).commit();
         } else if (id == R.id.nav_manage) {
-//            AmostragemListaFragment alf = new AmostragemListaFragment();
-//            fm.beginTransaction().replace(R.id.frg_principal, alf).commit();
+            AmostragemListaFragment alf = new AmostragemListaFragment();
+            fm.beginTransaction().replace(R.id.frg_principal, alf).commit();
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {

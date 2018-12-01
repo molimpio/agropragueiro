@@ -74,8 +74,8 @@
     <string name="talhao_id_param">Talhao_id_Param</string>
     <string name="contorno_param">Contorno_Param</string>
     <string-array name="opcoes_talhao_card">
-        <item>Contorno</item>
-        <item>Amostragens</item>
+        <item>Ver contorno no mapa</item>
+        <item>Ver lista amostragens</item>
         <item>Editar</item>
         <item>Excluir</item>
     </string-array>
@@ -96,6 +96,14 @@
         <item>Mover</item>
     </string-array>
 
-
+    <!-- amostragens-->
+    <string name="amostragem_param">Amostragem_Param</string>
+    <string name="amostragem_id_param">Amostragem_id_Param</string>
+    <string-array name="opcoes_amostragem_card">
+        <item>Ver Pontos no mapa</item>
+        <item>Ver pontos amostragens</item>
+        <item>Editar</item>
+        <item>Excluir</item>
+    </string-array>
 
 </resources>

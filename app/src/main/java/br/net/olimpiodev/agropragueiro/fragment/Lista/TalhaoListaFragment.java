@@ -65,7 +65,7 @@ public class TalhaoListaFragment extends Fragment {
         talhaoAdapter.setClickListener((position, view1) -> {
             if (view1.getId() == R.id.btn_opoes_tc) {
                 final TalhaoFazenda talhaoFazenda = talhoes.get(position);
-                    opcoes(talhaoFazenda);
+                opcoes(talhaoFazenda);
             }
         });
     }
