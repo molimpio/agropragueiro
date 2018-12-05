@@ -7,6 +7,7 @@ import android.arch.persistence.room.Room;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -58,6 +59,8 @@ public class AmostragemCadastroFragment extends Fragment {
         amostragem = new Amostragem();
         amostragem.setId(0);
 
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Cadastrar Amostragem");
+
         return view;
     }
 
@@ -88,6 +91,7 @@ public class AmostragemCadastroFragment extends Fragment {
         etNomeAmostragem.requestFocus();
 
         etDataAmostragem = view.findViewById(R.id.et_data_amostragem);
+        etDataAmostragem.setFocusable(false);
 
         etDataAmostragem.addTextChangedListener(new TextWatcher() {
             @Override

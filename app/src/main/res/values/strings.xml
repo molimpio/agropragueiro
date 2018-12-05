@@ -17,7 +17,9 @@
     <string name="nome">Nome</string>
     <string name="uf">UF</string>
     <string name="cidade">Cidade</string>
-    <string name="cancelar">Cancelar</string>
+    <string name="cancelar">Voltar</string>
+    <string name="opcional">Opcional</string>
+    <string name="obrigatorio">Obrigatório</string>
     <string name="categoria">Categoria</string>
     <string name="n_o_existem_dados_cadastrados">Não existem dados cadastrados!</string>
     <string name="titulo_opcoes_card">Selecione uma opção abaixo</string>

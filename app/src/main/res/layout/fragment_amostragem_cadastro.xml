@@ -6,7 +6,7 @@
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         tools:context=".fragment.Cadastro.AmostragemCadastroFragment">
 
         <LinearLayout
@@ -16,17 +16,8 @@
             android:padding="20dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/cadastrar_amostragem"
-                android:textSize="25sp"
-                tools:textColor="#000" />
-
-            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:text="@string/talhao" />
 
             <Spinner
@@ -37,7 +28,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:text="@string/nome" />
 
             <EditText
@@ -50,7 +41,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
+                android:hint="@string/obrigatorio"
                 android:text="@string/data" />
 
             <EditText
@@ -61,20 +53,20 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="30dp"
                 android:text="@string/observacao" />
 
             <EditText
                 android:id="@+id/et_observacao_amostragem"
+                android:hint="@string/opcional"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/minimo_dois_caracteres"
                 android:inputType="text" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
                 <Button
@@ -95,22 +87,31 @@
                     android:text="@string/cadastrar" />
             </LinearLayout>
 
-            <Button
-                android:id="@+id/btn_pontos_amostragem"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:enabled="false"
-                android:text="@string/pontos" />
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/btn_nova_amostragem"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="@string/novo"
-                android:visibility="visible" />
+                <Button
+                    android:id="@+id/btn_pontos_amostragem"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_weight="1"
+                    android:enabled="false"
+                    android:text="@string/pontos" />
 
+                <Button
+                    android:id="@+id/btn_nova_amostragem"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_weight="1"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/novo"
+                    android:visibility="visible" />
+            </LinearLayout>
         </LinearLayout>
     </FrameLayout>
 </ScrollView>
