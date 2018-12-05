@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -54,6 +55,7 @@ public class TalhaoCadastroFragment extends Fragment {
         setRefs(view);
         talhao = new Talhao();
         talhao.setId(0);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Cadastrar Talhão");
         return view;
     }
 
