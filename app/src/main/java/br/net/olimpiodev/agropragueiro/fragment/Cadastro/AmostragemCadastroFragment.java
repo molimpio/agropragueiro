@@ -135,7 +135,7 @@ public class AmostragemCadastroFragment extends Fragment {
             }
         });
 
-        Button btnCancelar = view.findViewById(R.id.btn_cadastrar_amostragem);
+        Button btnCancelar = view.findViewById(R.id.btn_cancelar_amostragem);
         AmostragemListaFragment alf = new AmostragemListaFragment();
 
         btnCancelar.setOnClickListener(view1 ->

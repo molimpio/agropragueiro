@@ -96,6 +96,15 @@ public class TalhaoListaFragment extends Fragment {
         startActivity(mapaIntent);
     }
 
+    private void openListaAmostragens(TalhaoFazenda talhaoFazenda) {
+        AmostragemListaFragment alf = new AmostragemListaFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(getResources().getString(R.string.amostragem_param), talhaoFazenda);
+        alf.setArguments(bundle);
+        FragmentManager fm = getFragmentManager();
+        fm.beginTransaction().replace(R.id.frg_principal, alf).commit();
+    }
+
     private void opcoes(final TalhaoFazenda talhaoFazenda) {
         try {
             final String[] OPCOES = getResources().getStringArray(R.array.opcoes_talhao_card);
@@ -111,7 +120,8 @@ public class TalhaoListaFragment extends Fragment {
                                 openMapa(talhaoFazenda);
                                 break;
                             case 1:
-                                // amostragens
+                                dialog.dismiss();
+                                openListaAmostragens(talhaoFazenda);
                                 break;
                             case 2:
                                 dialog.dismiss();

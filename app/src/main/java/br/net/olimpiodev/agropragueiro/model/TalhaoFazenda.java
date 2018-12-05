@@ -50,4 +50,15 @@ public class TalhaoFazenda implements Serializable {
     public void setContorno(String contorno) {
         this.contorno = contorno;
     }
+
+    @Override
+    public String toString() {
+        return "TalhaoFazenda{" +
+                "idTalhao=" + idTalhao +
+                ", nomeTalhao='" + nomeTalhao + '\'' +
+                ", areaHa=" + areaHa +
+                ", nomeFazenda='" + nomeFazenda + '\'' +
+                ", contorno='" + contorno + '\'' +
+                '}';
+    }
 }

@@ -24,6 +24,7 @@ import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.adapter.AmostragemAdapter;
 import br.net.olimpiodev.agropragueiro.fragment.Cadastro.AmostragemCadastroFragment;
 import br.net.olimpiodev.agropragueiro.model.AmostragemTalhao;
+import br.net.olimpiodev.agropragueiro.model.TalhaoFazenda;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 
 public class AmostragemListaFragment extends Fragment {
@@ -137,8 +138,8 @@ public class AmostragemListaFragment extends Fragment {
             try {
                 if (bundle != null) {
                     String keyBunle = getResources().getString(R.string.amostragem_param);
-                    AmostragemTalhao at = (AmostragemTalhao) bundle.getSerializable(keyBunle);
-                    amostragens = db.amostragemDao().getAmostragensByTalhaoId(true, at.getIdTalhao());
+                    TalhaoFazenda tf = (TalhaoFazenda) bundle.getSerializable(keyBunle);
+                    amostragens = db.amostragemDao().getAmostragensByTalhaoId(true, tf.getIdTalhao());
                 } else {
                     amostragens = db.amostragemDao().getAmostragensTalhao(true);
                 }
