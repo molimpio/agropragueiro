@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:datePickerDialogTheme">@style/DialogTheme</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -15,6 +16,11 @@
 
     <style name="AppCompat.TelaCheia" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <!-- define a cor primaria para dialog picker -->
+    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/colorPrimary</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

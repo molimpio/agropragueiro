@@ -22,27 +22,29 @@ public class AmostragemAdapter extends RecyclerView.Adapter<AmostragemAdapter.Am
         this.amostragens = amostragens;
     }
 
-    @NonNull
     @Override
-    public AmostragemAdapter.AmostragemViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public AmostragemViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.amostragem_card, viewGroup, false);
         return new AmostragemViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AmostragemAdapter.AmostragemViewHolder amostragemViewHolder, int position) {
+    public void onBindViewHolder(@NonNull AmostragemViewHolder amostragemViewHolder, int position) {
         AmostragemTalhao amostragemTalhao = amostragens.get(position);
 
-        amostragemViewHolder.nome.setText(amostragemTalhao.getNomeAmostragem());
-        amostragemViewHolder.talhao.setText(amostragemTalhao.getTalhaoNome());
-        amostragemViewHolder.qtdePontos.setText(amostragemTalhao.getQtdePontos());
-        amostragemViewHolder.data.setText(amostragemTalhao.getData());
+        String talhao = "Talhão: " + amostragemTalhao.getTalhaoNome();
+        String data = "Data: " + amostragemTalhao.getData();
+        String qtdePontos = "Qtde pontos: " + amostragemTalhao.getQtdePontos();
 
+        amostragemViewHolder.nome.setText(amostragemTalhao.getNomeAmostragem());
+        amostragemViewHolder.talhao.setText(talhao);
+        amostragemViewHolder.qtdePontos.setText(qtdePontos);
+        amostragemViewHolder.data.setText(data);
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return amostragens.size();
     }
 
     public void setClickListener(AmostragemAdapter.ItemClickListener itemClickListener) {

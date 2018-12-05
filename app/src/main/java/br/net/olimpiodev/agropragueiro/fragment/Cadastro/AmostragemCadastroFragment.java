@@ -42,7 +42,6 @@ public class AmostragemCadastroFragment extends Fragment {
     private List<ChaveValor> talhaoList;
     private Bundle bundle;
     private int talhaoSelecionado;
-    private int ano, mes, dia;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,6 +72,8 @@ public class AmostragemCadastroFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (etNomeAmostragem.getText().toString().length() > 3) {
+                    String nome = etNomeAmostragem.getText().toString().trim().toUpperCase();
+                    amostragem.setNome(nome);
                     btnCadastrar.setEnabled(true);
                 } else {
                     btnCadastrar.setEnabled(false);
@@ -87,9 +88,35 @@ public class AmostragemCadastroFragment extends Fragment {
         etNomeAmostragem.requestFocus();
 
         etDataAmostragem = view.findViewById(R.id.et_data_amostragem);
+
+        etDataAmostragem.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (etDataAmostragem.getText().toString().length() != 0) {
+                    String data = etDataAmostragem.getText().toString().trim().toUpperCase();
+                    amostragem.setData(data);
+                    btnCadastrar.setEnabled(true);
+                } else {
+                    btnCadastrar.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         etDataAmostragem.setOnClickListener(view12 -> new DatePickerDialog(getContext(), date,
                 myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                 myCalendar.get(Calendar.DAY_OF_MONTH)).show());
+
+        etObservacaoAmostragem = view.findViewById(R.id.et_observacao_amostragem);
 
         spTalhao = view.findViewById(R.id.sp_talhoes_amostragem);
         spTalhao.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -141,20 +168,9 @@ public class AmostragemCadastroFragment extends Fragment {
 
     }
 
-    private void initDateTime() {
-        if (ano == 0) {
-            Calendar c = Calendar.getInstance();
-            ano = c.get(Calendar.YEAR);
-            mes = c.get(Calendar.MONTH);
-            dia = c.get(Calendar.DAY_OF_MONTH);
-        }
-    }
-
     @SuppressLint("StaticFieldLeak")
     private void cadastrar() {
         talhaoSelecionado = amostragem.getTalhaoId();
-        String nome = etNomeAmostragem.getText().toString().trim().toUpperCase();
-        amostragem.setNome(nome);
 
         if (etObservacaoAmostragem.getText().length() > 0) {
             String obs = etObservacaoAmostragem.getText().toString().trim().toUpperCase();
@@ -196,10 +212,9 @@ public class AmostragemCadastroFragment extends Fragment {
 
                 etNomeAmostragem.setText(amostragem.getNome());
                 etObservacaoAmostragem.setText(amostragem.getObservacao());
+                etDataAmostragem.setText(amostragem.getData());
 
                 spTalhao.setSelection(Utils.getIndexChaveValor(talhaoList, at.getTalhaoNome()));
-
-                //TODO: setar a data...
             }
         } catch (Exception e) {
             Utils.logar(e.getMessage());
@@ -224,11 +239,9 @@ public class AmostragemCadastroFragment extends Fragment {
     }
 
     private void updateLabel() {
-
-        String myFormat = "dd/MM/yyyy"; //In which you need put here
+        String myFormat = "dd/MM/yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, new Locale("pt","BR"));
-
-        //edittext.setText(sdf.format(myCalendar.getTime()));
+        etDataAmostragem.setText(sdf.format(myCalendar.getTime()));
     }
 
     Calendar myCalendar = Calendar.getInstance();
