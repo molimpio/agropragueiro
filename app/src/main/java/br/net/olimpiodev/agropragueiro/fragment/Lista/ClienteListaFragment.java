@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -44,6 +45,9 @@ public class ClienteListaFragment extends Fragment {
         fabCadastroCliente.setOnClickListener(view1 -> openCadastro(null));
         GetClientes getClientes = new GetClientes();
         getClientes.execute();
+
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Clientes");
+
         return view;
     }
 

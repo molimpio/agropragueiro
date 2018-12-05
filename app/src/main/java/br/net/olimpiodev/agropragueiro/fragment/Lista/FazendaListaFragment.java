@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,7 +23,6 @@ import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.adapter.FazendaAdapter;
 import br.net.olimpiodev.agropragueiro.fragment.Cadastro.FazendaCadastroFragment;
 import br.net.olimpiodev.agropragueiro.model.Cliente;
-import br.net.olimpiodev.agropragueiro.model.Fazenda;
 import br.net.olimpiodev.agropragueiro.model.FazendaCliente;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 
@@ -49,6 +49,8 @@ public class FazendaListaFragment extends Fragment {
         
         GetFazendas getFazendas = new GetFazendas();
         getFazendas.execute();
+
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Fazendas");
         
         return view;
     }

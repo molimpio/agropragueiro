@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -48,6 +49,8 @@ public class AmostragemListaFragment extends Fragment {
 
         GetAmostragens getAmostragens = new GetAmostragens();
         getAmostragens.execute();
+
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Amostragens");
 
         return view;
     }

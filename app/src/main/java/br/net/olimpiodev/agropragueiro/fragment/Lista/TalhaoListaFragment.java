@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -51,6 +52,8 @@ public class TalhaoListaFragment extends Fragment {
 
         GetTalhoes getTalhoes = new GetTalhoes();
         getTalhoes.execute();
+
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Talhões");
 
         return view;
     }
