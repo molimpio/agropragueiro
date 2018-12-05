@@ -43,6 +43,7 @@ public class AmostragemCadastroFragment extends Fragment {
     private List<ChaveValor> talhaoList;
     private Bundle bundle;
     private int talhaoSelecionado;
+    private int year, month, day = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -115,10 +116,13 @@ public class AmostragemCadastroFragment extends Fragment {
 
             }
         });
+        Utils.logar(year + " " + month + " " + day);
 
-        etDataAmostragem.setOnClickListener(view12 -> new DatePickerDialog(getContext(), date,
-                myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                myCalendar.get(Calendar.DAY_OF_MONTH)).show());
+        etDataAmostragem.setOnClickListener(view12 ->
+            new DatePickerDialog(getContext(), date,
+                    myCalendar.get(Calendar.YEAR),
+                    myCalendar.get(Calendar.MONTH),
+                    myCalendar.get(Calendar.DAY_OF_MONTH)).show());
 
         etObservacaoAmostragem = view.findViewById(R.id.et_observacao_amostragem);
 
@@ -162,6 +166,9 @@ public class AmostragemCadastroFragment extends Fragment {
             amostragem = new Amostragem();
             amostragem.setId(0);
             amostragem.setTalhaoId(talhaoSelecionado);
+            year = 0;
+            month = 0;
+            day = 0;
         });
     }
 
@@ -219,6 +226,11 @@ public class AmostragemCadastroFragment extends Fragment {
                 etDataAmostragem.setText(amostragem.getData());
 
                 spTalhao.setSelection(Utils.getIndexChaveValor(talhaoList, at.getTalhaoNome()));
+                Utils.logar(amostragem.getData());
+                String[] dataSplit = amostragem.getData().split("/");
+                day = Integer.parseInt(dataSplit[0]);
+                month = Integer.parseInt(dataSplit[1]);
+                year = Integer.parseInt(dataSplit[2]);
             }
         } catch (Exception e) {
             Utils.logar(e.getMessage());
