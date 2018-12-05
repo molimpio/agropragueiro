@@ -97,6 +97,10 @@
     </string-array>
 
     <!-- amostragens-->
+    <string name="talhao">Talhão</string>
+    <string name="pontos">Pontos</string>
+    <string name="data">Data</string>
+    <string name="cadastrar_amostragem">Cadastrar Amostragem</string>
     <string name="amostragem_param">Amostragem_Param</string>
     <string name="amostragem_id_param">Amostragem_id_Param</string>
     <string-array name="opcoes_amostragem_card">

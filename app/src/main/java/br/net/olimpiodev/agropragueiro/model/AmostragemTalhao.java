@@ -11,6 +11,7 @@ public class AmostragemTalhao implements Serializable {
     private String data;
     private int idTalhao;
     private String talhaoNome;
+    private String observacaoAmostragem;
 
     public int getIdAmostragem() {
         return idAmostragem;
@@ -50,6 +51,14 @@ public class AmostragemTalhao implements Serializable {
 
     public void setIdTalhao(int idTalhao) {
         this.idTalhao = idTalhao;
+    }
+
+    public String getObservacaoAmostragem() {
+        return observacaoAmostragem;
+    }
+
+    public void setObservacaoAmostragem(String observacaoAmostragem) {
+        this.observacaoAmostragem = observacaoAmostragem;
     }
 
     public String getTalhaoNome() {

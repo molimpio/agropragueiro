@@ -8,6 +8,7 @@ import android.arch.persistence.room.Update;
 
 import java.util.List;
 
+import br.net.olimpiodev.agropragueiro.model.ChaveValor;
 import br.net.olimpiodev.agropragueiro.model.Talhao;
 import br.net.olimpiodev.agropragueiro.model.TalhaoFazenda;
 
@@ -21,6 +22,9 @@ public interface TalhaoDao {
 
     @Query("SELECT * FROM talhao WHERE id = :id")
     Talhao getTalhaoById(int id);
+
+    @Query("SELECT t.id AS chave, t.nome AS valor FROM talhao AS t WHERE ativo = :ativo")
+    List<ChaveValor> getTalhoesDropDown(boolean ativo);
 
     @Query("SELECT t.id AS idTalhao, t.nome AS nomeTalhao, t.areaHa, t.contorno, f.nome AS nomeFazenda" +
             " FROM talhao AS t INNER JOIN fazenda AS f ON f.id = t.fazenda_id WHERE t.ativo = :ativo")
