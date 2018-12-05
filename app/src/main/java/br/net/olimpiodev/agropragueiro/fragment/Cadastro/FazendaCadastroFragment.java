@@ -5,6 +5,7 @@ import android.arch.persistence.room.Room;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -51,6 +52,7 @@ public class FazendaCadastroFragment extends Fragment {
         setRefs(view);
         fazenda = new Fazenda();
         fazenda.setId(0);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Cadastrar Fazenda");
         return view;
     }
 
