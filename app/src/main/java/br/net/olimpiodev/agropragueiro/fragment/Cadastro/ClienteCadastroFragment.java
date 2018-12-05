@@ -6,7 +6,7 @@ import android.arch.persistence.room.Room;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -43,6 +43,7 @@ public class ClienteCadastroFragment extends Fragment {
         cliente.setId(0);
         Bundle bundle = this.getArguments();
         getArgumentos(bundle);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Cadastrar Cliente");
         return view;
     }
 

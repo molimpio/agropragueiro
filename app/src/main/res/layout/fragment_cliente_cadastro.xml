@@ -6,7 +6,7 @@
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         tools:context=".fragment.Cadastro.ClienteCadastroFragment">
 
         <LinearLayout
@@ -14,15 +14,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="20dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/cadastrar_cliente"
-                android:textSize="25sp"
-                android:layout_marginBottom="20dp"
-                tools:textColor="#000" />
 
             <TextView
                 android:layout_width="match_parent"
