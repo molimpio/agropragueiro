@@ -4,6 +4,7 @@ package br.net.olimpiodev.agropragueiro.fragment.Lista;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.arch.persistence.room.Room;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -21,6 +22,7 @@ import java.util.List;
 
 import br.net.olimpiodev.agropragueiro.AppDatabase;
 import br.net.olimpiodev.agropragueiro.R;
+import br.net.olimpiodev.agropragueiro.activity.MapaPontosActivity;
 import br.net.olimpiodev.agropragueiro.adapter.AmostragemAdapter;
 import br.net.olimpiodev.agropragueiro.fragment.Cadastro.AmostragemCadastroFragment;
 import br.net.olimpiodev.agropragueiro.model.AmostragemTalhao;
@@ -84,7 +86,10 @@ public class AmostragemListaFragment extends Fragment {
     }
 
     private void openMapa(AmostragemTalhao amostragem) {
-
+        Intent mapaPontosIntent = new Intent(getContext(), MapaPontosActivity.class);
+        mapaPontosIntent.putExtra(getResources().getString(R.string.amostragem_param), amostragem.getIdAmostragem());
+         // verificar se existe contorno...
+        startActivity(mapaPontosIntent);
     }
 
     private void opcoes(final AmostragemTalhao amostragem) {
