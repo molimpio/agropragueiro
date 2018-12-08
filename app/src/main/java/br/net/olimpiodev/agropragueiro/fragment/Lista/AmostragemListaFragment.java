@@ -26,6 +26,7 @@ import br.net.olimpiodev.agropragueiro.activity.MapaPontosActivity;
 import br.net.olimpiodev.agropragueiro.adapter.AmostragemAdapter;
 import br.net.olimpiodev.agropragueiro.fragment.Cadastro.AmostragemCadastroFragment;
 import br.net.olimpiodev.agropragueiro.model.AmostragemTalhao;
+import br.net.olimpiodev.agropragueiro.model.Talhao;
 import br.net.olimpiodev.agropragueiro.model.TalhaoFazenda;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 
@@ -85,11 +86,28 @@ public class AmostragemListaFragment extends Fragment {
         fm.beginTransaction().replace(R.id.frg_principal, acf).commit();
     }
 
+
+    @SuppressLint("StaticFieldLeak")
     private void openMapa(AmostragemTalhao amostragem) {
         Intent mapaPontosIntent = new Intent(getContext(), MapaPontosActivity.class);
-        mapaPontosIntent.putExtra(getResources().getString(R.string.amostragem_param), amostragem.getIdAmostragem());
-         // verificar se existe contorno...
-        startActivity(mapaPontosIntent);
+        mapaPontosIntent.putExtra(getResources().getString(R.string.amostragem_param),
+                amostragem.getIdAmostragem());
+
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                final AppDatabase db = Room.databaseBuilder(getContext(),
+                        AppDatabase.class, AppDatabase.DB_NAME).build();
+                Talhao talhao = db.talhaoDao().getTalhaoById(amostragem.getIdTalhao());
+                if (talhao.getContorno() != null) {
+                    mapaPontosIntent.putExtra(getResources().getString(R.string.contorno_param),
+                            talhao.getContorno());
+                    // verificar se existem pontos...
+                    startActivity(mapaPontosIntent);
+                }
+                return null;
+            }
+        }.execute();
     }
 
     private void opcoes(final AmostragemTalhao amostragem) {

@@ -28,7 +28,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 import br.net.olimpiodev.agropragueiro.R;
+import br.net.olimpiodev.agropragueiro.model.PontoAmostragem;
 
 public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleMap.OnMarkerClickListener,
@@ -40,6 +43,7 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
     private String contorno;
     private String pontos;
     private String amostragem;
+    private List<PontoAmostragem> pontosAmostragem;
     private int pontoAcaoSelecionado = 2;
 
     @Override
@@ -50,9 +54,10 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
         SupportMapFragment fragmentoMapa = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map);
         fragmentoMapa.getMapAsync(this);
 
-        if (getIntent().hasExtra("contorno")) {
-            contorno = (String) getIntent().getSerializableExtra("contorno");
+        if (getIntent().hasExtra(getResources().getString(R.string.contorno_param))) {
+            contorno = (String) getIntent().getSerializableExtra(getResources().getString(R.string.contorno_param));
         }
+        // parou aqui, pegar a amostragem...
         if (getIntent().hasExtra("amostragem")) {
             amostragem = (String) getIntent().getSerializableExtra("amostragem");
         }
@@ -77,8 +82,10 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
         marcador.position(latLng);
         mapa.addMarker(marcador);
 
-//        int usuarioId = Integer.parseInt(sharedPref.getPreferenceString(
-//                getResources().getString(R.string.ID_USUARIO)));
+        PontoAmostragem pontoAmostragem = new PontoAmostragem();
+        pontoAmostragem.setLatitude(latLng.latitude);
+        pontoAmostragem.setLongitude(latLng.longitude);
+        pontoAmostragem.setAmostragemId(amostragem.get);
 
 //        PontoAmostragem pontoAmostragem = new PontoAmostragem();
 //        pontoAmostragem.setLatitude(latLng.latitude);
@@ -128,10 +135,10 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
 
         mapa.setOnMapClickListener(this);
         mapa.setOnMarkerClickListener(this);
-//        exibirContornoMapa();
-//        if (pontos != null) {
-//            exibirPontosMapa();
-//        }
+        exibirContornoMapa();
+        if (pontos != null) {
+            exibirPontosMapa();
+        }
     }
 
     private void exibirContornoMapa() {
