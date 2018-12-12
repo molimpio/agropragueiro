@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.arch.persistence.room.Room;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -43,7 +45,9 @@ import br.net.olimpiodev.agropragueiro.utils.Utils;
 public class MapaActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleMap.OnMapClickListener,
         GoogleMap.OnPolylineClickListener,
-        GoogleMap.OnPolygonClickListener {
+        GoogleMap.OnPolygonClickListener,
+        GoogleMap.OnMyLocationButtonClickListener,
+        GoogleMap.OnMyLocationClickListener {
 
     private final int CODIGO_REQUISICAO_PERMISSAO_LOCALIZACAO = 0;
     private GoogleMap mapa;
@@ -63,6 +67,7 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         SupportMapFragment fragmentoMapa = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map);
         fragmentoMapa.getMapAsync(this);
+
         db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, AppDatabase.DB_NAME).build();
 
         if (getIntent().hasExtra(getResources().getString(R.string.talhao_id_param))) {
@@ -98,9 +103,12 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         } else {
             mapa.setMyLocationEnabled(true);
+            mapa.setOnMyLocationButtonClickListener(this);
+            mapa.setOnMyLocationClickListener(this);
         }
 
         mapa.setOnMapClickListener(this);
+
         if (contorno != null) {
             exibirContornoMapa();
         }
@@ -114,6 +122,18 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
                 mapa.setMyLocationEnabled(true);
             }
         }
+    }
+    @Override
+    public void onMyLocationClick(@NonNull Location location) {
+        Toast.makeText(this, "Current location:\n" + location, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public boolean onMyLocationButtonClick() {
+        Toast.makeText(this, "MyLocation button clicked", Toast.LENGTH_SHORT).show();
+        // Return false so that we don't consume the event and the default behavior still occurs
+        // (the camera animates to the user's current position).
+        return false;
     }
 
     @Override

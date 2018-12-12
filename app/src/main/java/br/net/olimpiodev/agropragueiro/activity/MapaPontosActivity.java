@@ -1,10 +1,13 @@
 package br.net.olimpiodev.agropragueiro.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.arch.persistence.room.Room;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,15 +26,19 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import br.net.olimpiodev.agropragueiro.AppDatabase;
 import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.model.PontoAmostragem;
+import br.net.olimpiodev.agropragueiro.utils.Utils;
 
 public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleMap.OnMarkerClickListener,
@@ -42,9 +49,10 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
     private GoogleMap mapa;
     private String contorno;
     private String pontos;
-    private String amostragem;
-    private List<PontoAmostragem> pontosAmostragem;
+    private int amostragemId;
+    private List<PontoAmostragem> pontosAmostragem = new ArrayList<>();
     private int pontoAcaoSelecionado = 2;
+    private AppDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,15 +62,18 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
         SupportMapFragment fragmentoMapa = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map);
         fragmentoMapa.getMapAsync(this);
 
+        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, AppDatabase.DB_NAME).build();
+
         if (getIntent().hasExtra(getResources().getString(R.string.contorno_param))) {
             contorno = (String) getIntent().getSerializableExtra(getResources().getString(R.string.contorno_param));
         }
-        // parou aqui, pegar a amostragem...
-        if (getIntent().hasExtra("amostragem")) {
-            amostragem = (String) getIntent().getSerializableExtra("amostragem");
+
+        if (getIntent().hasExtra(getResources().getString(R.string.amostragem_id_param))) {
+            amostragemId = (Integer) getIntent().getSerializableExtra(getResources().getString(R.string.amostragem_id_param));
         }
-        if (getIntent().hasExtra("pontos")) {
-            pontos = (String) getIntent().getSerializableExtra("pontos");
+
+        if (getIntent().hasExtra(getResources().getString(R.string.amostragem_pontos))) {
+            pontos = (String) getIntent().getSerializableExtra(getResources().getString(R.string.amostragem_pontos));
         }
     }
 
@@ -85,19 +96,8 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
         PontoAmostragem pontoAmostragem = new PontoAmostragem();
         pontoAmostragem.setLatitude(latLng.latitude);
         pontoAmostragem.setLongitude(latLng.longitude);
-        pontoAmostragem.setAmostragemId(amostragem.get);
-
-//        PontoAmostragem pontoAmostragem = new PontoAmostragem();
-//        pontoAmostragem.setLatitude(latLng.latitude);
-//        pontoAmostragem.setLongitude(latLng.latitude);
-////        pontoAmostragem.setAmostragem(amostragem);
-//        pontoAmostragem.setCreatedAt(Util.getDataNow());
-//        pontoAmostragem.setUpdatedAt(Util.getDataNow());
-//        pontoAmostragem.setCreatedBy(usuarioId);
-//        pontoAmostragem.setUpdatedBy(usuarioId);
-//
-//        pontoAmostragemLista.add(pontoAmostragem);
-//        Log.i("po", "" + pontoAmostragem.toString());
+        pontoAmostragem.setAmostragemId(amostragemId);
+        pontosAmostragem.add(pontoAmostragem);
     }
 
     @Override
@@ -135,7 +135,9 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
 
         mapa.setOnMapClickListener(this);
         mapa.setOnMarkerClickListener(this);
+
         exibirContornoMapa();
+
         if (pontos != null) {
             exibirPontosMapa();
         }
@@ -196,10 +198,20 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     public void salvarPontos() {
-//        pontoAmostragemDAO.salvar(pontoAmostragemLista);
-//        Util.toast(this, getResources().getString(R.string.pontos_cadastrados));
-//        finish();
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                for (PontoAmostragem pontoAmostragem: pontosAmostragem) {
+                    db.pontoAmostragemDao().insert(pontoAmostragem);
+                }
+                return null;
+            }
+        }.execute();
+
+        Utils.showMessage(getApplicationContext(), "", 1);
+        finish();
     }
 
     public void removerPontos() {

@@ -26,6 +26,7 @@ import br.net.olimpiodev.agropragueiro.activity.MapaPontosActivity;
 import br.net.olimpiodev.agropragueiro.adapter.AmostragemAdapter;
 import br.net.olimpiodev.agropragueiro.fragment.Cadastro.AmostragemCadastroFragment;
 import br.net.olimpiodev.agropragueiro.model.AmostragemTalhao;
+import br.net.olimpiodev.agropragueiro.model.PontoAmostragem;
 import br.net.olimpiodev.agropragueiro.model.Talhao;
 import br.net.olimpiodev.agropragueiro.model.TalhaoFazenda;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
@@ -90,8 +91,7 @@ public class AmostragemListaFragment extends Fragment {
     @SuppressLint("StaticFieldLeak")
     private void openMapa(AmostragemTalhao amostragem) {
         Intent mapaPontosIntent = new Intent(getContext(), MapaPontosActivity.class);
-        mapaPontosIntent.putExtra(getResources().getString(R.string.amostragem_param),
-                amostragem.getIdAmostragem());
+        mapaPontosIntent.putExtra(getResources().getString(R.string.amostragem_param), amostragem.getIdAmostragem());
 
         new AsyncTask<Void, Void, Void>() {
             @Override
@@ -99,10 +99,19 @@ public class AmostragemListaFragment extends Fragment {
                 final AppDatabase db = Room.databaseBuilder(getContext(),
                         AppDatabase.class, AppDatabase.DB_NAME).build();
                 Talhao talhao = db.talhaoDao().getTalhaoById(amostragem.getIdTalhao());
+
                 if (talhao.getContorno() != null) {
-                    mapaPontosIntent.putExtra(getResources().getString(R.string.contorno_param),
-                            talhao.getContorno());
-                    // verificar se existem pontos...
+                    mapaPontosIntent.putExtra(getResources().getString(R.string.contorno_param), talhao.getContorno());
+
+                    PontoAmostragem pontoAmostragem = db.pontoAmostragemDao()
+                            .getPontosAmostragemByAmostragemId(amostragem.getIdAmostragem());
+
+                    if (pontoAmostragem != null) {
+                        mapaPontosIntent.putExtra(getResources().getString(R.string.amostragem_pontos), pontoAmostragem);
+                    } else {
+                        mapaPontosIntent.putExtra(getResources().getString(R.string.amostragem_id_param), amostragem.getIdAmostragem());
+                    }
+
                     startActivity(mapaPontosIntent);
                 }
                 return null;

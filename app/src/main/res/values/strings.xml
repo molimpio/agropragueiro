@@ -105,6 +105,7 @@
     <string name="cadastrar_amostragem">Cadastrar Amostragem</string>
     <string name="amostragem_param">Amostragem_Param</string>
     <string name="amostragem_id_param">Amostragem_id_Param</string>
+    <string name="amostragem_pontos">Amostragem_Pontos</string>
     <string-array name="opcoes_amostragem_card">
         <item>Ver Pontos no mapa</item>
         <item>Ver pontos amostragens</item>

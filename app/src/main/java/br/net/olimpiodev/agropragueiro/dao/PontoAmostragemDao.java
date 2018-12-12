@@ -9,6 +9,7 @@ import java.util.List;
 
 import br.net.olimpiodev.agropragueiro.model.PontoAmostragem;
 
+@Dao
 public interface PontoAmostragemDao {
     @Insert
     void insert(PontoAmostragem... pontoAmostragem);
@@ -16,5 +17,6 @@ public interface PontoAmostragemDao {
     @Update
     void update(PontoAmostragem... pontoAmostragem);
 
-
+    @Query("SELECT * FROM ponto_amostragem WHERE amostragem_id = :amostragemId")
+    PontoAmostragem getPontosAmostragemByAmostragemId(int amostragemId);
 }
