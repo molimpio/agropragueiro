@@ -18,5 +18,5 @@ public interface PontoAmostragemDao {
     void update(PontoAmostragem... pontoAmostragem);
 
     @Query("SELECT * FROM ponto_amostragem WHERE amostragem_id = :amostragemId")
-    PontoAmostragem getPontosAmostragemByAmostragemId(int amostragemId);
+    List<PontoAmostragem> getPontosAmostragemByAmostragemId(int amostragemId);
 }

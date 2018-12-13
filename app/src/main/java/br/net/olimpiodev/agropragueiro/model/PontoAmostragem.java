@@ -77,4 +77,16 @@ public class PontoAmostragem implements Serializable {
     public void setAmostragemId(int amostragemId) {
         this.amostragemId = amostragemId;
     }
+
+    @Override
+    public String toString() {
+        return "PontoAmostragem{" +
+                "id=" + id +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", ativo=" + ativo +
+                ", sincronizado=" + sincronizado +
+                ", amostragemId=" + amostragemId +
+                '}';
+    }
 }

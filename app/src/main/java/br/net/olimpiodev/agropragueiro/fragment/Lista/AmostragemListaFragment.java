@@ -18,6 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
 import java.util.List;
 
 import br.net.olimpiodev.agropragueiro.AppDatabase;
@@ -103,11 +105,14 @@ public class AmostragemListaFragment extends Fragment {
                 if (talhao.getContorno() != null) {
                     mapaPontosIntent.putExtra(getResources().getString(R.string.contorno_param), talhao.getContorno());
 
-                    PontoAmostragem pontoAmostragem = db.pontoAmostragemDao()
+                    List<PontoAmostragem> pontoAmostragem = db.pontoAmostragemDao()
                             .getPontosAmostragemByAmostragemId(amostragem.getIdAmostragem());
 
+                    Gson gson = new Gson();
+                    String pontos = gson.toJson(pontoAmostragem);
+
                     if (pontoAmostragem != null) {
-                        mapaPontosIntent.putExtra(getResources().getString(R.string.amostragem_pontos), pontoAmostragem);
+                        mapaPontosIntent.putExtra(getResources().getString(R.string.amostragem_pontos), pontos);
                     } else {
                         mapaPontosIntent.putExtra(getResources().getString(R.string.amostragem_id_param), amostragem.getIdAmostragem());
                     }

@@ -179,6 +179,7 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
 
     private void exibirPontosMapa() {
         try {
+
             JSONArray jsonArray = new JSONArray(pontos);
 
             for (int i = 0; i < jsonArray.length(); i++) {
