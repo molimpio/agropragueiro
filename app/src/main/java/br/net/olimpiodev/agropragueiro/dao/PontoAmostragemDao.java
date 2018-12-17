@@ -1,6 +1,7 @@
 package br.net.olimpiodev.agropragueiro.dao;
 
 import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
@@ -14,9 +15,9 @@ public interface PontoAmostragemDao {
     @Insert
     void insert(PontoAmostragem... pontoAmostragem);
 
-    @Update
-    void update(PontoAmostragem... pontoAmostragem);
-
     @Query("SELECT * FROM ponto_amostragem WHERE amostragem_id = :amostragemId")
     List<PontoAmostragem> getPontosAmostragemByAmostragemId(int amostragemId);
+
+    @Query("DELETE FROM ponto_amostragem WHERE amostragem_id = :amostragemId")
+    void delete(int amostragemId);
 }

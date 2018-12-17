@@ -111,11 +111,8 @@ public class AmostragemListaFragment extends Fragment {
                     Gson gson = new Gson();
                     String pontos = gson.toJson(pontoAmostragem);
 
-                    if (pontoAmostragem != null) {
-                        mapaPontosIntent.putExtra(getResources().getString(R.string.amostragem_pontos), pontos);
-                    } else {
-                        mapaPontosIntent.putExtra(getResources().getString(R.string.amostragem_id_param), amostragem.getIdAmostragem());
-                    }
+                    mapaPontosIntent.putExtra(getResources().getString(R.string.amostragem_pontos), pontos);
+                    mapaPontosIntent.putExtra(getResources().getString(R.string.amostragem_id_param), amostragem.getIdAmostragem());
 
                     startActivity(mapaPontosIntent);
                 }

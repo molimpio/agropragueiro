@@ -6,7 +6,6 @@ import android.app.AlertDialog;
 import android.arch.persistence.room.Room;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,8 +24,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,6 +35,7 @@ import java.util.List;
 import br.net.olimpiodev.agropragueiro.AppDatabase;
 import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.model.PontoAmostragem;
+import br.net.olimpiodev.agropragueiro.service.MapaService;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 
 public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyCallback,
@@ -93,11 +91,7 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
         marcador.position(latLng);
         mapa.addMarker(marcador);
 
-        PontoAmostragem pontoAmostragem = new PontoAmostragem();
-        pontoAmostragem.setLatitude(latLng.latitude);
-        pontoAmostragem.setLongitude(latLng.longitude);
-        pontoAmostragem.setAmostragemId(amostragemId);
-        pontosAmostragem.add(pontoAmostragem);
+        adicionarPontoAmostragemArray(latLng, 0);
     }
 
     @Override
@@ -143,38 +137,20 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
         }
     }
 
+    private void adicionarPontoAmostragemArray(LatLng latLng, int pontoAmotragemId) {
+        PontoAmostragem pontoAmostragem = new PontoAmostragem();
+
+        if (pontoAmotragemId != 0) pontoAmostragem.setId(pontoAmotragemId);
+
+        pontoAmostragem.setLatitude(latLng.latitude);
+        pontoAmostragem.setLongitude(latLng.longitude);
+        pontoAmostragem.setAmostragemId(amostragemId);
+        pontosAmostragem.add(pontoAmostragem);
+    }
+
     private void exibirContornoMapa() {
-        try {
-            JSONArray jsonArray = new JSONArray(contorno);
-            PolylineOptions polylineOptions = new PolylineOptions();
-            LatLng primeiraCoordenda = null;
-
-            for (int i = 0; i < jsonArray.length(); i++) {
-
-                JSONObject jsonObject = new JSONObject(jsonArray.get(i).toString());
-
-                Double lat = Double.parseDouble(jsonObject.getString("latitude"));
-                Double lng = Double.parseDouble(jsonObject.getString("longitude"));
-
-                if (i == 0) {
-                    primeiraCoordenda = new LatLng(lat, lng);
-                }
-
-                LatLng coordenada = new LatLng(lat, lng);
-
-                polylineOptions.color(Color.RED);
-                polylineOptions.add(coordenada);
-
-                if ((i + 1) == jsonArray.length()) {
-                    polylineOptions.add(primeiraCoordenda);
-                    mapa.addPolyline(polylineOptions);
-                    // TODO: ver como pegar o centro do polygono para centralizar o zoom
-                    mapa.animateCamera(CameraUpdateFactory.newLatLngZoom(primeiraCoordenda, 16));
-                }
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        mapa.addPolyline(MapaService.coordenadasStringToList(contorno));
+        mapa.animateCamera(CameraUpdateFactory.newLatLngZoom(MapaService.primeiraCoordenada, 16));
     }
 
     private void exibirPontosMapa() {
@@ -188,11 +164,14 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
 
                 Double lat = Double.parseDouble(jsonObject.getString("latitude"));
                 Double lng = Double.parseDouble(jsonObject.getString("longitude"));
+                int pontoAmostragemId = Integer.parseInt(jsonObject.getString("id"));
 
                 LatLng ponto = new LatLng(lat, lng);
                 MarkerOptions marcador = new MarkerOptions();
                 marcador.position(ponto);
                 mapa.addMarker(marcador);
+
+                adicionarPontoAmostragemArray(ponto, pontoAmostragemId);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -215,8 +194,18 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
         finish();
     }
 
+    @SuppressLint("StaticFieldLeak")
     public void removerPontos() {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                db.pontoAmostragemDao().delete(amostragemId);
+                return null;
+            }
+        }.execute();
+
         mapa.clear();
+        pontosAmostragem.clear();
         exibirContornoMapa();
     }
 

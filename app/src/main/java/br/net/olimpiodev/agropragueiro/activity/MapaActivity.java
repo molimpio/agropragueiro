@@ -30,16 +30,13 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.gson.Gson;
 import com.google.maps.android.SphericalUtil;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import br.net.olimpiodev.agropragueiro.AppDatabase;
 import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.model.Talhao;
+import br.net.olimpiodev.agropragueiro.service.MapaService;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 
 public class MapaActivity extends AppCompatActivity implements OnMapReadyCallback,
@@ -123,6 +120,7 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         }
     }
+
     @Override
     public void onMyLocationClick(@NonNull Location location) {
         Toast.makeText(this, "Current location:\n" + location, Toast.LENGTH_LONG).show();
@@ -245,37 +243,9 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void exibirContornoMapa() {
-        try {
-            JSONArray jsonArray = new JSONArray(contorno);
-            PolylineOptions polylineOptions = new PolylineOptions();
-            LatLng primeiraCoordenda = null;
-
-            for (int i = 0; i < jsonArray.length(); i++) {
-
-                JSONObject jsonObject = new JSONObject(jsonArray.get(i).toString());
-
-                Double lat = Double.parseDouble(jsonObject.getString("latitude"));
-                Double lng = Double.parseDouble(jsonObject.getString("longitude"));
-
-                if (i == 0) {
-                    primeiraCoordenda = new LatLng(lat, lng);
-                }
-
-                LatLng coordenada = new LatLng(lat, lng);
-
-                polylineOptions.color(Color.RED);
-                polylineOptions.add(coordenada);
-
-                if ((i + 1) == jsonArray.length()) {
-                    polylineOptions.add(primeiraCoordenda);
-                    mapa.addPolyline(polylineOptions);
-                    // TODO: ver como pegar o centro do polygono para centralizar o zoom
-                    mapa.animateCamera(CameraUpdateFactory.newLatLngZoom(primeiraCoordenda, 16));
-                }
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        // TODO: ver como pegar o centro do polygono para centralizar o zoom
+        mapa.addPolyline(MapaService.coordenadasStringToList(contorno));
+        mapa.animateCamera(CameraUpdateFactory.newLatLngZoom(MapaService.primeiraCoordenada, 16));
     }
 
     private void opcoesLayer() {
