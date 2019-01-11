@@ -21,6 +21,8 @@ public class ClienteService {
 
     private Context ctx;
     private FragmentManager fm;
+
+    @SuppressLint("StaticFieldLeak")
     private static Context contextDB;
 
     public ClienteService(Context context, FragmentManager fragmentManager) {
@@ -30,12 +32,15 @@ public class ClienteService {
     }
 
     @SuppressLint("StaticFieldLeak")
-    public static class GetClientes extends AsyncTask<Void, Void, List<Cliente>> {
-        @Override
-        protected List<Cliente> doInBackground(Void ...voids) {
-            AppDatabase db = Room.databaseBuilder(contextDB, AppDatabase.class, AppDatabase.DB_NAME).build();
-            return db.clienteDao().getClientes(true);
-        }
+    public AsyncTask<Void, Void, List<Cliente>> getClientes() {
+
+        return new AsyncTask<Void, Void, List<Cliente>>() {
+            @Override
+            protected List<Cliente> doInBackground(Void... voids) {
+                AppDatabase db = Room.databaseBuilder(contextDB, AppDatabase.class, AppDatabase.DB_NAME).build();
+                return db.clienteDao().getClientes(true);
+            }
+        };
     }
 
     public void openCadastro(Cliente cliente) {
@@ -50,7 +55,7 @@ public class ClienteService {
         fm.beginTransaction().replace(R.id.frg_principal, cdf).commit();
     }
 
-    public void openListaFazendas(Cliente cliente) {
+    private void openListaFazendas(Cliente cliente) {
         FazendaListaFragment flf = new FazendaListaFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable(ctx.getResources().getString(R.string.cliente_param), cliente);
