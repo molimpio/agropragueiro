@@ -91,7 +91,7 @@ public class AmostragemListaFragment extends Fragment {
 
 
     @SuppressLint("StaticFieldLeak")
-    private void openMapa(AmostragemTalhao amostragem) {
+    private void openMapa(AmostragemTalhao amostragem, boolean coletarDados) {
         Intent mapaPontosIntent = new Intent(getContext(), MapaPontosActivity.class);
         mapaPontosIntent.putExtra(getResources().getString(R.string.amostragem_param), amostragem.getIdAmostragem());
 
@@ -113,6 +113,7 @@ public class AmostragemListaFragment extends Fragment {
 
                     mapaPontosIntent.putExtra(getResources().getString(R.string.amostragem_pontos), pontos);
                     mapaPontosIntent.putExtra(getResources().getString(R.string.amostragem_id_param), amostragem.getIdAmostragem());
+                    mapaPontosIntent.putExtra(getString(R.string.coletar_dados), coletarDados);
 
                     startActivity(mapaPontosIntent);
                 }
@@ -133,10 +134,10 @@ public class AmostragemListaFragment extends Fragment {
                 switch (item) {
                     case 0:
                         dialog.dismiss();
-                        openMapa(amostragem);
+                        openMapa(amostragem, false);
                         break;
                     case 1:
-                        // amostragens
+                        openMapa(amostragem, true);
                         break;
                     case 2:
                         dialog.dismiss();

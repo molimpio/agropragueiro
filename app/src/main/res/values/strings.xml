@@ -28,6 +28,9 @@
     <string name="novo">Novo</string>
     <string name="salvar">Salvar</string>
     <string name="remover">Remover</string>
+    <string name="qtde">Qtde</string>
+    <string name="zero">0</string>
+    <string name="cinquenta">50</string>
 
     <!-- hints -->
     <string name="minimo_dois_caracteres">Mínimo 2 caracteres</string>
@@ -106,11 +109,15 @@
     <string name="amostragem_param">Amostragem_Param</string>
     <string name="amostragem_id_param">Amostragem_id_Param</string>
     <string name="amostragem_pontos">Amostragem_Pontos</string>
+    <string name="coletar_dados">Coletar Dados</string>
+    <string name="selecione_praga">Selecione a praga</string>
+    <string name="dano_causado">Dano causado</string>
+    <string name="registrar_fotos">Registrar fotos</string>
     <string-array name="opcoes_amostragem_card">
-        <item>Ver Pontos no mapa</item>
-        <item>Ver pontos amostragens</item>
-        <item>Editar</item>
-        <item>Excluir</item>
+        <item>Visualizar pontos no mapa</item>
+        <item>Coletar dados amostragem</item>
+        <item>Editar dados amostragem</item>
+        <item>Excluir amostragem</item>
     </string-array>
 
     <!-- erros cliente -->

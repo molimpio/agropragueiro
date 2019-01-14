@@ -36,6 +36,7 @@ import br.net.olimpiodev.agropragueiro.AppDatabase;
 import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.model.PontoAmostragem;
 import br.net.olimpiodev.agropragueiro.service.MapaService;
+import br.net.olimpiodev.agropragueiro.service.amostragem.ColetarDadosService;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 
 public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyCallback,
@@ -50,6 +51,7 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
     private int amostragemId;
     private List<PontoAmostragem> pontosAmostragem = new ArrayList<>();
     private int pontoAcaoSelecionado = 2;
+    private boolean coletarDados;
     private AppDatabase db;
 
     @Override
@@ -72,6 +74,10 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
 
         if (getIntent().hasExtra(getResources().getString(R.string.amostragem_pontos))) {
             pontos = (String) getIntent().getSerializableExtra(getResources().getString(R.string.amostragem_pontos));
+        }
+
+        if (getIntent().hasExtra(getString(R.string.coletar_dados))) {
+            coletarDados = (Boolean) getIntent().getSerializableExtra(getString(R.string.coletar_dados));
         }
     }
 
@@ -97,7 +103,11 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
     @Override
     public boolean onMarkerClick(Marker marker) {
         if (marker != null) {
-//            opcoesPonto(marker);
+            if (!coletarDados) {
+                opcoesPonto(marker);
+            } else {
+                ColetarDadosService.coletarDadosDialog(this);
+            }
         }
         return false;
     }
@@ -244,28 +254,22 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
             builder.setTitle(dialogTitle);
 
             builder.setSingleChoiceItems(
-                    MAPA_PONTOS, pontoAcaoSelecionado, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int item) {
-                            switch (item) {
-                                case 0:
-                                    marker.remove();
-                                    break;
-                                case 1:
-                                    moveMarker(marker);
-                                    break;
-                            }
-                            pontoAcaoSelecionado = item;
-                            dialog.dismiss();
+                    MAPA_PONTOS, pontoAcaoSelecionado, (dialog, item) -> {
+                        switch (item) {
+                            case 0:
+                                marker.remove();
+                                break;
+                            case 1:
+                                moveMarker(marker);
+                                break;
                         }
+                        pontoAcaoSelecionado = item;
+                        dialog.dismiss();
                     });
 
             String cancelar = getResources().getString(R.string.cancelar);
-            builder.setPositiveButton(cancelar, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    //Util.toast(getApplicationContext(), getResources().getString(R.string.acao_cancelada));
-                }
+            builder.setPositiveButton(cancelar, (dialogInterface, i) -> {
+                //Util.toast(getApplicationContext(), getResources().getString(R.string.acao_cancelada));
             });
 
             AlertDialog alertDialog = builder.create();
