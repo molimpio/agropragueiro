@@ -13,12 +13,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.adapter.ClienteAdapter;
 import br.net.olimpiodev.agropragueiro.model.Cliente;
 import br.net.olimpiodev.agropragueiro.service.ClienteService;
+import br.net.olimpiodev.agropragueiro.utils.Utils;
 
 public class ClienteListaFragment extends Fragment {
 
@@ -29,19 +31,26 @@ public class ClienteListaFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              final Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_cliente_lista, container, false);
+        try {
+            View view = inflater.inflate(R.layout.fragment_cliente_lista, container, false);
 
-        rvClientes = view.findViewById(R.id.rv_clientes);
-        tvListaVazia = view.findViewById(R.id.tv_lista_vazia_cliente);
+            rvClientes = view.findViewById(R.id.rv_clientes);
+            tvListaVazia = view.findViewById(R.id.tv_lista_vazia_cliente);
 
-        FloatingActionButton fabCadastroCliente = view.findViewById(R.id.fab_cadastro_cliente);
-        fabCadastroCliente.setOnClickListener(view1 -> clienteService.openCadastro(null));
+            FloatingActionButton fabCadastroCliente = view.findViewById(R.id.fab_cadastro_cliente);
+            fabCadastroCliente.setOnClickListener(view1 -> clienteService.openCadastro(null));
 
-        clienteService = new ClienteService(getContext(), getFragmentManager());
-        getClientes();
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Clientes");
+            clienteService = new ClienteService(getContext(), getFragmentManager());
+            getClientes();
 
-        return view;
+            Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity()))
+                    .getSupportActionBar()).setTitle(getString(R.string.clientes));
+
+            return view;
+        } catch (Exception ex) {
+            Utils.showMessage(getContext(), getString(R.string.erro_view_clientes), 0);
+            return null;
+        }
     }
 
     private void getClientes() {
@@ -54,22 +63,30 @@ public class ClienteListaFragment extends Fragment {
                 startRecyclerView(clientes);
             }
         } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
+            Utils.showMessage(getContext(), getString(R.string.erro_get_clientes), 0);
         }
     }
 
     private void startRecyclerView(List<Cliente> clientes) {
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        rvClientes.setLayoutManager(layoutManager);
+        try {
+            if (clientes != null) {
+                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+                rvClientes.setLayoutManager(layoutManager);
 
-        ClienteAdapter clienteAdapter = new ClienteAdapter(clientes);
-        rvClientes.setAdapter(clienteAdapter);
+                ClienteAdapter clienteAdapter = new ClienteAdapter(clientes);
+                rvClientes.setAdapter(clienteAdapter);
 
-        clienteAdapter.setClickListener((position, view1) -> {
-            if (view1.getId() == R.id.btn_opoes_cc) {
-                final Cliente cliente = clientes.get(position);
-                clienteService.opcoes(cliente);
+                clienteAdapter.setClickListener((position, view1) -> {
+                    if (view1.getId() == R.id.btn_opoes_cc) {
+                        final Cliente cliente = clientes.get(position);
+                        clienteService.opcoes(cliente);
+                    }
+                });
+            } else {
+                Utils.showMessage(getContext(), getString(R.string.erro_adapter_clientes), 0);
             }
-        });
+        } catch (Exception ex) {
+            Utils.showMessage(getContext(), getString(R.string.erro_adapter_clientes), 0);
+        }
     }
 }

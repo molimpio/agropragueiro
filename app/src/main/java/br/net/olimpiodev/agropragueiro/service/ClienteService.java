@@ -33,34 +33,46 @@ public class ClienteService {
 
     @SuppressLint("StaticFieldLeak")
     public AsyncTask<Void, Void, List<Cliente>> getClientes() {
-
-        return new AsyncTask<Void, Void, List<Cliente>>() {
-            @Override
-            protected List<Cliente> doInBackground(Void... voids) {
-                AppDatabase db = Room.databaseBuilder(contextDB, AppDatabase.class, AppDatabase.DB_NAME).build();
-                return db.clienteDao().getClientes(true);
-            }
-        };
+        try {
+            return new AsyncTask<Void, Void, List<Cliente>>() {
+                @Override
+                protected List<Cliente> doInBackground(Void... voids) {
+                    AppDatabase db = Room.databaseBuilder(contextDB, AppDatabase.class, AppDatabase.DB_NAME).build();
+                    return db.clienteDao().getClientes(true);
+                }
+            };
+        } catch (Exception ex) {
+            Utils.showMessage(ctx, ctx.getResources().getString(R.string.erro_get_clientes), 0);
+            return null;
+        }
     }
 
     public void openCadastro(Cliente cliente) {
-        ClienteCadastroFragment cdf = new ClienteCadastroFragment();
+        try {
+            ClienteCadastroFragment cdf = new ClienteCadastroFragment();
 
-        if (cliente != null) {
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(ctx.getResources().getString(R.string.cliente_param), cliente);
-            cdf.setArguments(bundle);
+            if (cliente != null) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(ctx.getResources().getString(R.string.cliente_param), cliente);
+                cdf.setArguments(bundle);
+            }
+
+            fm.beginTransaction().replace(R.id.frg_principal, cdf).commit();
+        } catch (Exception ex) {
+            Utils.showMessage(ctx, ctx.getResources().getString(R.string.erro_abrir_cadastro_clientes), 0);
         }
-
-        fm.beginTransaction().replace(R.id.frg_principal, cdf).commit();
     }
 
     private void openListaFazendas(Cliente cliente) {
-        FazendaListaFragment flf = new FazendaListaFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(ctx.getResources().getString(R.string.cliente_param), cliente);
-        flf.setArguments(bundle);
-        fm.beginTransaction().replace(R.id.frg_principal, flf).commit();
+        try {
+            FazendaListaFragment flf = new FazendaListaFragment();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(ctx.getResources().getString(R.string.cliente_param), cliente);
+            flf.setArguments(bundle);
+            fm.beginTransaction().replace(R.id.frg_principal, flf).commit();
+        } catch (Exception ex) {
+            Utils.showMessage(ctx, ctx.getResources().getString(R.string.erro_abrir_lista_fazendas_cliente), 0);
+        }
     }
 
     public void opcoes(final Cliente cliente) {
@@ -98,7 +110,7 @@ public class ClienteService {
             alertDialog.setCanceledOnTouchOutside(true);
             alertDialog.show();
         } catch (Exception ex) {
-            Utils.logar(ex.getMessage());
+            Utils.showMessage(ctx, ctx.getResources().getString(R.string.erro_abrir_opcoes_cliente), 0);
         }
     }
 }

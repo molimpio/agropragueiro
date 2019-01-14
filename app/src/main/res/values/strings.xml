@@ -113,4 +113,15 @@
         <item>Excluir</item>
     </string-array>
 
+    <!-- erros cliente -->
+    <string name="erro_get_clientes">Erro ao buscar clientes</string>
+    <string name="erro_adapter_clientes">Erro ao listar clientes</string>
+    <string name="erro_view_clientes">Erro ao carregar view clientes</string>
+    <string name="erro_view_cadastro_clientes">Erro ao carregar view cadastro clientes</string>
+    <string name="erro_carregar_dados_cadastro_clientes">Erro ao carregar dados cadastro clientes</string>
+    <string name="erro_validacao_cliente">Erro validação cadastro cliente</string>
+    <string name="erro_args_cliente">Erro argumentos cadastro cliente</string>
+    <string name="erro_abrir_cadastro_clientes">Erro ao abrir cadastro clientes</string>
+    <string name="erro_abrir_lista_fazendas_cliente">Erro ao abrir lista de fazendas do cliente</string>
+    <string name="erro_abrir_opcoes_cliente">Erro abrir opções do cliente</string>
 </resources>
