@@ -86,8 +86,24 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
         if (requestCode == CODIGO_REQUISICAO_PERMISSAO_LOCALIZACAO) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
                     ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                mapa.setMyLocationEnabled(true);
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                            mapa.setMyLocationEnabled(true);
+                        } else {
+                            // leitura storage
+                        }
+                    } else {
+                        // escrita storage
+                    }
+                } else {
+                    // camera
+                }
+            } else {
+                // location
             }
+        } else {
+            // codigo requisicao
         }
     }
 
@@ -106,7 +122,8 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
             if (!coletarDados) {
                 opcoesPonto(marker);
             } else {
-                ColetarDadosService.coletarDadosDialog(this);
+                ColetarDadosService.coletarDadosDialog(this, this);
+
             }
         }
         return false;

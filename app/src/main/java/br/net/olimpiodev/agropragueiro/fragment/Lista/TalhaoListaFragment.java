@@ -90,7 +90,7 @@ public class TalhaoListaFragment extends Fragment {
         Intent mapaIntent = new Intent(getContext(), MapaActivity.class);
         mapaIntent.putExtra(getResources().getString(R.string.talhao_id_param), talhaoFazenda.getIdTalhao());
 
-        if (talhaoFazenda.getContorno() != null) {
+        if (!talhaoFazenda.getContorno().isEmpty()) {
             mapaIntent.putExtra(getResources().getString(R.string.contorno_param), talhaoFazenda.getContorno());
         }
         startActivity(mapaIntent);

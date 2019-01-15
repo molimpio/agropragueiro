@@ -52,7 +52,7 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
     private LatLng ultimaCoordenada;
     private int contador = 0;
     private int talhaoId;
-    private String contorno;
+    private String contorno = "";
     private List<LatLng> coordenadas = new ArrayList<>();
     private int mapaTipoSelecionado = 2;
     private AppDatabase db;
@@ -106,7 +106,7 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         mapa.setOnMapClickListener(this);
 
-        if (contorno != null) {
+        if (!contorno.isEmpty()) {
             exibirContornoMapa();
         }
     }

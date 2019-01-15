@@ -1,24 +1,37 @@
 package br.net.olimpiodev.agropragueiro.service.amostragem;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import br.net.olimpiodev.agropragueiro.R;
+import br.net.olimpiodev.agropragueiro.activity.MapaPontosActivity;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
+import livroandroid.lib.utils.SDCardUtils;
 
 public class ColetarDadosService {
 
-    public static void coletarDadosDialog(Context context) {
+    public static void coletarDadosDialog(Context context, Activity activity) {
 
         ArrayList<String> pragas = new ArrayList<String>();
         pragas.add("Meloidogyne");
@@ -63,10 +76,28 @@ public class ColetarDadosService {
             }
         });
 
-
         alertDialogBuilder.setView(dialogView);
 
         alertDialog = alertDialogBuilder.create();
         alertDialog.show();
+
+        Button btCancelar = dialogView.findViewById(R.id.bt_cancelar_registrar);
+        btCancelar.setOnClickListener(v -> alertDialog.dismiss());
+
+        Button btRegistraFotos = dialogView.findViewById(R.id.bt_registrar_fotos);
+        btRegistraFotos.setOnClickListener(v -> registrarFotos(context, activity));
+    }
+
+    private static void registrarFotos(Context context, Activity activity) {
+
+        try {
+            File file = SDCardUtils.getPrivateFile(context, "foto.jpg", Environment.DIRECTORY_PICTURES);
+            Intent intentCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".provider", file);
+            intentCamera.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+            activity.startActivityForResult(intentCamera, 0);
+        } catch (Exception ex) {
+            Utils.logar(ex.getMessage());
+        }
     }
 }
