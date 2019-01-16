@@ -23,8 +23,7 @@ public class FotoRegistro implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private int id;
     private String nome;
-    private String observacao;
-    private String data = Utils.getDataNow();
+    private String path;
     private Boolean ativo = true;
     private Boolean sincronizado = false;
 
@@ -49,20 +48,12 @@ public class FotoRegistro implements Serializable {
         this.nome = nome;
     }
 
-    public String getObservacao() {
-        return observacao;
+    public String getPath() {
+        return path;
     }
 
-    public void setObservacao(String observacao) {
-        this.observacao = observacao;
-    }
-
-    public String getData() {
-        return data;
-    }
-
-    public void setData(String data) {
-        this.data = data;
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public Boolean getAtivo() {

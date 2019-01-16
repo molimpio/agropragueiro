@@ -109,16 +109,19 @@
     <string name="amostragem_param">Amostragem_Param</string>
     <string name="amostragem_id_param">Amostragem_id_Param</string>
     <string name="amostragem_pontos">Amostragem_Pontos</string>
-    <string name="coletar_dados">Coletar Dados</string>
-    <string name="selecione_praga">Selecione a praga</string>
-    <string name="dano_causado">Dano causado</string>
-    <string name="registrar_fotos">Registrar fotos</string>
     <string-array name="opcoes_amostragem_card">
         <item>Visualizar pontos no mapa</item>
         <item>Coletar dados amostragem</item>
         <item>Editar dados amostragem</item>
         <item>Excluir amostragem</item>
     </string-array>
+
+    <!-- registro -->
+    <string name="coletar_dados">Coletar Dados</string>
+    <string name="praga">Praga</string>
+    <string name="dano_causado">Dano causado</string>
+    <string name="registrar_fotos">Registrar fotos</string>
+    <string name="validar_praga_qtde">Os campos praga e qtde são obrigatórios</string>
 
     <!-- erros cliente -->
     <string name="erro_get_clientes">Erro ao buscar clientes</string>

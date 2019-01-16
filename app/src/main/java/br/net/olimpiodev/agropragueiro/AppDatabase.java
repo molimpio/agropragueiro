@@ -10,7 +10,9 @@ import android.support.annotation.NonNull;
 import br.net.olimpiodev.agropragueiro.dao.AmostragemDao;
 import br.net.olimpiodev.agropragueiro.dao.ClienteDao;
 import br.net.olimpiodev.agropragueiro.dao.FazendaDao;
+import br.net.olimpiodev.agropragueiro.dao.FotoRegistroDao;
 import br.net.olimpiodev.agropragueiro.dao.PontoAmostragemDao;
+import br.net.olimpiodev.agropragueiro.dao.PontoAmostragemRegistroDao;
 import br.net.olimpiodev.agropragueiro.dao.TalhaoDao;
 import br.net.olimpiodev.agropragueiro.dao.UsuarioDao;
 import br.net.olimpiodev.agropragueiro.model.Amostragem;
@@ -41,6 +43,8 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract TalhaoDao talhaoDao();
     public abstract AmostragemDao amostragemDao();
     public abstract PontoAmostragemDao pontoAmostragemDao();
+    public abstract PontoAmostragemRegistroDao pontoAmostragemRegistroDao();
+    public abstract FotoRegistroDao fotoRegistroDao();
 
     @NonNull
     @Override

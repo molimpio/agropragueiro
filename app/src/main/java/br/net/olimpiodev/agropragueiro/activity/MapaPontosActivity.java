@@ -122,8 +122,9 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
             if (!coletarDados) {
                 opcoesPonto(marker);
             } else {
-                ColetarDadosService.coletarDadosDialog(this, this);
-
+                int pontoAmostragemId = Integer.parseInt(marker.getSnippet());
+                ColetarDadosService.coletarDadosDialog(this, this,
+                        marker.getPosition(), pontoAmostragemId);
             }
         }
         return false;
@@ -196,6 +197,7 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
                 LatLng ponto = new LatLng(lat, lng);
                 MarkerOptions marcador = new MarkerOptions();
                 marcador.position(ponto);
+                marcador.snippet(pontoAmostragemId + "");
                 mapa.addMarker(marcador);
 
                 adicionarPontoAmostragemArray(ponto, pontoAmostragemId);

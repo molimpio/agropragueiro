@@ -12,12 +12,13 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/selecione_praga" />
+            android:text="@string/praga" />
 
-        <Spinner
-            android:id="@+id/sp_pragas"
+        <EditText
+            android:id="@+id/et_praga"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:inputType="text" />
 
         <TextView
             android:layout_width="match_parent"
@@ -62,19 +63,51 @@
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/bt_registrar_fotos"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/registrar_fotos"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/bt_cancelar_registrar"
+            <Button
+                android:id="@+id/bt_salvar_registro"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/salvar" />
+
+            <Button
+                android:id="@+id/bt_registrar_fotos"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/registrar_fotos"
+                android:enabled="false"/>
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/cancelar"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/bt_novo_registro"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/novo"
+                android:enabled="false"/>
+
+            <Button
+                android:id="@+id/bt_cancelar_registrar"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/cancelar" />
+
+        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>
