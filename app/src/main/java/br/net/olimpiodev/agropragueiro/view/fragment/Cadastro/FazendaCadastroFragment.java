@@ -132,7 +132,7 @@ public class FazendaCadastroFragment extends Fragment
         etCidadeFaz.setText("");
         spClienteFaz.setEnabled(true);
         spUfFaz.setEnabled(true);
-        btnCadastrarFaz.setEnabled(false);
+        btnCadastrarFaz.setEnabled(true);
         btnNovo.setVisibility(View.INVISIBLE);
         fazenda = new Fazenda();
         fazenda.setId(0);
