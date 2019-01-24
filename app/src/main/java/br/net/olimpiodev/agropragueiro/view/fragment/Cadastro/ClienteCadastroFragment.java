@@ -27,8 +27,7 @@ public class ClienteCadastroFragment extends Fragment
 
     private EditText etNomeCliente, etCidadeCliente;
     private Spinner spUfCliente;
-    private Button btCadastrarCliente;
-    private Button btnNovo;
+    private Button btCadastrarCliente, btnNovo;
     private Cliente cliente;
     private String ufs[];
     private ClienteCadastroContrato.ClienteCadastroPresenter presenter;
@@ -37,10 +36,6 @@ public class ClienteCadastroFragment extends Fragment
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cliente_cadastro, container, false);
-
-        cliente = new Cliente();
-        cliente.setId(0);
-
         setupView(view);
 
         Bundle bundle = this.getArguments();
@@ -97,6 +92,9 @@ public class ClienteCadastroFragment extends Fragment
 
     private void getArgumentos(Bundle bundle) {
         try {
+            cliente = new Cliente();
+            cliente.setId(0);
+
             if (bundle != null) {
                 String keyBundle = getString(R.string.cliente_param);
                 Cliente c = (Cliente) bundle.getSerializable(keyBundle);

@@ -1,13 +1,9 @@
 package br.net.olimpiodev.agropragueiro.view.fragment.Cadastro;
 
-import android.annotation.SuppressLint;
-import android.arch.persistence.room.Room;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,18 +14,20 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import java.util.List;
+import java.util.Objects;
 
-import br.net.olimpiodev.agropragueiro.AppDatabase;
 import br.net.olimpiodev.agropragueiro.R;
-import br.net.olimpiodev.agropragueiro.view.fragment.Lista.FazendaListaFragment;
+import br.net.olimpiodev.agropragueiro.contracts.FazendaCadastroContrato;
 import br.net.olimpiodev.agropragueiro.model.ChaveValor;
 import br.net.olimpiodev.agropragueiro.model.Fazenda;
 import br.net.olimpiodev.agropragueiro.model.FazendaCliente;
+import br.net.olimpiodev.agropragueiro.presenter.FazendaCadastroPresenter;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
+import br.net.olimpiodev.agropragueiro.view.fragment.Lista.FazendaListaFragment;
 
-public class FazendaCadastroFragment extends Fragment {
+public class FazendaCadastroFragment extends Fragment
+        implements FazendaCadastroContrato.FazendaCadastroView {
 
-    private AppDatabase db;
     private EditText etNomeFaz, etCidadeFaz;
     private Spinner spUfFaz, spClienteFaz;
     private Button btnCadastrarFaz, btnNovo;
@@ -37,138 +35,55 @@ public class FazendaCadastroFragment extends Fragment {
     private List<ChaveValor> clienteList;
     private Bundle bundle;
     private int clienteIdSelecionado;
+    private FazendaCadastroContrato.FazendaCadastroPresenter presenter;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fazenda_cadastro, container,false);
-        db = Room.databaseBuilder(getContext(), AppDatabase.class, AppDatabase.DB_NAME).build();
-
+        setupView(view);
         bundle = this.getArguments();
-
-        GetClientes getClientes = new GetClientes();
-        getClientes.execute();
-
-        setRefs(view);
-        fazenda = new Fazenda();
-        fazenda.setId(0);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Cadastrar Fazenda");
+        presenter = new FazendaCadastroPresenter(this, getContext());
+        presenter.getClientes();
         return view;
     }
 
-    private void setRefs(View view) {
-        etNomeFaz = view.findViewById(R.id.et_nome_faz);
-        etNomeFaz.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+    private void setupView(View view) {
+        try {
+            Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity()))
+                    .getSupportActionBar()).setTitle(getString(R.string.cadastrar_fazenda));
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                validarNomeCidade();
-            }
-        });
-        etNomeFaz.requestFocus();
-
-        etCidadeFaz = view.findViewById(R.id.et_cidade_faz);
-        etCidadeFaz.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                validarNomeCidade();
-            }
-        });
-
-        spUfFaz = view.findViewById(R.id.sp_uf_faz);
-        spClienteFaz = view.findViewById(R.id.sp_cliente_faz);
-        spClienteFaz.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                fazenda.setClienteId(clienteList.get(position).getChave());
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-        Button btCancelarFaz = view.findViewById(R.id.bt_cancelar_faz);
-        FazendaListaFragment flf = new FazendaListaFragment();
-
-        btCancelarFaz.setOnClickListener(view1 ->
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.frg_principal, flf).commit()
-        );
-
-        btnCadastrarFaz = view.findViewById(R.id.bt_cadastrar_faz);
-        btnCadastrarFaz.setOnClickListener(view1 -> cadastrar());
-
-        btnNovo = view.findViewById(R.id.btn_novo_fazenda);
-        btnNovo.setOnClickListener(view1 -> {
-            etNomeFaz.setEnabled(true);
+            etNomeFaz = view.findViewById(R.id.et_nome_faz);
             etNomeFaz.requestFocus();
-            etCidadeFaz.setEnabled(true);
-            etNomeFaz.setText("");
-            etCidadeFaz.setText("");
-            spClienteFaz.setEnabled(true);
-            spUfFaz.setEnabled(true);
-            btnCadastrarFaz.setEnabled(false);
-            btnNovo.setVisibility(View.INVISIBLE);
-            fazenda = new Fazenda();
-            fazenda.setId(0);
-            fazenda.setClienteId(clienteIdSelecionado);
-        });
-    }
+            etCidadeFaz = view.findViewById(R.id.et_cidade_faz);
+            spUfFaz = view.findViewById(R.id.sp_uf_faz);
+            spClienteFaz = view.findViewById(R.id.sp_cliente_faz);
+            spClienteFaz.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                    fazenda.setClienteId(clienteList.get(position).getChave());
+                }
 
-    private void startSpinners(List<ChaveValor> clientes) {
-        String[] ufs = getResources().getStringArray(R.array.estados);
-        ArrayAdapter<String> adapterUfs = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_dropdown_item, ufs);
-        spUfFaz.setAdapter(adapterUfs);
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
 
-        ArrayAdapter<ChaveValor> adapterClientes = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_dropdown_item, clientes);
-        spClienteFaz.setAdapter(adapterClientes);
-    }
+                }
+            });
 
-    private void validarNomeCidade() {
-        String nome = etNomeFaz.getText().toString().trim().toUpperCase();
-        String cidade = etCidadeFaz.getText().toString().trim().toUpperCase();
+            btnCadastrarFaz = view.findViewById(R.id.bt_cadastrar_faz);
+            btnCadastrarFaz.setOnClickListener(view1 -> cadastrar());
 
-        if (nome.length() > 1 && cidade.length() > 1) {
-            fazenda.setNome(nome);
-            fazenda.setCidade(cidade);
-            btnCadastrarFaz.setEnabled(true);
-        } else {
-            btnCadastrarFaz.setEnabled(false);
+            btnNovo = view.findViewById(R.id.btn_novo_fazenda);
+            btnNovo.setOnClickListener(view1 -> novoCadastro());
+
+            Button btCancelarFaz = view.findViewById(R.id.bt_cancelar_faz);
+            btCancelarFaz.setOnClickListener(view1 -> cancelarFazenda());
+        } catch (Exception ex) {
+            Utils.showMessage(getContext(), getString(R.string.erro_view_fazendas), 0);
         }
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private void cadastrar() {
-        clienteIdSelecionado = fazenda.getClienteId();
-        String uf = spUfFaz.getSelectedItem().toString().toUpperCase();
-        fazenda.setUf(uf);
-
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... voids) {
-                if (fazenda.getId() == 0) db.fazendaDao().insert(fazenda);
-                else db.fazendaDao().update(fazenda);
-                return null;
-            }
-        }.execute();
-
-        Utils.showMessage(getContext(), "", 1);
-
+    private void disabledCampos() {
         etNomeFaz.setEnabled(false);
         etCidadeFaz.setEnabled(false);
         spClienteFaz.setEnabled(false);
@@ -179,8 +94,11 @@ public class FazendaCadastroFragment extends Fragment {
 
     private void getArgumentos(Bundle bundle) {
         try {
+            fazenda = new Fazenda();
+            fazenda.setId(0);
+
             if (bundle != null) {
-                String keyBundle = getResources().getString(R.string.fazenda_param);
+                String keyBundle = getString(R.string.fazenda_param);
                 FazendaCliente fc = (FazendaCliente) bundle.getSerializable(keyBundle);
                 fazenda.setId(fc.getIdFazenda());
                 fazenda.setNome(fc.getNomeFazenda());
@@ -191,30 +109,83 @@ public class FazendaCadastroFragment extends Fragment {
                 etCidadeFaz.setText(fazenda.getCidade());
 
                 spUfFaz.setSelection(Utils.getIndex(getResources()
-                                .getStringArray(R.array.estados), fazenda.getUf()));
+                        .getStringArray(R.array.estados), fazenda.getUf()));
 
                 spClienteFaz.setSelection(Utils.getIndexChaveValor(clienteList, fc.getNomeCliente()));
             }
-        } catch (Exception e) {
-            Utils.logar(e.getMessage());
+        } catch (Exception ex) {
+            Utils.showMessage(getContext(), getString(R.string.erro_argumentos_fazenda), 0);
         }
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private class GetClientes extends AsyncTask<Void, Void, List<ChaveValor>> {
+    private void cancelarFazenda() {
+        FazendaListaFragment flf = new FazendaListaFragment();
+        Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frg_principal, flf).commit();
+    }
 
-        @Override
-        protected List<ChaveValor> doInBackground(Void... voids) {
-            List<ChaveValor> clientes = db.clienteDao().getClientesDropDown(true);
-            return clientes;
-        }
+    private void novoCadastro() {
+        etNomeFaz.setEnabled(true);
+        etNomeFaz.requestFocus();
+        etCidadeFaz.setEnabled(true);
+        etNomeFaz.setText("");
+        etCidadeFaz.setText("");
+        spClienteFaz.setEnabled(true);
+        spUfFaz.setEnabled(true);
+        btnCadastrarFaz.setEnabled(false);
+        btnNovo.setVisibility(View.INVISIBLE);
+        fazenda = new Fazenda();
+        fazenda.setId(0);
+        fazenda.setClienteId(clienteIdSelecionado);
+    }
 
-        @Override
-        protected void onPostExecute(List<ChaveValor> clientes) {
+    @Override
+    public void startSpinners(List<ChaveValor> clientes) {
+        try {
             clienteList = clientes;
-            startSpinners(clientes);
+
+            String[] ufs = getResources().getStringArray(R.array.estados);
+            ArrayAdapter<String> adapterUfs = new ArrayAdapter<>(getContext(),
+                    android.R.layout.simple_spinner_dropdown_item, ufs);
+            spUfFaz.setAdapter(adapterUfs);
+
+            ArrayAdapter<ChaveValor> adapterClientes = new ArrayAdapter<>(getContext(),
+                    android.R.layout.simple_spinner_dropdown_item, clientes);
+            spClienteFaz.setAdapter(adapterClientes);
+
             getArgumentos(bundle);
+        } catch (Exception ex) {
+            Utils.showMessage(getContext(), getString(R.string.erro_carregar_dados_cadastro_fazenda), 0);
         }
+    }
+
+    @Override
+    public void cadastrar() {
+        clienteIdSelecionado = fazenda.getClienteId();
+        String nome = etNomeFaz.getText().toString().trim().toUpperCase();
+        String cidade = etCidadeFaz.getText().toString().trim().toUpperCase();
+
+        if (nome.length() > 2 && cidade.length() > 1) {
+            String uf = spUfFaz.getSelectedItem().toString().toUpperCase();
+            fazenda.setUf(uf);
+            fazenda.setNome(nome);
+            fazenda.setCidade(cidade);
+            presenter.cadastrar(fazenda);
+            disabledCampos();
+        } else {
+            Utils.showMessage(getContext(), getString(R.string.fazenda_erro_cadastro), 0);
+        }
+    }
+
+    @Override
+    public void showMessage(String mensagem, int codigo) {
+        Utils.showMessage(getContext(), mensagem, codigo);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.destroyView();
     }
 
 }

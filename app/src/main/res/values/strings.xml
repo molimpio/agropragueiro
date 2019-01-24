@@ -44,7 +44,6 @@
 
     <!-- cliente -->
     <string name="cadastrar_cliente">Cadastrar Cliente</string>
-    <string name="cliente_erro_cadastro">O nome deve ter mais que 4 caracteres e a cidade mais que 2</string>
     <string name="talhoes">Talhões</string>
     <string name="amostragens">Amostragens</string>
     <string name="cliente_param">Cliente_Param</string>
@@ -135,6 +134,7 @@
     <string name="erro_abrir_cadastro_clientes">Erro ao abrir cadastro clientes</string>
     <string name="erro_abrir_lista_fazendas_cliente">Erro ao abrir lista de fazendas do cliente</string>
     <string name="erro_abrir_opcoes_cliente">Erro abrir opções do cliente</string>
+    <string name="cliente_erro_cadastro">O nome deve ter mais que 4 caracteres e a cidade mais que 2</string>
 
     <!-- erros fazenda -->
     <string name="erro_get_fazendas">Erro ao buscar fazendas</string>
@@ -143,5 +143,8 @@
     <string name="erro_abrir_lista_talhoes_fazenda">Erro ao abrir lista de talhões da fazenda</string>
     <string name="erro_abrir_opcoes_fazenda">Erro abrir opções da fazenda</string>
     <string name="erro_argumentos_fazenda">Erro ao ler argumentos fazenda</string>
+    <string name="erro_carregar_dados_cadastro_fazenda">Erro ao carregar dados cadastro fazenda</string>
+    <string name="fazenda_erro_cadastro">O nome da fazenda deve ter mais que 2 caracteres e a cidade mais que 2</string>
+    <string name="erro_cadastrar_fazenda">Erro ao cadastrar fazenda</string>
 
 </resources>
