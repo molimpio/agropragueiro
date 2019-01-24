@@ -23,4 +23,7 @@ public interface ClienteDao {
 
     @Query("SELECT c.id AS chave, c.nome AS valor FROM cliente AS c WHERE ativo = :ativo")
     List<ChaveValor> getClientesDropDown(boolean ativo);
+
+    @Query("SELECT * FROM cliente WHERE id = :clienteId")
+    Cliente getClienteById(int clienteId);
 }

@@ -3,6 +3,7 @@ package br.net.olimpiodev.agropragueiro.contracts;
 import java.util.List;
 
 import br.net.olimpiodev.agropragueiro.model.ChaveValor;
+import br.net.olimpiodev.agropragueiro.model.Cliente;
 import br.net.olimpiodev.agropragueiro.model.Fazenda;
 
 public interface FazendaCadastroContrato {
@@ -13,6 +14,8 @@ public interface FazendaCadastroContrato {
 
         void cadastrar();
 
+        void getDadosCliente(Cliente cliente);
+
         void showMessage(String mensagem, int codigo);
     }
 
@@ -21,6 +24,8 @@ public interface FazendaCadastroContrato {
         void getClientes();
 
         void cadastrar(Fazenda fazenda);
+
+        void getClienteById(int clienteId);
 
         void destroyView();
     }

@@ -146,5 +146,6 @@
     <string name="erro_carregar_dados_cadastro_fazenda">Erro ao carregar dados cadastro fazenda</string>
     <string name="fazenda_erro_cadastro">O nome da fazenda deve ter mais que 2 caracteres e a cidade mais que 2</string>
     <string name="erro_cadastrar_fazenda">Erro ao cadastrar fazenda</string>
+    <string name="erro_buscar_dados_cliente">Erro ao buscar dados cliente</string>
 
 </resources>

@@ -11,16 +11,19 @@ import br.net.olimpiodev.agropragueiro.AppDatabase;
 import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.contracts.FazendaCadastroContrato;
 import br.net.olimpiodev.agropragueiro.model.ChaveValor;
+import br.net.olimpiodev.agropragueiro.model.Cliente;
 import br.net.olimpiodev.agropragueiro.model.Fazenda;
 
 public class FazendaCadastroPresenter implements FazendaCadastroContrato.FazendaCadastroPresenter {
 
     private FazendaCadastroContrato.FazendaCadastroView view;
     private Context context;
+    private AppDatabase db;
 
     public FazendaCadastroPresenter(FazendaCadastroContrato.FazendaCadastroView view, Context context) {
         this.view = view;
         this.context = context;
+        this.db = Room.databaseBuilder(context, AppDatabase.class, AppDatabase.DB_NAME).build();
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -30,7 +33,6 @@ public class FazendaCadastroPresenter implements FazendaCadastroContrato.Fazenda
             new AsyncTask<Void, Void, List<ChaveValor>>() {
                 @Override
                 protected List<ChaveValor> doInBackground(Void... voids) {
-                    AppDatabase db = Room.databaseBuilder(context, AppDatabase.class, AppDatabase.DB_NAME).build();
                     return db.clienteDao().getClientesDropDown(true);
                 }
 
@@ -51,7 +53,6 @@ public class FazendaCadastroPresenter implements FazendaCadastroContrato.Fazenda
             new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... voids) {
-                    AppDatabase db = Room.databaseBuilder(context, AppDatabase.class, AppDatabase.DB_NAME).build();
                     if (fazenda.getId() == 0) db.fazendaDao().insert(fazenda);
                     else db.fazendaDao().update(fazenda);
                     return null;
@@ -64,6 +65,26 @@ public class FazendaCadastroPresenter implements FazendaCadastroContrato.Fazenda
             }.execute();
         } catch (Exception ex) {
             view.showMessage(context.getString(R.string.erro_cadastrar_fazenda), 0);
+        }
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    @Override
+    public void getClienteById(int clienteId) {
+        try {
+            new AsyncTask<Void, Void, Cliente>() {
+                @Override
+                protected Cliente doInBackground(Void... voids) {
+                    return db.clienteDao().getClienteById(clienteId);
+                }
+
+                @Override
+                protected void onPostExecute(Cliente cliente) {
+                    view.getDadosCliente(cliente);
+                }
+            }.execute();
+        } catch (Exception ex) {
+            view.showMessage(context.getString(R.string.erro_buscar_dados_cliente), 0);
         }
     }
 

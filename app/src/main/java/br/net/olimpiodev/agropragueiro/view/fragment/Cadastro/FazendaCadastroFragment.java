@@ -19,6 +19,7 @@ import java.util.Objects;
 import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.contracts.FazendaCadastroContrato;
 import br.net.olimpiodev.agropragueiro.model.ChaveValor;
+import br.net.olimpiodev.agropragueiro.model.Cliente;
 import br.net.olimpiodev.agropragueiro.model.Fazenda;
 import br.net.olimpiodev.agropragueiro.model.FazendaCliente;
 import br.net.olimpiodev.agropragueiro.presenter.FazendaCadastroPresenter;
@@ -62,6 +63,7 @@ public class FazendaCadastroFragment extends Fragment
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                     fazenda.setClienteId(clienteList.get(position).getChave());
+                    presenter.getClienteById(fazenda.getClienteId());
                 }
 
                 @Override
@@ -108,10 +110,10 @@ public class FazendaCadastroFragment extends Fragment
                 etNomeFaz.setText(fazenda.getNome());
                 etCidadeFaz.setText(fazenda.getCidade());
 
+                spClienteFaz.setSelection(Utils.getIndexChaveValor(clienteList, fc.getNomeCliente()));
+
                 spUfFaz.setSelection(Utils.getIndex(getResources()
                         .getStringArray(R.array.estados), fazenda.getUf()));
-
-                spClienteFaz.setSelection(Utils.getIndexChaveValor(clienteList, fc.getNomeCliente()));
             }
         } catch (Exception ex) {
             Utils.showMessage(getContext(), getString(R.string.erro_argumentos_fazenda), 0);
@@ -175,6 +177,13 @@ public class FazendaCadastroFragment extends Fragment
         } else {
             Utils.showMessage(getContext(), getString(R.string.fazenda_erro_cadastro), 0);
         }
+    }
+
+    @Override
+    public void getDadosCliente(Cliente cliente) {
+        spUfFaz.setSelection(Utils.getIndex(getResources()
+                .getStringArray(R.array.estados), cliente.getUf()));
+        etCidadeFaz.setText(cliente.getCidade());
     }
 
     @Override
