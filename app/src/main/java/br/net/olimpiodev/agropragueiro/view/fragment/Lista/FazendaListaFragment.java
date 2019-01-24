@@ -1,4 +1,4 @@
-package br.net.olimpiodev.agropragueiro.fragment.Lista;
+package br.net.olimpiodev.agropragueiro.view.fragment.Lista;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -21,7 +21,7 @@ import java.util.List;
 import br.net.olimpiodev.agropragueiro.AppDatabase;
 import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.adapter.FazendaAdapter;
-import br.net.olimpiodev.agropragueiro.fragment.Cadastro.FazendaCadastroFragment;
+import br.net.olimpiodev.agropragueiro.view.fragment.Cadastro.FazendaCadastroFragment;
 import br.net.olimpiodev.agropragueiro.model.Cliente;
 import br.net.olimpiodev.agropragueiro.model.FazendaCliente;
 import br.net.olimpiodev.agropragueiro.utils.Utils;

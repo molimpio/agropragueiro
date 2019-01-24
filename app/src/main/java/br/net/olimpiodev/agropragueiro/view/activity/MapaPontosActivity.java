@@ -1,10 +1,9 @@
-package br.net.olimpiodev.agropragueiro.activity;
+package br.net.olimpiodev.agropragueiro.view.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.arch.persistence.room.Room;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;

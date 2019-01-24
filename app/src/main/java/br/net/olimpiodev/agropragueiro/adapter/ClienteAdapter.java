@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.net.olimpiodev.agropragueiro.R;
@@ -18,8 +19,8 @@ public class ClienteAdapter extends RecyclerView.Adapter<ClienteAdapter.ClienteV
     private List<Cliente> clientes;
     private static ClienteAdapter.ItemClickListener clickListener;
 
-    public ClienteAdapter(List<Cliente> clientes) {
-        this.clientes = clientes;
+    public ClienteAdapter() {
+        this.clientes = new ArrayList<>();
     }
 
     @Override
@@ -44,6 +45,11 @@ public class ClienteAdapter extends RecyclerView.Adapter<ClienteAdapter.ClienteV
 
     public void setClickListener(ClienteAdapter.ItemClickListener itemClickListener) {
         clickListener = itemClickListener;
+    }
+
+    public void setClientes(List<Cliente> clientes) {
+        this.clientes = clientes;
+        notifyDataSetChanged();
     }
 
     public class ClienteViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

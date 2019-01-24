@@ -13,7 +13,7 @@ import br.net.olimpiodev.agropragueiro.model.Cliente;
 @Dao
 public interface ClienteDao {
     @Insert
-    public void insert(Cliente... cliente);
+    void insert(Cliente... cliente);
 
     @Update
     void update(Cliente... cliente);

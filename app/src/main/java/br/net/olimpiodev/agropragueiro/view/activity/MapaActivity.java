@@ -1,4 +1,4 @@
-package br.net.olimpiodev.agropragueiro.activity;
+package br.net.olimpiodev.agropragueiro.view.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;

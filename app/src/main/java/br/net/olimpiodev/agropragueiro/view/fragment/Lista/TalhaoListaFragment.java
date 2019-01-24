@@ -1,4 +1,4 @@
-package br.net.olimpiodev.agropragueiro.fragment.Lista;
+package br.net.olimpiodev.agropragueiro.view.fragment.Lista;
 
 
 import android.annotation.SuppressLint;
@@ -22,9 +22,9 @@ import java.util.List;
 
 import br.net.olimpiodev.agropragueiro.AppDatabase;
 import br.net.olimpiodev.agropragueiro.R;
-import br.net.olimpiodev.agropragueiro.activity.MapaActivity;
+import br.net.olimpiodev.agropragueiro.view.activity.MapaActivity;
 import br.net.olimpiodev.agropragueiro.adapter.TalhaoAdapter;
-import br.net.olimpiodev.agropragueiro.fragment.Cadastro.TalhaoCadastroFragment;
+import br.net.olimpiodev.agropragueiro.view.fragment.Cadastro.TalhaoCadastroFragment;
 import br.net.olimpiodev.agropragueiro.model.FazendaCliente;
 import br.net.olimpiodev.agropragueiro.model.TalhaoFazenda;
 import br.net.olimpiodev.agropragueiro.utils.Utils;

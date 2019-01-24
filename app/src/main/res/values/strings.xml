@@ -126,6 +126,7 @@
     <!-- erros cliente -->
     <string name="erro_get_clientes">Erro ao buscar clientes</string>
     <string name="erro_adapter_clientes">Erro ao listar clientes</string>
+    <string name="erro_cadastrar_cliente">Erro ao cadastrar cliente</string>
     <string name="erro_view_clientes">Erro ao carregar view clientes</string>
     <string name="erro_view_cadastro_clientes">Erro ao carregar view cadastro clientes</string>
     <string name="erro_carregar_dados_cadastro_clientes">Erro ao carregar dados cadastro clientes</string>
