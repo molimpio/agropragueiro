@@ -135,4 +135,13 @@
     <string name="erro_abrir_cadastro_clientes">Erro ao abrir cadastro clientes</string>
     <string name="erro_abrir_lista_fazendas_cliente">Erro ao abrir lista de fazendas do cliente</string>
     <string name="erro_abrir_opcoes_cliente">Erro abrir opções do cliente</string>
+
+    <!-- erros fazenda -->
+    <string name="erro_get_fazendas">Erro ao buscar fazendas</string>
+    <string name="erro_view_fazendas">Erro ao carregar view fazendas</string>
+    <string name="erro_abrir_cadastro_fazendas">Erro ao abrir cadastro fazendas</string>
+    <string name="erro_abrir_lista_talhoes_fazenda">Erro ao abrir lista de talhões da fazenda</string>
+    <string name="erro_abrir_opcoes_fazenda">Erro abrir opções da fazenda</string>
+    <string name="erro_argumentos_fazenda">Erro ao ler argumentos fazenda</string>
+
 </resources>

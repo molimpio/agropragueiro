@@ -1,13 +1,10 @@
 package br.net.olimpiodev.agropragueiro.view.fragment.Lista;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.arch.persistence.room.Room;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,82 +14,103 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Objects;
 
-import br.net.olimpiodev.agropragueiro.AppDatabase;
 import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.adapter.FazendaAdapter;
-import br.net.olimpiodev.agropragueiro.view.fragment.Cadastro.FazendaCadastroFragment;
+import br.net.olimpiodev.agropragueiro.contracts.FazendaListaContrato;
 import br.net.olimpiodev.agropragueiro.model.Cliente;
 import br.net.olimpiodev.agropragueiro.model.FazendaCliente;
+import br.net.olimpiodev.agropragueiro.presenter.FazendaListaPresenter;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
+import br.net.olimpiodev.agropragueiro.view.fragment.Cadastro.FazendaCadastroFragment;
 
-public class FazendaListaFragment extends Fragment {
+public class FazendaListaFragment extends Fragment implements FazendaListaContrato.FazendaListaView {
 
-    private AppDatabase db;
     private RecyclerView rvFazendas;
     private TextView tvListaVazia;
-    private Bundle bundle;
+    private FazendaListaContrato.FazendaListaPresenter presenter;
+    private FazendaAdapter fazendaAdapter;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fazenda_lista, container, false);
-        db = Room.databaseBuilder(getContext(), AppDatabase.class, AppDatabase.DB_NAME).build();
-
-        rvFazendas = view.findViewById(R.id.rv_fazendas);
-        tvListaVazia = view.findViewById(R.id.tv_lista_vazia_fazenda);
-
-        FloatingActionButton fabCadastroFazenda = view.findViewById(R.id.fab_cadastro_fazenda);
-        fabCadastroFazenda.setOnClickListener(view1 -> openCadastro(null));
-
-        bundle = this.getArguments();
-        
-        GetFazendas getFazendas = new GetFazendas();
-        getFazendas.execute();
-
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Fazendas");
-        
+        getFazendas();
+        setupView(view);
+        setupRecyclerView();
         return view;
     }
 
-    private void startRecyclerView(List<FazendaCliente> fazendas) {
+    private void getFazendas() {
+        try {
+            int clienteId = 0;
+            Bundle bundle = this.getArguments();
+
+            if (bundle != null) {
+                String keyBundle = getString(R.string.cliente_param);
+                Cliente c = (Cliente) bundle.getSerializable(keyBundle);
+                clienteId = c.getId();
+            }
+
+            presenter = new FazendaListaPresenter(this, getContext());
+            presenter.getFazendas(clienteId);
+        } catch (Exception ex) {
+            Utils.showMessage(getContext(), getString(R.string.erro_argumentos_fazenda), 0);
+        }
+    }
+
+    private void setupView(View view) {
+        try {
+            Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity()))
+                    .getSupportActionBar()).setTitle(getString(R.string.fazendas));
+
+            rvFazendas = view.findViewById(R.id.rv_fazendas);
+            tvListaVazia = view.findViewById(R.id.tv_lista_vazia_fazenda);
+
+            FloatingActionButton fabCadastroFazenda = view.findViewById(R.id.fab_cadastro_fazenda);
+            fabCadastroFazenda.setOnClickListener(view1 -> openCadastro(null));
+        } catch (Exception ex) {
+            Utils.showMessage(getContext(), getString(R.string.erro_view_fazendas), 0);
+        }
+    }
+
+    private void setupRecyclerView() {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvFazendas.setLayoutManager(layoutManager);
-
-        FazendaAdapter fazendaAdapter = new FazendaAdapter(fazendas);
+        fazendaAdapter = new FazendaAdapter();
         rvFazendas.setAdapter(fazendaAdapter);
-
-        fazendaAdapter.setClickListener((position, view1) -> {
-            if (view1.getId() == R.id.btn_opoes_fc) {
-                final FazendaCliente fazendaCliente = fazendas.get(position);
-                opcoes(fazendaCliente);
-            }
-        });
     }
 
     private void openCadastro(FazendaCliente fazenda) {
-        FazendaCadastroFragment fdf = new FazendaCadastroFragment();
+        try {
+            FazendaCadastroFragment fdf = new FazendaCadastroFragment();
 
-        if (fazenda != null) {
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(getResources().getString(R.string.fazenda_param), fazenda);
-            fdf.setArguments(bundle);
+            if (fazenda != null) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(getString(R.string.fazenda_param), fazenda);
+                fdf.setArguments(bundle);
+            }
+
+            getFragmentManager().beginTransaction().replace(R.id.frg_principal, fdf).commit();
+        } catch (Exception ex) {
+            Utils.showMessage(getContext(), getString(R.string.erro_abrir_cadastro_fazendas), 0);
         }
-
-        FragmentManager fm = getFragmentManager();
-        fm.beginTransaction().replace(R.id.frg_principal, fdf).commit();
     }
 
     private void openListaTalhoes(FazendaCliente fazenda) {
-        TalhaoListaFragment tlf = new TalhaoListaFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(getResources().getString(R.string.fazenda_param), fazenda);
-        tlf.setArguments(bundle);
-        FragmentManager fm = getFragmentManager();
-        fm.beginTransaction().replace(R.id.frg_principal, tlf).commit();
+        try {
+            TalhaoListaFragment tlf = new TalhaoListaFragment();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(getString(R.string.fazenda_param), fazenda);
+            tlf.setArguments(bundle);
+            getFragmentManager().beginTransaction().replace(R.id.frg_principal, tlf).commit();
+        } catch (Exception ex) {
+            Utils.showMessage(getContext(), getString(R.string.erro_abrir_lista_talhoes_fazenda), 0);
+        }
     }
 
-    private void opcoes(final FazendaCliente fazenda) {
+    private void opcoesDialog(final FazendaCliente fazenda) {
         try {
             final String[] OPCOES = getResources().getStringArray(R.array.opcoes_fazenda_card);
             final String dialogTitle = getResources().getString(R.string.titulo_opcoes_card);
@@ -101,66 +119,56 @@ public class FazendaListaFragment extends Fragment {
             builder.setTitle(dialogTitle);
 
             builder.setSingleChoiceItems(OPCOES, 3, (dialog, item) -> {
-                        switch (item) {
-                            case 0:
-                                dialog.dismiss();
-                                openListaTalhoes(fazenda);
-                                break;
-                            case 1:
-                                dialog.dismiss();
-                                openCadastro(fazenda);
-                                break;
-                            case 2:
-                                // excluir
-                                break;
-                        }
-                    });
-
-            String cancelar = getResources().getString(R.string.cancelar);
-
-            builder.setNegativeButton(cancelar, (dialogInterface, i) -> {
-                dialogInterface.dismiss();
-                Utils.showMessage(getContext(), "", 3);
+                switch (item) {
+                    case 0:
+                        dialog.dismiss();
+                        openListaTalhoes(fazenda);
+                        break;
+                    case 1:
+                        dialog.dismiss();
+                        openCadastro(fazenda);
+                        break;
+                    case 2:
+                        // excluir
+                        break;
+                }
             });
+
+            builder.setNegativeButton(getString(R.string.cancelar), (dialogInterface, i)
+                    -> dialogInterface.dismiss());
 
             AlertDialog alertDialog = builder.create();
             alertDialog.setCanceledOnTouchOutside(true);
             alertDialog.show();
         } catch (Exception ex) {
-            Utils.logar(ex.getMessage());
+            Utils.showMessage(getContext(), getString(R.string.erro_abrir_opcoes_fazenda), 0);
         }
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private class GetFazendas extends AsyncTask<Void, Void, List<FazendaCliente>> {
-
-        @Override
-        protected List<FazendaCliente> doInBackground(Void... voids) {
-            List<FazendaCliente> fazendas = null;
-
-            try {
-                if (bundle != null) {
-                    String keyBundle = getResources().getString(R.string.cliente_param);
-                    Cliente c = (Cliente) bundle.getSerializable(keyBundle);
-                    fazendas = db.fazendaDao().getFazendasByClienteID(true, c.getId());
-                } else {
-                    fazendas = db.fazendaDao().getFazendasCliente(true);
-                }
-            } catch (Exception ex) {
-              Utils.logar(ex.getMessage());  
+    @Override
+    public void listarFazendas(List<FazendaCliente> fazendas) {
+        fazendaAdapter.setFazendas(fazendas);
+        fazendaAdapter.setClickListener((position, view1) -> {
+            if (view1.getId() == R.id.btn_opoes_fc) {
+                final FazendaCliente fazendaCliente = fazendas.get(position);
+                opcoesDialog(fazendaCliente);
             }
-            return fazendas;
-        }
-
-        @Override
-        protected void onPostExecute(List<FazendaCliente> fazendas) {
-            if (fazendas.size() == 0) {
-                tvListaVazia.setVisibility(View.VISIBLE);
-            } else {
-                tvListaVazia.setVisibility(View.GONE);
-                startRecyclerView(fazendas);
-            }
-        }
+        });
     }
 
+    @Override
+    public void exibirListaVazia() {
+        tvListaVazia.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void exibirError(String mensagem) {
+        Utils.showMessage(getContext(), mensagem, 0);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.destroyView();
+    }
 }

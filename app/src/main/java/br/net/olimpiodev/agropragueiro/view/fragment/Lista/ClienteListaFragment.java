@@ -116,7 +116,8 @@ public class ClienteListaFragment extends Fragment implements ClienteListaContra
                 }
             });
 
-            builder.setNegativeButton(getString(R.string.cancelar), (dialogInterface, i) -> dialogInterface.dismiss());
+            builder.setNegativeButton(getString(R.string.cancelar), (dialogInterface, i)
+                    -> dialogInterface.dismiss());
 
             AlertDialog alertDialog = builder.create();
             alertDialog.setCanceledOnTouchOutside(true);

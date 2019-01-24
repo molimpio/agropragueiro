@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.net.olimpiodev.agropragueiro.R;
@@ -18,8 +19,8 @@ public class FazendaAdapter extends RecyclerView.Adapter<FazendaAdapter.FazendaV
     private List<FazendaCliente> fazendas;
     private static FazendaAdapter.ItemClickListener clickListener;
 
-    public FazendaAdapter(List<FazendaCliente> fazendas) {
-        this.fazendas = fazendas;
+    public FazendaAdapter() {
+        this.fazendas = new ArrayList<>();
     }
 
     @NonNull
@@ -46,6 +47,11 @@ public class FazendaAdapter extends RecyclerView.Adapter<FazendaAdapter.FazendaV
 
     public void setClickListener(FazendaAdapter.ItemClickListener itemClickListener) {
         clickListener = itemClickListener;
+    }
+
+    public void setFazendas(List<FazendaCliente> fazendas) {
+        this.fazendas = fazendas;
+        notifyDataSetChanged();
     }
 
     public class FazendaViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
