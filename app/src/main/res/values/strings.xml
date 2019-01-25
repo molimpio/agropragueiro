@@ -44,7 +44,6 @@
 
     <!-- cliente -->
     <string name="cadastrar_cliente">Cadastrar Cliente</string>
-    <string name="talhoes">Talhões</string>
     <string name="amostragens">Amostragens</string>
     <string name="cliente_param">Cliente_Param</string>
     <string-array name="opcoes_cliente_card">
@@ -73,6 +72,7 @@
 
     <!-- talhao -->
     <string name="fazenda">Fazenda</string>
+    <string name="talhoes">Talhões</string>
     <string name="cadastrar_talhao">Cadastrar Talhão</string>
     <string name="talhao_param">Talhao_Param</string>
     <string name="talhao_id_param">Talhao_id_Param</string>
@@ -148,4 +148,11 @@
     <string name="erro_cadastrar_fazenda">Erro ao cadastrar fazenda</string>
     <string name="erro_buscar_dados_cliente">Erro ao buscar dados cliente</string>
 
+    <!-- erros talhao -->
+    <string name="erro_view_talhao">Erro ao carregar view talhao</string>
+    <string name="erro_abrir_cadastro_talhao">Erro ao abrir cadastro talhão</string>
+    <string name="erro_abrir_lista_amostragens_talhao">Erro ao abrir llista amostragens do talhão</string>
+    <string name="erro_abrir_opcoes_talhao">Erro abrir opções talhão</string>
+    <string name="erro_ler_argumentos_talhao">Erro ao ler argumentos talhão</string>
+    <string name="erro_buscar_talhoes">Erro buscar talhões</string>
 </resources>

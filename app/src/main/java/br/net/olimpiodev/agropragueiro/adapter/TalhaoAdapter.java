@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.net.olimpiodev.agropragueiro.R;
@@ -19,8 +20,8 @@ public class TalhaoAdapter extends RecyclerView.Adapter<TalhaoAdapter.TalhaoView
     private List<TalhaoFazenda> talhoes;
     private static TalhaoAdapter.ItemClickListener clickListener;
 
-    public TalhaoAdapter(List<TalhaoFazenda> talhoes) {
-        this.talhoes = talhoes;
+    public TalhaoAdapter() {
+        this.talhoes = new ArrayList<>();
     }
 
     @Override
@@ -47,6 +48,11 @@ public class TalhaoAdapter extends RecyclerView.Adapter<TalhaoAdapter.TalhaoView
 
     public void setClickListener(TalhaoAdapter.ItemClickListener itemClickListener) {
         clickListener = itemClickListener;
+    }
+
+    public void setTalhoes(List<TalhaoFazenda> talhoes) {
+        this.talhoes = talhoes;
+        notifyDataSetChanged();
     }
 
     public class TalhaoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
