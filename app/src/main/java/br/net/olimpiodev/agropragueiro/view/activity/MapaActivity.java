@@ -1,13 +1,10 @@
 package br.net.olimpiodev.agropragueiro.view.activity;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.arch.persistence.room.Room;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,7 +12,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,16 +23,13 @@ import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.gson.Gson;
-import com.google.maps.android.SphericalUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import br.net.olimpiodev.agropragueiro.AppDatabase;
 import br.net.olimpiodev.agropragueiro.R;
-import br.net.olimpiodev.agropragueiro.model.Talhao;
-import br.net.olimpiodev.agropragueiro.service.MapaService;
+import br.net.olimpiodev.agropragueiro.contracts.MapaContrato;
+import br.net.olimpiodev.agropragueiro.presenter.MapaPresenter;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 
 public class MapaActivity extends AppCompatActivity implements OnMapReadyCallback,
@@ -44,7 +37,8 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
         GoogleMap.OnPolylineClickListener,
         GoogleMap.OnPolygonClickListener,
         GoogleMap.OnMyLocationButtonClickListener,
-        GoogleMap.OnMyLocationClickListener {
+        GoogleMap.OnMyLocationClickListener,
+        MapaContrato.MapaView {
 
     private final int CODIGO_REQUISICAO_PERMISSAO_LOCALIZACAO = 0;
     private GoogleMap mapa;
@@ -55,30 +49,38 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
     private String contorno = "";
     private List<LatLng> coordenadas = new ArrayList<>();
     private int mapaTipoSelecionado = 2;
-    private AppDatabase db;
+    private MapaContrato.MapaPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapa);
+        setupView();
+    }
 
-        SupportMapFragment fragmentoMapa = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map);
-        fragmentoMapa.getMapAsync(this);
+    private void setupView() {
+        try {
+            SupportMapFragment fragmentoMapa = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map);
+            fragmentoMapa.getMapAsync(this);
 
-        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, AppDatabase.DB_NAME).build();
 
-        if (getIntent().hasExtra(getResources().getString(R.string.talhao_id_param))) {
-            talhaoId = (int) getIntent().getSerializableExtra(getResources().getString(R.string.talhao_id_param));
-        }
+            if (getIntent().hasExtra(getResources().getString(R.string.talhao_id_param))) {
+                talhaoId = (int) getIntent().getSerializableExtra(getResources().getString(R.string.talhao_id_param));
+            }
 
-        if (getIntent().hasExtra(getResources().getString(R.string.contorno_param))) {
-            contorno = (String) getIntent().getSerializableExtra(getResources().getString(R.string.contorno_param));
+            if (getIntent().hasExtra(getResources().getString(R.string.contorno_param))) {
+                contorno = (String) getIntent().getSerializableExtra(getResources().getString(R.string.contorno_param));
+            }
+        } catch (Exception ex) {
+            showMessage(getString(R.string.erro_carregar_mapa), 0);
         }
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mapa = googleMap;
+        presenter = new MapaPresenter(this, MapaActivity.this, mapa);
+
         mapa.getUiSettings().setZoomControlsEnabled(true);
         mapa.getUiSettings().setMyLocationButtonEnabled(true);
 
@@ -107,7 +109,7 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapa.setOnMapClickListener(this);
 
         if (!contorno.isEmpty()) {
-            exibirContornoMapa();
+            presenter.exibirContorno(contorno);
         }
     }
 
@@ -123,14 +125,12 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onMyLocationClick(@NonNull Location location) {
-        Toast.makeText(this, "Current location:\n" + location, Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "Current location:\n" + location, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public boolean onMyLocationButtonClick() {
-        Toast.makeText(this, "MyLocation button clicked", Toast.LENGTH_SHORT).show();
-        // Return false so that we don't consume the event and the default behavior still occurs
-        // (the camera animates to the user's current position).
+        showMessage(getString(R.string.my_location), 0);
         return false;
     }
 
@@ -138,45 +138,7 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapClick(LatLng latLng) {
         //TODO: limpar ultima coordenada...
         coordenadas.add(latLng);
-
-        if (contador == 0) {
-            // ultima coordenada começa como sendo a inicial
-            ultimaCoordenada = latLng;
-
-            opcoesPoligonoCoordendas = new PolygonOptions();
-            opcoesPoligonoCoordendas.strokeColor(Color.BLUE); // ou fill color
-            opcoesPoligonoCoordendas.add(ultimaCoordenada);
-
-        } else {
-            mapa.clear();
-
-            // cria o marcador p ultima coordenada
-            MarkerOptions opcoesMarcadorUltimaCoordenada = new MarkerOptions();
-            opcoesMarcadorUltimaCoordenada.position(ultimaCoordenada);
-            mapa.addMarker(opcoesMarcadorUltimaCoordenada);
-
-            // cria marcador p nova coordenada
-            MarkerOptions opcoesMarcadorNovaCoordenada = new MarkerOptions();
-            opcoesMarcadorNovaCoordenada.position(latLng);
-            mapa.addMarker(opcoesMarcadorNovaCoordenada);
-
-            // Polyline
-            PolylineOptions opcoesLinhaEntreMarcadores = new PolylineOptions();
-            opcoesLinhaEntreMarcadores.add(ultimaCoordenada);
-            opcoesLinhaEntreMarcadores.add(latLng);
-            opcoesLinhaEntreMarcadores.color(Color.RED); // altera a cor da linha
-
-            mapa.addPolyline(opcoesLinhaEntreMarcadores); // adiciona no mapa*/
-
-            // mudar o zoom do local para nova latlog
-            mapa.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-
-            ultimaCoordenada = latLng;
-
-            opcoesPoligonoCoordendas.add(ultimaCoordenada);
-            mapa.addPolygon(opcoesPoligonoCoordendas);
-        }
-
+        presenter.drawContorno(contador, latLng);
         contador++;
     }
 
@@ -205,7 +167,7 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.salvar:
-                salvarContorno();
+                cadastrarContorno();
                 return true;
             case R.id.remover:
                 //TODO: verificar pq não está apagando.
@@ -213,75 +175,27 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
                 coordenadas.clear();
                 return true;
             case R.id.layers:
-                opcoesLayer();
+                mapaTipoSelecionado = presenter.opcoesLayer();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    @SuppressLint("StaticFieldLeak")
-    public void salvarContorno() {
-        Gson gson = new Gson();
-        String contorno = gson.toJson(coordenadas);
-        Double areaHa = SphericalUtil.computeArea(coordenadas) / 10000;
-        Double areaRound = Utils.round(areaHa, 2);
-
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... voids) {
-                Talhao talhao = db.talhaoDao().getTalhaoById(talhaoId);
-                talhao.setContorno(contorno);
-                talhao.setAreaHa(areaRound);
-                db.talhaoDao().update(talhao);
-                return null;
-            }
-        }.execute();
-
-        Utils.showMessage(getApplicationContext(), "", 1);
+    @Override
+    public void cadastrarContorno() {
+        presenter.cadastrar(talhaoId, coordenadas);
         finish();
     }
 
-    private void exibirContornoMapa() {
-        // TODO: ver como pegar o centro do polygono para centralizar o zoom
-        mapa.addPolyline(MapaService.coordenadasStringToList(contorno));
-        mapa.animateCamera(CameraUpdateFactory.newLatLngZoom(MapaService.primeiraCoordenada, 16));
+    @Override
+    public void showMessage(String mensagem, int codigo) {
+        Utils.showMessage(getApplicationContext(), mensagem, codigo);
     }
 
-    private void opcoesLayer() {
-        try {
-            final String[] MAPA_TYPES = getResources().getStringArray(R.array.mapa_types);
-            final String dialogTitle = getResources().getString(R.string.titulo_dialog);
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(dialogTitle);
-
-            builder.setSingleChoiceItems(
-                    MAPA_TYPES, mapaTipoSelecionado,
-                    (dialog, item) -> {
-                        switch (item) {
-                            case 0:
-                                mapa.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-                                break;
-                            case 1:
-                                mapa.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-                                break;
-                            case 2:
-                                mapa.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-                                break;
-                            case 3:
-                                mapa.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-                                break;
-                        }
-                        mapaTipoSelecionado = item;
-                        dialog.dismiss();
-                    }
-            );
-
-            AlertDialog alertDialog = builder.create();
-            alertDialog.setCanceledOnTouchOutside(true);
-            alertDialog.show();
-        } catch (Exception ex) {
-
-        }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.destroyView();
     }
 }

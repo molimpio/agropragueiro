@@ -159,6 +159,7 @@ public class TalhaoListaFragment extends Fragment implements TalhaoListaContrato
         if (!talhaoFazenda.getContorno().isEmpty()) {
             mapaIntent.putExtra(getResources().getString(R.string.contorno_param), talhaoFazenda.getContorno());
         }
+        //TODO: verificar o retorno se cadastrou novo contorno precisa atualizar o adapter...
         startActivity(mapaIntent);
     }
 

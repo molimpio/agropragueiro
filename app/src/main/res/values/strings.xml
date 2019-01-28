@@ -87,6 +87,7 @@
     <!-- mapa -->
     <string name="titulo_dialog">Selecione o tipo do Mapa</string>
     <string name="titulo_dialog_ponto">Escolha ação que deseja aplicar no ponto</string>
+    <string name="my_location">Centralizando na localização do usuário</string>
     <string name="basemaps">Tipos mapas</string>
     <string-array name="mapa_types">
         <item>Normal</item>
@@ -158,4 +159,10 @@
     <string name="erro_carregar_dados_cadastro_talhao">Erro ao carregar dados cadastro talhão</string>
     <string name="talhao_erro_cadastro">O nome do talhão deve ter mais que 1 caractere</string>
     <string name="erro_cadastrar_talhao">Erro ao cadastrar talhão</string>
+
+    <!-- erros mapa -->
+    <string name="erro_salvar_contorno">Erro ao salvar contorno</string>
+    <string name="erro_carregar_contorno">Erro ao carregar contorno no mapa</string>
+    <string name="erro_carregar_mapa">Erro ao carregar mapa</string>
+    <string name="erro_carregar_opcoes_layer">Erro ao carregar opções de layer</string>
 </resources>

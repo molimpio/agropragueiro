@@ -34,7 +34,6 @@ import java.util.List;
 import br.net.olimpiodev.agropragueiro.AppDatabase;
 import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.model.PontoAmostragem;
-import br.net.olimpiodev.agropragueiro.service.MapaService;
 import br.net.olimpiodev.agropragueiro.service.amostragem.ColetarDadosService;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 
@@ -176,8 +175,8 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     private void exibirContornoMapa() {
-        mapa.addPolyline(MapaService.coordenadasStringToList(contorno));
-        mapa.animateCamera(CameraUpdateFactory.newLatLngZoom(MapaService.primeiraCoordenada, 16));
+//        mapa.addPolyline(MapaService.coordenadasStringToList(contorno));
+//        mapa.animateCamera(CameraUpdateFactory.newLatLngZoom(MapaService.primeiraCoordenada, 16));
     }
 
     private void exibirPontosMapa() {
