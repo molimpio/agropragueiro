@@ -1,15 +1,11 @@
 package br.net.olimpiodev.agropragueiro.view.fragment.Cadastro;
 
 
-import android.annotation.SuppressLint;
-import android.arch.persistence.room.Room;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,19 +16,21 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import java.util.List;
+import java.util.Objects;
 
-import br.net.olimpiodev.agropragueiro.AppDatabase;
 import br.net.olimpiodev.agropragueiro.R;
-import br.net.olimpiodev.agropragueiro.view.activity.MapaActivity;
-import br.net.olimpiodev.agropragueiro.view.fragment.Lista.TalhaoListaFragment;
+import br.net.olimpiodev.agropragueiro.contracts.TalhaoCadastroContrato;
 import br.net.olimpiodev.agropragueiro.model.ChaveValor;
 import br.net.olimpiodev.agropragueiro.model.Talhao;
 import br.net.olimpiodev.agropragueiro.model.TalhaoFazenda;
+import br.net.olimpiodev.agropragueiro.presenter.TalhaoCadastroPresenter;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
+import br.net.olimpiodev.agropragueiro.view.activity.MapaActivity;
+import br.net.olimpiodev.agropragueiro.view.fragment.Lista.TalhaoListaFragment;
 
-public class TalhaoCadastroFragment extends Fragment {
+public class TalhaoCadastroFragment extends Fragment
+        implements TalhaoCadastroContrato.TalhaoCadastroView {
 
-    private AppDatabase db;
     private EditText etNomeTalhao;
     private Spinner spFazenda;
     private Button btnCadastrar, btnContorno, btnNovo;
@@ -40,118 +38,98 @@ public class TalhaoCadastroFragment extends Fragment {
     private List<ChaveValor> fazendaList;
     private Bundle bundle;
     private int fazendaIdSelecionado;
+    private TalhaoCadastroContrato.TalhaoCadastroPresenter presenter;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_talhao_cadastro, container, false);
-        db = Room.databaseBuilder(getContext(), AppDatabase.class, AppDatabase.DB_NAME).build();
-
+        setupView(view);
         bundle = this.getArguments();
-
-        GetFazendas getFazendas = new GetFazendas();
-        getFazendas.execute();
-
-        setRefs(view);
-        talhao = new Talhao();
-        talhao.setId(0);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Cadastrar Talhão");
+        presenter = new TalhaoCadastroPresenter(this, getContext());
+        presenter.getFazendas();
         return view;
     }
 
-    private void setRefs(View view) {
-        etNomeTalhao = view.findViewById(R.id.et_nome_talhao);
-        etNomeTalhao.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+    private void setupView(View view) {
+        try {
+            Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity()))
+                    .getSupportActionBar()).setTitle(getString(R.string.cadastrar_talhao));
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (etNomeTalhao.getText().toString().length() > 1) {
-                    btnCadastrar.setEnabled(true);
-                } else {
-                    btnCadastrar.setEnabled(false);
+            etNomeTalhao = view.findViewById(R.id.et_nome_talhao);
+            etNomeTalhao.requestFocus();
+            spFazenda = view.findViewById(R.id.sp_fazendas_talhao);
+            spFazenda.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                    talhao.setFazendaId(fazendaList.get(position).getChave());
                 }
-            }
 
-            @Override
-            public void afterTextChanged(Editable editable) {
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
 
-            }
-        });
-        etNomeTalhao.requestFocus();
+                }
+            });
 
-        spFazenda = view.findViewById(R.id.sp_fazendas_talhao);
-        spFazenda.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                talhao.setFazendaId(fazendaList.get(position).getChave());
-            }
+            btnCadastrar = view.findViewById(R.id.btn_cadastrar_talhao);
+            btnCadastrar.setOnClickListener(view1 -> cadastrar());
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
+            btnContorno = view.findViewById(R.id.btn_contorno_talhao);
+            btnContorno.setOnClickListener(view1 -> openMapa());
 
-            }
-        });
+            btnNovo = view.findViewById(R.id.btn_novo_talhao);
+            btnNovo.setOnClickListener(v -> novoCadastro());
 
-        Button btnCancelar = view.findViewById(R.id.btn_cancelar_talhao);
-        TalhaoListaFragment tlf = new TalhaoListaFragment();
+            Button btnCancelar = view.findViewById(R.id.btn_cancelar_talhao);
+            btnCancelar.setOnClickListener(v -> cancelarTalhao());
 
-        btnCancelar.setOnClickListener(view1 ->
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.frg_principal, tlf).commit()
-        );
-
-        btnCadastrar = view.findViewById(R.id.btn_cadastrar_talhao);
-        btnCadastrar.setOnClickListener(view1 -> cadastrar());
-
-        btnContorno = view.findViewById(R.id.btn_contorno_talhao);
-        btnContorno.setOnClickListener(view1 -> openMapa());
-
-        btnNovo = view.findViewById(R.id.btn_novo_talhao);
-        btnNovo.setOnClickListener(view1 -> {
-            etNomeTalhao.setEnabled(true);
-            spFazenda.setEnabled(true);
-            etNomeTalhao.setText("");
-            btnCadastrar.setEnabled(false);
-            btnContorno.setEnabled(false);
-            btnNovo.setVisibility(View.INVISIBLE);
-            talhao = new Talhao();
-            talhao.setId(0);
-            talhao.setFazendaId(fazendaIdSelecionado);
-        });
+        } catch (Exception ex) {
+            Utils.showMessage(getContext(), getString(R.string.erro_view_talhao), 0);
+        }
     }
 
-    private void startSpinners(List<ChaveValor> fazendas) {
-        ArrayAdapter<ChaveValor> adapterFazendas = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_dropdown_item, fazendas);
-        spFazenda.setAdapter(adapterFazendas);
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private void cadastrar() {
-        fazendaIdSelecionado = talhao.getFazendaId();
-        String nome = etNomeTalhao.getText().toString().trim().toUpperCase();
-        talhao.setNome(nome);
-
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... voids) {
-                if (talhao.getId() == 0) db.talhaoDao().insert(talhao);
-                else db.talhaoDao().update(talhao);
-                return null;
-            }
-        }.execute();
-
-        Utils.showMessage(getContext(), "", 1);
-
+    private void disabledCampos() {
         etNomeTalhao.setEnabled(false);
         spFazenda.setEnabled(false);
-        btnCadastrar.setEnabled(false);
         btnContorno.setEnabled(true);
         btnNovo.setVisibility(View.VISIBLE);
+    }
+
+    private void getArgumentos(Bundle bundle) {
+        try {
+            talhao = new Talhao();
+            talhao.setId(0);
+
+            if (bundle != null) {
+                String keyBundle = getResources().getString(R.string.talhao_param);
+                TalhaoFazenda tf = (TalhaoFazenda) bundle.getSerializable(keyBundle);
+                talhao.setId(tf.getIdTalhao());
+                talhao.setNome(tf.getNomeTalhao());
+                talhao.setContorno(tf.getContorno());
+
+                etNomeTalhao.setText(talhao.getNome());
+                spFazenda.setSelection(Utils.getIndexChaveValor(fazendaList, tf.getNomeFazenda()));
+            }
+        } catch (Exception e) {
+            Utils.showMessage(getContext(), getString(R.string.erro_ler_argumentos_talhao), 0);
+        }
+    }
+
+    private void cancelarTalhao() {
+        TalhaoListaFragment tlf = new TalhaoListaFragment();
+        Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frg_principal, tlf).commit();
+    }
+
+    private void novoCadastro() {
+        etNomeTalhao.setEnabled(true);
+        spFazenda.setEnabled(true);
+        etNomeTalhao.setText("");
+        btnContorno.setEnabled(false);
+        btnNovo.setVisibility(View.INVISIBLE);
+        talhao = new Talhao();
+        talhao.setId(0);
+        talhao.setFazendaId(fazendaIdSelecionado);
     }
 
     private void openMapa() {
@@ -164,37 +142,42 @@ public class TalhaoCadastroFragment extends Fragment {
         startActivity(mapaIntent);
     }
 
-    private void getArgumentos(Bundle bundle) {
+    @Override
+    public void startSpinners(List<ChaveValor> fazendas) {
         try {
-            if (bundle != null) {
-                String keyBundle = getResources().getString(R.string.talhao_param);
-                TalhaoFazenda tf = (TalhaoFazenda) bundle.getSerializable(keyBundle);
-                talhao.setId(tf.getIdTalhao());
-                talhao.setNome(tf.getNomeTalhao());
-                talhao.setContorno(tf.getContorno());
-
-                etNomeTalhao.setText(talhao.getNome());
-                spFazenda.setSelection(Utils.getIndexChaveValor(fazendaList, tf.getNomeFazenda()));
-            }
-        } catch (Exception e) {
-            Utils.logar(e.getMessage());
-        }
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private class GetFazendas extends AsyncTask<Void, Void, List<ChaveValor>> {
-
-        @Override
-        protected List<ChaveValor> doInBackground(Void... voids) {
-            List<ChaveValor> fazendas = db.fazendaDao().getFazendasDropDown(true);
-            return fazendas;
-        }
-
-        @Override
-        protected void onPostExecute(List<ChaveValor> fazendas) {
             fazendaList = fazendas;
-            startSpinners(fazendas);
+            ArrayAdapter<ChaveValor> adapterFazendas = new ArrayAdapter<>(getContext(),
+                    android.R.layout.simple_spinner_dropdown_item, fazendas);
+            spFazenda.setAdapter(adapterFazendas);
             getArgumentos(bundle);
+        } catch (Exception ex) {
+            Utils.showMessage(getContext(), getString(R.string.erro_carregar_dados_cadastro_talhao), 0);
         }
     }
+
+    @Override
+    public void cadastrar() {
+        fazendaIdSelecionado = talhao.getFazendaId();
+        String nome = etNomeTalhao.getText().toString().trim().toUpperCase();
+
+        if (nome.length() > 0) {
+            talhao.setNome(nome);
+            presenter.cadastrar(talhao);
+            disabledCampos();
+        } else {
+            Utils.showMessage(getContext(), getString(R.string.talhao_erro_cadastro), 0);
+        }
+    }
+
+    @Override
+    public void showMessage(String mensagem, int codigo) {
+        Utils.showMessage(getContext(), mensagem, codigo);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.destroyView();
+    }
+
 }

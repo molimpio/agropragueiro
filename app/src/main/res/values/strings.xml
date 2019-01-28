@@ -155,4 +155,7 @@
     <string name="erro_abrir_opcoes_talhao">Erro abrir opções talhão</string>
     <string name="erro_ler_argumentos_talhao">Erro ao ler argumentos talhão</string>
     <string name="erro_buscar_talhoes">Erro buscar talhões</string>
+    <string name="erro_carregar_dados_cadastro_talhao">Erro ao carregar dados cadastro talhão</string>
+    <string name="talhao_erro_cadastro">O nome do talhão deve ter mais que 1 caractere</string>
+    <string name="erro_cadastrar_talhao">Erro ao cadastrar talhão</string>
 </resources>
