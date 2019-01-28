@@ -33,7 +33,7 @@ public class TalhaoCadastroFragment extends Fragment
 
     private EditText etNomeTalhao;
     private Spinner spFazenda;
-    private Button btnCadastrar, btnContorno, btnNovo;
+    private Button btnContorno, btnNovo;
     private Talhao talhao;
     private List<ChaveValor> fazendaList;
     private Bundle bundle;
@@ -71,7 +71,7 @@ public class TalhaoCadastroFragment extends Fragment
                 }
             });
 
-            btnCadastrar = view.findViewById(R.id.btn_cadastrar_talhao);
+            Button btnCadastrar = view.findViewById(R.id.btn_cadastrar_talhao);
             btnCadastrar.setOnClickListener(view1 -> cadastrar());
 
             btnContorno = view.findViewById(R.id.btn_contorno_talhao);
