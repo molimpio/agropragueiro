@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +23,14 @@ import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.adapter.TalhaoAdapter;
 import br.net.olimpiodev.agropragueiro.contracts.TalhaoListaContrato;
 import br.net.olimpiodev.agropragueiro.model.FazendaCliente;
+import br.net.olimpiodev.agropragueiro.model.Talhao;
 import br.net.olimpiodev.agropragueiro.model.TalhaoFazenda;
 import br.net.olimpiodev.agropragueiro.presenter.TalhaoListaPresenter;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 import br.net.olimpiodev.agropragueiro.view.activity.MapaActivity;
 import br.net.olimpiodev.agropragueiro.view.fragment.Cadastro.TalhaoCadastroFragment;
+
+import static android.app.Activity.RESULT_OK;
 
 public class TalhaoListaFragment extends Fragment implements TalhaoListaContrato.TalhaoListaView {
 
@@ -125,7 +129,7 @@ public class TalhaoListaFragment extends Fragment implements TalhaoListaContrato
                 switch (item) {
                     case 0:
                         dialog.dismiss();
-                        openMapa(talhaoFazenda);
+                        presenter.openMapa(talhaoFazenda.getIdTalhao());
                         break;
                     case 1:
                         dialog.dismiss();
@@ -152,17 +156,6 @@ public class TalhaoListaFragment extends Fragment implements TalhaoListaContrato
         }
     }
 
-    private void openMapa(TalhaoFazenda talhaoFazenda) {
-        Intent mapaIntent = new Intent(getContext(), MapaActivity.class);
-        mapaIntent.putExtra(getResources().getString(R.string.talhao_id_param), talhaoFazenda.getIdTalhao());
-
-        if (!talhaoFazenda.getContorno().isEmpty()) {
-            mapaIntent.putExtra(getResources().getString(R.string.contorno_param), talhaoFazenda.getContorno());
-        }
-        //TODO: verificar o retorno se cadastrou novo contorno precisa atualizar o adapter...
-        startActivity(mapaIntent);
-    }
-
     @Override
     public void listarTalhoes(List<TalhaoFazenda> talhoes) {
         talhaoAdapter.setTalhoes(talhoes);
@@ -177,6 +170,22 @@ public class TalhaoListaFragment extends Fragment implements TalhaoListaContrato
     @Override
     public void exibirListaVazia() {
         tvListaVazia.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void openMapa(Talhao talhao) {
+        try {
+            Intent mapaIntent = new Intent(getContext(), MapaActivity.class);
+            mapaIntent.putExtra(getString(R.string.talhao_id_param), talhao.getId());
+
+            if (!talhao.getContorno().isEmpty()) {
+                mapaIntent.putExtra(getResources().getString(R.string.contorno_param), talhao.getContorno());
+            }
+
+            startActivity(mapaIntent);
+        } catch (Exception ex) {
+            Utils.showMessage(getContext(), getString(R.string.erro_carregar_dados_mapa), 0);
+        }
     }
 
     @Override

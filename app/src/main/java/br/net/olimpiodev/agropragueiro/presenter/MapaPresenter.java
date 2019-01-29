@@ -6,6 +6,7 @@ import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -66,17 +67,18 @@ public class MapaPresenter implements MapaContrato.MapaPresenter {
 
                 @Override
                 protected void onPostExecute(Void aVoid) {
-                    view.showMessage("", 1);
+                    Utils.showMessage(context, "", 1);
                 }
             }.execute();
         } catch (Exception ex) {
-            view.showMessage(context.getString(R.string.erro_salvar_contorno), 0);
+            Utils.showMessage(context, context.getString(R.string.erro_salvar_contorno), 0);
         }
     }
 
     @Override
     public void exibirContorno(String contorno) {
         try {
+            Log.i("contorno", contorno);
             // TODO: ver como pegar o centro do polygono para centralizar o zoom
             LatLng primeiraCoordenada = null;
             JSONArray jsonArray = new JSONArray(contorno);
@@ -101,10 +103,13 @@ public class MapaPresenter implements MapaContrato.MapaPresenter {
                     polylineOptions.add(primeiraCoordenada);
                 }
             }
-            mapa.addPolyline(polylineOptions);
-            mapa.animateCamera(CameraUpdateFactory.newLatLngZoom(primeiraCoordenada, 16));
-        } catch (JSONException e) {
-            view.showMessage(context.getString(R.string.erro_carregar_contorno), 0);
+
+            if (primeiraCoordenada != null) {
+                mapa.addPolyline(polylineOptions);
+                mapa.animateCamera(CameraUpdateFactory.newLatLngZoom(primeiraCoordenada, 16));
+            }
+        } catch (Exception ex) {
+            Utils.showMessage(context, context.getString(R.string.erro_carregar_contorno), 0);
         }
     }
 
@@ -143,49 +148,53 @@ public class MapaPresenter implements MapaContrato.MapaPresenter {
             alertDialog.show();
             return layerSelecionado;
         } catch (Exception ex) {
-            view.showMessage(context.getString(R.string.erro_carregar_opcoes_layer), 0);
+            Utils.showMessage(context, context.getString(R.string.erro_carregar_opcoes_layer), 0);
             return 0;
         }
     }
 
     @Override
     public void drawContorno(int contador, LatLng latLng) {
-        if (contador == 0) {
-            // ultima coordenada começa como sendo a inicial
-            ultimaCoordenada = latLng;
+        try {
+            if (contador == 0) {
+                // ultima coordenada começa como sendo a inicial
+                ultimaCoordenada = latLng;
 
-            opcoesPoligonoCoordendas = new PolygonOptions();
-            opcoesPoligonoCoordendas.strokeColor(Color.BLUE); // ou fill color
-            opcoesPoligonoCoordendas.add(ultimaCoordenada);
+                opcoesPoligonoCoordendas = new PolygonOptions();
+                opcoesPoligonoCoordendas.strokeColor(Color.BLUE); // ou fill color
+                opcoesPoligonoCoordendas.add(ultimaCoordenada);
 
-        } else {
-            mapa.clear();
+            } else {
+                mapa.clear();
 
-            // cria o marcador p ultima coordenada
-            MarkerOptions opcoesMarcadorUltimaCoordenada = new MarkerOptions();
-            opcoesMarcadorUltimaCoordenada.position(ultimaCoordenada);
-            mapa.addMarker(opcoesMarcadorUltimaCoordenada);
+                // cria o marcador p ultima coordenada
+                MarkerOptions opcoesMarcadorUltimaCoordenada = new MarkerOptions();
+                opcoesMarcadorUltimaCoordenada.position(ultimaCoordenada);
+                mapa.addMarker(opcoesMarcadorUltimaCoordenada);
 
-            // cria marcador p nova coordenada
-            MarkerOptions opcoesMarcadorNovaCoordenada = new MarkerOptions();
-            opcoesMarcadorNovaCoordenada.position(latLng);
-            mapa.addMarker(opcoesMarcadorNovaCoordenada);
+                // cria marcador p nova coordenada
+                MarkerOptions opcoesMarcadorNovaCoordenada = new MarkerOptions();
+                opcoesMarcadorNovaCoordenada.position(latLng);
+                mapa.addMarker(opcoesMarcadorNovaCoordenada);
 
-            // Polyline
-            PolylineOptions opcoesLinhaEntreMarcadores = new PolylineOptions();
-            opcoesLinhaEntreMarcadores.add(ultimaCoordenada);
-            opcoesLinhaEntreMarcadores.add(latLng);
-            opcoesLinhaEntreMarcadores.color(Color.RED); // altera a cor da linha
+                // Polyline
+                PolylineOptions opcoesLinhaEntreMarcadores = new PolylineOptions();
+                opcoesLinhaEntreMarcadores.add(ultimaCoordenada);
+                opcoesLinhaEntreMarcadores.add(latLng);
+                opcoesLinhaEntreMarcadores.color(Color.RED); // altera a cor da linha
 
-            mapa.addPolyline(opcoesLinhaEntreMarcadores); // adiciona no mapa*/
+                mapa.addPolyline(opcoesLinhaEntreMarcadores); // adiciona no mapa*/
 
-            // mudar o zoom do local para nova latlog
-            mapa.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                // mudar o zoom do local para nova latlog
+                mapa.animateCamera(CameraUpdateFactory.newLatLng(latLng));
 
-            ultimaCoordenada = latLng;
+                ultimaCoordenada = latLng;
 
-            opcoesPoligonoCoordendas.add(ultimaCoordenada);
-            mapa.addPolygon(opcoesPoligonoCoordendas);
+                opcoesPoligonoCoordendas.add(ultimaCoordenada);
+                mapa.addPolygon(opcoesPoligonoCoordendas);
+            }
+        } catch (Exception ex) {
+            Utils.showMessage(context, context.getString(R.string.erro_desenhar_contorno), 0);
         }
     }
 

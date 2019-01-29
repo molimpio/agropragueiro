@@ -2,6 +2,7 @@ package br.net.olimpiodev.agropragueiro.contracts;
 
 import java.util.List;
 
+import br.net.olimpiodev.agropragueiro.model.Talhao;
 import br.net.olimpiodev.agropragueiro.model.TalhaoFazenda;
 
 public interface TalhaoListaContrato {
@@ -12,12 +13,16 @@ public interface TalhaoListaContrato {
 
         void exibirListaVazia();
 
+        void openMapa(Talhao talhao);
+
         void exibirError(String mensagem);
     }
 
     interface TalhaoListaPresenter {
 
         void getTalhoes(int fazendaId);
+
+        void openMapa(int talhaoId);
 
         void destroyView();
     }

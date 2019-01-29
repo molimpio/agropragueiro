@@ -151,6 +151,7 @@
 
     <!-- erros talhao -->
     <string name="erro_view_talhao">Erro ao carregar view talhao</string>
+    <string name="erro_get_talhao_by_id">Erro ao buscar talhao por ID</string>
     <string name="erro_abrir_cadastro_talhao">Erro ao abrir cadastro talhão</string>
     <string name="erro_abrir_lista_amostragens_talhao">Erro ao abrir llista amostragens do talhão</string>
     <string name="erro_abrir_opcoes_talhao">Erro abrir opções talhão</string>
@@ -164,5 +165,7 @@
     <string name="erro_salvar_contorno">Erro ao salvar contorno</string>
     <string name="erro_carregar_contorno">Erro ao carregar contorno no mapa</string>
     <string name="erro_carregar_mapa">Erro ao carregar mapa</string>
+    <string name="erro_carregar_dados_mapa">Erro ao carregar dados mapa</string>
     <string name="erro_carregar_opcoes_layer">Erro ao carregar opções de layer</string>
+    <string name="erro_desenhar_contorno">Erro ao desenhar contorno</string>
 </resources>

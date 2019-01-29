@@ -1,9 +1,8 @@
 package br.net.olimpiodev.agropragueiro.view.activity;
 
 import android.Manifest;
-import android.app.AlertDialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,16 +12,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
-import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,13 +37,10 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private final int CODIGO_REQUISICAO_PERMISSAO_LOCALIZACAO = 0;
     private GoogleMap mapa;
-    private PolygonOptions opcoesPoligonoCoordendas;
-    private LatLng ultimaCoordenada;
     private int contador = 0;
     private int talhaoId;
     private String contorno = "";
     private List<LatLng> coordenadas = new ArrayList<>();
-    private int mapaTipoSelecionado = 2;
     private MapaContrato.MapaPresenter presenter;
 
     @Override
@@ -175,7 +167,7 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
                 coordenadas.clear();
                 return true;
             case R.id.layers:
-                mapaTipoSelecionado = presenter.opcoesLayer();
+                presenter.opcoesLayer();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
