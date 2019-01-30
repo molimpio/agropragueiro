@@ -161,6 +161,13 @@
     <string name="talhao_erro_cadastro">O nome do talhão deve ter mais que 1 caractere</string>
     <string name="erro_cadastrar_talhao">Erro ao cadastrar talhão</string>
 
+    <!-- erros amostragem -->
+    <string name="erro_args_amostragem">Erro ao ler argumentos amostragem</string>
+    <string name="erro_carregar_view_amostragem">Erro ao carregar view amostragem</string>
+    <string name="erro_cadastro_amostragem">Erro ao abrir cadastro amostragem</string>
+    <string name="erro_abrir_opcoes_amostragem">Erro ao abrir opções amostragem</string>
+    <string name="erro_buscar_amostragens">Erro ao buscar amostragens</string>
+
     <!-- erros mapa -->
     <string name="erro_salvar_contorno">Erro ao salvar contorno</string>
     <string name="erro_carregar_contorno">Erro ao carregar contorno no mapa</string>
@@ -168,4 +175,7 @@
     <string name="erro_carregar_dados_mapa">Erro ao carregar dados mapa</string>
     <string name="erro_carregar_opcoes_layer">Erro ao carregar opções de layer</string>
     <string name="erro_desenhar_contorno">Erro ao desenhar contorno</string>
+
+    <!-- erros mapa pontos -->
+    <string name="erro_cadastrar_pontos">Erro ao cadastrar Pontos</string>
 </resources>

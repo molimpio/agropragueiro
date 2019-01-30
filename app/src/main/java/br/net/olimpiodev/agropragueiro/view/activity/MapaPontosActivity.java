@@ -33,14 +33,17 @@ import java.util.List;
 
 import br.net.olimpiodev.agropragueiro.AppDatabase;
 import br.net.olimpiodev.agropragueiro.R;
+import br.net.olimpiodev.agropragueiro.contracts.MapaPontosContrato;
 import br.net.olimpiodev.agropragueiro.model.PontoAmostragem;
+import br.net.olimpiodev.agropragueiro.presenter.MapaPontosPresenter;
 import br.net.olimpiodev.agropragueiro.service.amostragem.ColetarDadosService;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 
 public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleMap.OnMarkerClickListener,
         GoogleMap.OnMapClickListener,
-        GoogleMap.OnPolylineClickListener {
+        GoogleMap.OnPolylineClickListener,
+        MapaPontosContrato.MapaPontosView {
 
     private final int CODIGO_REQUISICAO_PERMISSAO_LOCALIZACAO = 0;
     private GoogleMap mapa;
@@ -51,6 +54,7 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
     private int pontoAcaoSelecionado = 2;
     private boolean coletarDados;
     private AppDatabase db;
+    private MapaPontosContrato.MapaPontosPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,6 +142,8 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
         mapa = googleMap;
         mapa.getUiSettings().setZoomControlsEnabled(true);
 
+        presenter = new MapaPontosPresenter(this, MapaPontosActivity.this, mapa);
+
         // verifica se tem a permissao por triangulação e por GPS
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -205,19 +211,9 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
         }
     }
 
-    @SuppressLint("StaticFieldLeak")
+    @Override
     public void salvarPontos() {
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... voids) {
-                for (PontoAmostragem pontoAmostragem: pontosAmostragem) {
-                    db.pontoAmostragemDao().insert(pontoAmostragem);
-                }
-                return null;
-            }
-        }.execute();
-
-        Utils.showMessage(getApplicationContext(), "", 1);
+        presenter.salvarPontos(pontosAmostragem);
         finish();
     }
 

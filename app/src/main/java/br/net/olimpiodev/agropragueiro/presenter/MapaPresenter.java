@@ -114,7 +114,7 @@ public class MapaPresenter implements MapaContrato.MapaPresenter {
     }
 
     @Override
-    public int opcoesLayer() {
+    public void opcoesLayer() {
         try {
             final String[] MAPA_TYPES = context.getResources().getStringArray(R.array.mapa_types);
             final String dialogTitle = context.getResources().getString(R.string.titulo_dialog);
@@ -146,10 +146,8 @@ public class MapaPresenter implements MapaContrato.MapaPresenter {
             AlertDialog alertDialog = builder.create();
             alertDialog.setCanceledOnTouchOutside(true);
             alertDialog.show();
-            return layerSelecionado;
         } catch (Exception ex) {
             Utils.showMessage(context, context.getString(R.string.erro_carregar_opcoes_layer), 0);
-            return 0;
         }
     }
 

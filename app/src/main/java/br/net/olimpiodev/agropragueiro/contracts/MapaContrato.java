@@ -19,7 +19,7 @@ public interface MapaContrato {
 
         void exibirContorno(String contorno);
 
-        int opcoesLayer();
+        void opcoesLayer();
 
         void drawContorno(int contador,  LatLng latLng);
 

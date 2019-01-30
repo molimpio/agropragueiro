@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.net.olimpiodev.agropragueiro.R;
@@ -18,8 +19,8 @@ public class AmostragemAdapter extends RecyclerView.Adapter<AmostragemAdapter.Am
     private List<AmostragemTalhao> amostragens;
     private static AmostragemAdapter.ItemClickListener clickListener;
 
-    public AmostragemAdapter(List<AmostragemTalhao> amostragens) {
-        this.amostragens = amostragens;
+    public AmostragemAdapter() {
+        this.amostragens = new ArrayList<>();
     }
 
     @Override
@@ -49,6 +50,11 @@ public class AmostragemAdapter extends RecyclerView.Adapter<AmostragemAdapter.Am
 
     public void setClickListener(AmostragemAdapter.ItemClickListener itemClickListener) {
         clickListener = itemClickListener;
+    }
+
+    public void setAmostragens(List<AmostragemTalhao> amostragens) {
+        this.amostragens = amostragens;
+        notifyDataSetChanged();
     }
 
     public class AmostragemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

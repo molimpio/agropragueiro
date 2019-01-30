@@ -1,128 +1,108 @@
 package br.net.olimpiodev.agropragueiro.view.fragment.Lista;
 
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.arch.persistence.room.Room;
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-
 import java.util.List;
+import java.util.Objects;
 
 import br.net.olimpiodev.agropragueiro.AppDatabase;
 import br.net.olimpiodev.agropragueiro.R;
-import br.net.olimpiodev.agropragueiro.view.activity.MapaPontosActivity;
 import br.net.olimpiodev.agropragueiro.adapter.AmostragemAdapter;
-import br.net.olimpiodev.agropragueiro.view.fragment.Cadastro.AmostragemCadastroFragment;
+import br.net.olimpiodev.agropragueiro.contracts.AmostragemListaContrato;
+import br.net.olimpiodev.agropragueiro.model.Amostragem;
 import br.net.olimpiodev.agropragueiro.model.AmostragemTalhao;
-import br.net.olimpiodev.agropragueiro.model.PontoAmostragem;
-import br.net.olimpiodev.agropragueiro.model.Talhao;
 import br.net.olimpiodev.agropragueiro.model.TalhaoFazenda;
+import br.net.olimpiodev.agropragueiro.presenter.AmostragemListaPresenter;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
+import br.net.olimpiodev.agropragueiro.view.fragment.Cadastro.AmostragemCadastroFragment;
 
-public class AmostragemListaFragment extends Fragment {
+public class AmostragemListaFragment extends Fragment
+        implements AmostragemListaContrato.AmostragemListaView {
 
-    private AppDatabase db;
     private RecyclerView rvAmostragem;
     private TextView tvListaVazia;
-    private Bundle bundle;
+    private AmostragemListaContrato.AmostragemListaPresenter presenter;
+    private AmostragemAdapter amostragemAdapter;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_amostragem_lista, container, false);
-        db = Room.databaseBuilder(getContext(), AppDatabase.class, AppDatabase.DB_NAME).build();
-
-        rvAmostragem = view.findViewById(R.id.rv_amostragem);
-        tvListaVazia = view.findViewById(R.id.tv_lista_vazia_amostragem);
-
-        FloatingActionButton fabCadastroAmostragem = view.findViewById(R.id.fab_cadastro_amostragem);
-        fabCadastroAmostragem.setOnClickListener(view1 -> openCadastro(null));
-
-        bundle = this.getArguments();
-
-        GetAmostragens getAmostragens = new GetAmostragens();
-        getAmostragens.execute();
-
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Amostragens");
-
+        getAmostragens();
+        setupView(view);
+        setupRecyclerView();
         return view;
     }
 
-    private void startRecyclerView(List<AmostragemTalhao> amostragens) {
+    private void getAmostragens() {
+        try {
+            int talhaoId = 0;
+            Bundle bundle = this.getArguments();
+
+            if (bundle != null) {
+                String keyBunle = getResources().getString(R.string.amostragem_param);
+                TalhaoFazenda tf = (TalhaoFazenda) bundle.getSerializable(keyBunle);
+                talhaoId = tf.getIdTalhao();
+            }
+
+            presenter = new AmostragemListaPresenter(this, getContext());
+            presenter.getAmostragens(talhaoId);
+        } catch (Exception ex) {
+            Utils.showMessage(getContext(), getString(R.string.erro_args_amostragem), 0);
+        }
+    }
+
+    private void setupView(View view) {
+        try {
+            Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity()))
+                    .getSupportActionBar()).setTitle(getString(R.string.amostragens));
+
+            rvAmostragem = view.findViewById(R.id.rv_amostragem);
+            tvListaVazia = view.findViewById(R.id.tv_lista_vazia_amostragem);
+
+            FloatingActionButton fabCadastroAmostragem = view.findViewById(R.id.fab_cadastro_amostragem);
+            fabCadastroAmostragem.setOnClickListener(view1 -> openCadastro(null));
+        } catch (Exception ex) {
+            Utils.showMessage(getContext(), getString(R.string.erro_carregar_view_amostragem), 0);
+        }
+    }
+
+    private void setupRecyclerView() {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvAmostragem.setLayoutManager(layoutManager);
-
-        AmostragemAdapter amostragemAdapter = new AmostragemAdapter(amostragens);
+        amostragemAdapter = new AmostragemAdapter();
         rvAmostragem.setAdapter(amostragemAdapter);
-
-        amostragemAdapter.setClickListener(((position, view) -> {
-            if (view.getId() == R.id.btn_opoes_ac) {
-                final AmostragemTalhao amostragemTalhao = amostragens.get(position);
-                opcoes(amostragemTalhao);
-            }
-        }));
     }
 
     private void openCadastro(AmostragemTalhao amostragem) {
-        AmostragemCadastroFragment acf = new AmostragemCadastroFragment();
+        try {
+            AmostragemCadastroFragment acf = new AmostragemCadastroFragment();
 
-        if (amostragem != null) {
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(getResources().getString(R.string.amostragem_param), amostragem);
-            acf.setArguments(bundle);
-        }
-        FragmentManager fm = getFragmentManager();
-        fm.beginTransaction().replace(R.id.frg_principal, acf).commit();
-    }
-
-
-    @SuppressLint("StaticFieldLeak")
-    private void openMapa(AmostragemTalhao amostragem, boolean coletarDados) {
-        Intent mapaPontosIntent = new Intent(getContext(), MapaPontosActivity.class);
-        mapaPontosIntent.putExtra(getResources().getString(R.string.amostragem_param), amostragem.getIdAmostragem());
-
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... voids) {
-                final AppDatabase db = Room.databaseBuilder(getContext(),
-                        AppDatabase.class, AppDatabase.DB_NAME).build();
-                Talhao talhao = db.talhaoDao().getTalhaoById(amostragem.getIdTalhao());
-
-                if (talhao.getContorno() != null) {
-                    mapaPontosIntent.putExtra(getResources().getString(R.string.contorno_param), talhao.getContorno());
-
-                    List<PontoAmostragem> pontoAmostragem = db.pontoAmostragemDao()
-                            .getPontosAmostragemByAmostragemId(amostragem.getIdAmostragem());
-
-                    Gson gson = new Gson();
-                    String pontos = gson.toJson(pontoAmostragem);
-
-                    mapaPontosIntent.putExtra(getResources().getString(R.string.amostragem_pontos), pontos);
-                    mapaPontosIntent.putExtra(getResources().getString(R.string.amostragem_id_param), amostragem.getIdAmostragem());
-                    mapaPontosIntent.putExtra(getString(R.string.coletar_dados), coletarDados);
-
-                    startActivity(mapaPontosIntent);
-                }
-                return null;
+            if (amostragem != null) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(getResources().getString(R.string.amostragem_param), amostragem);
+                acf.setArguments(bundle);
             }
-        }.execute();
+            getFragmentManager().beginTransaction().replace(R.id.frg_principal, acf).commit();
+        } catch (Exception ex) {
+            Utils.showMessage(getContext(), getString(R.string.erro_cadastro_amostragem), 0);
+        }
     }
 
-    private void opcoes(final AmostragemTalhao amostragem) {
+    private void opcoesDialog(final AmostragemTalhao amostragem) {
         try {
             final String[] OPCOES = getResources().getStringArray(R.array.opcoes_amostragem_card);
             final String dialogTitle = getResources().getString(R.string.titulo_opcoes_card);
@@ -149,49 +129,69 @@ public class AmostragemListaFragment extends Fragment {
                 }
             });
 
-            String cancelar = getResources().getString(R.string.cancelar);
-
-            builder.setNegativeButton(cancelar, (dialogInterface, i) -> {
-                dialogInterface.dismiss();
-                Utils.showMessage(getContext(), "", 3);
-            });
+            builder.setNegativeButton(getString(R.string.cancelar), (dialogInterface, i) ->
+                dialogInterface.dismiss()
+            );
 
             AlertDialog alertDialog = builder.create();
             alertDialog.setCanceledOnTouchOutside(true);
             alertDialog.show();
         } catch (Exception ex) {
-            Utils.logar(ex.getMessage());
+            Utils.showMessage(getContext(), getString(R.string.erro_abrir_opcoes_amostragem), 0);
         }
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private class GetAmostragens extends AsyncTask<Void, Void, List<AmostragemTalhao>> {
-
-        @Override
-        protected List<AmostragemTalhao> doInBackground(Void... voids) {
-            List<AmostragemTalhao> amostragens = null;
-            try {
-                if (bundle != null) {
-                    String keyBunle = getResources().getString(R.string.amostragem_param);
-                    TalhaoFazenda tf = (TalhaoFazenda) bundle.getSerializable(keyBunle);
-                    amostragens = db.amostragemDao().getAmostragensByTalhaoId(true, tf.getIdTalhao());
-                } else {
-                    amostragens = db.amostragemDao().getAmostragensTalhao(true);
-                }
-            } catch (Exception ex) {
-                Utils.logar(ex.getMessage());
+    @Override
+    public void listarAmostragens(List<AmostragemTalhao> amostragens) {
+        amostragemAdapter.setAmostragens(amostragens);
+        amostragemAdapter.setClickListener(((position, view) -> {
+            if (view.getId() == R.id.btn_opoes_ac) {
+                final AmostragemTalhao amostragemTalhao = amostragens.get(position);
+                opcoesDialog(amostragemTalhao);
             }
-            return amostragens;
-        }
-
-        @Override
-        protected void onPostExecute(List<AmostragemTalhao> amostragens) {
-            if (amostragens.size() == 0) {
-                tvListaVazia.setVisibility(View.VISIBLE);
-            } else {
-                tvListaVazia.setVisibility(View.GONE);
-                startRecyclerView(amostragens);
-            }
-        }
+        }));
     }
+
+    @Override
+    public void openMapa(AmostragemTalhao amostragem, boolean coletarDados) {
+        try {
+
+        } catch (Exception ex) {
+            Utils.showMessage(getContext(), getString(R.string.erro_carregar_dados_mapa), 0);
+        }
+//        Intent mapaPontosIntent = new Intent(getContext(), MapaPontosActivity.class);
+//        mapaPontosIntent.putExtra(getResources().getString(R.string.amostragem_param), amostragem.getIdAmostragem());
+//
+//        new AsyncTask<Void, Void, Void>() {
+//            @Override
+//            protected Void doInBackground(Void... voids) {
+//                final AppDatabase db = Room.databaseBuilder(getContext(),
+//                        AppDatabase.class, AppDatabase.DB_NAME).build();
+//                Talhao talhao = db.talhaoDao().getTalhaoById(amostragem.getIdTalhao());
+//
+//                if (talhao.getContorno() != null) {
+//                    mapaPontosIntent.putExtra(getResources().getString(R.string.contorno_param), talhao.getContorno());
+//
+//                    List<PontoAmostragem> pontoAmostragem = db.pontoAmostragemDao()
+//                            .getPontosAmostragemByAmostragemId(amostragem.getIdAmostragem());
+//
+//                    Gson gson = new Gson();
+//                    String pontos = gson.toJson(pontoAmostragem);
+//
+//                    mapaPontosIntent.putExtra(getResources().getString(R.string.amostragem_pontos), pontos);
+//                    mapaPontosIntent.putExtra(getResources().getString(R.string.amostragem_id_param), amostragem.getIdAmostragem());
+//                    mapaPontosIntent.putExtra(getString(R.string.coletar_dados), coletarDados);
+//
+//                    startActivity(mapaPontosIntent);
+//                }
+//                return null;
+//            }
+//        }.execute();
+    }
+
+    @Override
+    public void exibirListaVazia() {
+        tvListaVazia.setVisibility(View.VISIBLE);
+    }
+
 }
