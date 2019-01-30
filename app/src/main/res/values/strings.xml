@@ -109,6 +109,8 @@
     <string name="amostragem_param">Amostragem_Param</string>
     <string name="amostragem_id_param">Amostragem_id_Param</string>
     <string name="amostragem_pontos">Amostragem_Pontos</string>
+    <string name="amostragem_sem_contorno">O talhão desta amostragem não tem contorno, para
+        continuar adicione um contorno ao talhão</string>
     <string-array name="opcoes_amostragem_card">
         <item>Visualizar pontos no mapa</item>
         <item>Coletar dados amostragem</item>
@@ -171,6 +173,7 @@
     <string name="erro_carregar_dados_cadastro_amostragem">Erro ao carregar dados cadastro amostragem</string>
     <string name="erro_validacao_amostragem">O nome da amostragem deve ter mais que 3 caracteres e data deve ser preenchida</string>
     <string name="erro_cadastrar_amostragem">Erro ao cadastrar amostragem</string>
+    <string name="erro_buscar_amostragem_por_id">Erro ao buscar amostragem por ID</string>
 
     <!-- erros mapa -->
     <string name="erro_salvar_contorno">Erro ao salvar contorno</string>

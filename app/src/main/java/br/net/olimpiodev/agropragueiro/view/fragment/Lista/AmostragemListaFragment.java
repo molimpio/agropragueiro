@@ -2,6 +2,7 @@ package br.net.olimpiodev.agropragueiro.view.fragment.Lista;
 
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -14,6 +15,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.gson.Gson;
 
 import java.util.List;
 import java.util.Objects;
@@ -24,9 +28,12 @@ import br.net.olimpiodev.agropragueiro.adapter.AmostragemAdapter;
 import br.net.olimpiodev.agropragueiro.contracts.AmostragemListaContrato;
 import br.net.olimpiodev.agropragueiro.model.Amostragem;
 import br.net.olimpiodev.agropragueiro.model.AmostragemTalhao;
+import br.net.olimpiodev.agropragueiro.model.PontoAmostragem;
+import br.net.olimpiodev.agropragueiro.model.Talhao;
 import br.net.olimpiodev.agropragueiro.model.TalhaoFazenda;
 import br.net.olimpiodev.agropragueiro.presenter.AmostragemListaPresenter;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
+import br.net.olimpiodev.agropragueiro.view.activity.MapaPontosActivity;
 import br.net.olimpiodev.agropragueiro.view.fragment.Cadastro.AmostragemCadastroFragment;
 
 public class AmostragemListaFragment extends Fragment
@@ -110,14 +117,14 @@ public class AmostragemListaFragment extends Fragment
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle(dialogTitle);
 
-            builder.setSingleChoiceItems(OPCOES, 3, (dialog, item) -> {
+            builder.setSingleChoiceItems(OPCOES, 4, (dialog, item) -> {
                 switch (item) {
                     case 0:
                         dialog.dismiss();
-                        openMapa(amostragem, false);
+                        presenter.openMapa(amostragem, false);
                         break;
                     case 1:
-                        openMapa(amostragem, true);
+                        presenter.openMapa(amostragem, true);
                         break;
                     case 2:
                         dialog.dismiss();
@@ -153,40 +160,25 @@ public class AmostragemListaFragment extends Fragment
     }
 
     @Override
-    public void openMapa(AmostragemTalhao amostragem, boolean coletarDados) {
+    public void openMapa(AmostragemTalhao amostragem, Talhao talhao,
+                         List<PontoAmostragem> pontoAmostragens, boolean coletarDados) {
         try {
+            Intent mapaPontosIntent = new Intent(getContext(), MapaPontosActivity.class);
+            mapaPontosIntent.putExtra(getResources().getString(R.string.contorno_param), talhao.getContorno());
+            mapaPontosIntent.putExtra(getResources().getString(R.string.amostragem_id_param), amostragem.getIdAmostragem());
+            mapaPontosIntent.putExtra(getString(R.string.coletar_dados), coletarDados);
 
+            if (pontoAmostragens.size() > 0) {
+                Gson gson = new Gson();
+                String pontos = gson.toJson(pontoAmostragens);
+                mapaPontosIntent.putExtra(getResources().getString(R.string.amostragem_pontos), pontos);
+                startActivity(mapaPontosIntent);
+            } else {
+                Toast.makeText(getContext(), getString(R.string.amostragem_sem_contorno), Toast.LENGTH_LONG).show();
+            }
         } catch (Exception ex) {
             Utils.showMessage(getContext(), getString(R.string.erro_carregar_dados_mapa), 0);
         }
-//        Intent mapaPontosIntent = new Intent(getContext(), MapaPontosActivity.class);
-//        mapaPontosIntent.putExtra(getResources().getString(R.string.amostragem_param), amostragem.getIdAmostragem());
-//
-//        new AsyncTask<Void, Void, Void>() {
-//            @Override
-//            protected Void doInBackground(Void... voids) {
-//                final AppDatabase db = Room.databaseBuilder(getContext(),
-//                        AppDatabase.class, AppDatabase.DB_NAME).build();
-//                Talhao talhao = db.talhaoDao().getTalhaoById(amostragem.getIdTalhao());
-//
-//                if (talhao.getContorno() != null) {
-//                    mapaPontosIntent.putExtra(getResources().getString(R.string.contorno_param), talhao.getContorno());
-//
-//                    List<PontoAmostragem> pontoAmostragem = db.pontoAmostragemDao()
-//                            .getPontosAmostragemByAmostragemId(amostragem.getIdAmostragem());
-//
-//                    Gson gson = new Gson();
-//                    String pontos = gson.toJson(pontoAmostragem);
-//
-//                    mapaPontosIntent.putExtra(getResources().getString(R.string.amostragem_pontos), pontos);
-//                    mapaPontosIntent.putExtra(getResources().getString(R.string.amostragem_id_param), amostragem.getIdAmostragem());
-//                    mapaPontosIntent.putExtra(getString(R.string.coletar_dados), coletarDados);
-//
-//                    startActivity(mapaPontosIntent);
-//                }
-//                return null;
-//            }
-//        }.execute();
     }
 
     @Override

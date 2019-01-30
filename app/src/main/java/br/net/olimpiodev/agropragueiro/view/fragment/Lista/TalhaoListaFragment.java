@@ -125,7 +125,7 @@ public class TalhaoListaFragment extends Fragment implements TalhaoListaContrato
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle(dialogTitle);
 
-            builder.setSingleChoiceItems(OPCOES, 3, (dialog, item) -> {
+            builder.setSingleChoiceItems(OPCOES, 4, (dialog, item) -> {
                 switch (item) {
                     case 0:
                         dialog.dismiss();

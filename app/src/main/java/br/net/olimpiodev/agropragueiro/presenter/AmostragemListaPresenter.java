@@ -10,7 +10,10 @@ import java.util.List;
 import br.net.olimpiodev.agropragueiro.AppDatabase;
 import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.contracts.AmostragemListaContrato;
+import br.net.olimpiodev.agropragueiro.model.Amostragem;
 import br.net.olimpiodev.agropragueiro.model.AmostragemTalhao;
+import br.net.olimpiodev.agropragueiro.model.PontoAmostragem;
+import br.net.olimpiodev.agropragueiro.model.Talhao;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 
 public class AmostragemListaPresenter implements AmostragemListaContrato.AmostragemListaPresenter {
@@ -54,8 +57,48 @@ public class AmostragemListaPresenter implements AmostragemListaContrato.Amostra
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
+    @Override
+    public void openMapa(AmostragemTalhao amostragemTalhao, boolean coletarDados) {
+        try {
+            new AsyncTask<Void, Void, List<PontoAmostragem>>() {
+                @Override
+                protected List<PontoAmostragem> doInBackground(Void... voids) {
+                    return db.pontoAmostragemDao()
+                            .getPontosAmostragemByAmostragemId(amostragemTalhao.getIdAmostragem());
+                }
+
+                @Override
+                protected void onPostExecute(List<PontoAmostragem> pontoAmostragems) {
+                    getContornoAmostragem(amostragemTalhao, coletarDados, pontoAmostragems);
+                }
+            }.execute();
+        } catch (Exception ex) {
+            Utils.showMessage(context, context.getString(R.string.erro_buscar_amostragem_por_id), 0);
+        }
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private void getContornoAmostragem(AmostragemTalhao amostragemTalhao, boolean coletarDados, List<PontoAmostragem> lista) {
+        try {
+            new AsyncTask<Void, Void, Talhao>() {
+                @Override
+                protected Talhao doInBackground(Void... voids) {
+                    return db.talhaoDao().getTalhaoById(amostragemTalhao.getIdTalhao());
+                }
+
+                @Override
+                protected void onPostExecute(Talhao talhao) {
+                    view.openMapa(amostragemTalhao, talhao, lista, coletarDados);
+                }
+            }.execute();
+        } catch (Exception ex) {
+            Utils.showMessage(context, context.getString(R.string.erro_buscar_amostragem_por_id), 0);
+        }
+    }
+
     @Override
     public void destroyView() {
-
+        this.view = null;
     }
 }
