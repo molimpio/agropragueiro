@@ -83,7 +83,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
                     android:layout_weight="1"
-                    android:enabled="false"
                     android:text="@string/cadastrar" />
             </LinearLayout>
 

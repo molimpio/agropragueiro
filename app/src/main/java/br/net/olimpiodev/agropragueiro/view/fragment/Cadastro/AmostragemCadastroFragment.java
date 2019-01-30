@@ -1,15 +1,11 @@
 package br.net.olimpiodev.agropragueiro.view.fragment.Cadastro;
 
 
-import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
-import android.arch.persistence.room.Room;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,197 +19,105 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
-import br.net.olimpiodev.agropragueiro.AppDatabase;
 import br.net.olimpiodev.agropragueiro.R;
-import br.net.olimpiodev.agropragueiro.view.fragment.Lista.AmostragemListaFragment;
+import br.net.olimpiodev.agropragueiro.contracts.AmostragemCadastroContrato;
 import br.net.olimpiodev.agropragueiro.model.Amostragem;
 import br.net.olimpiodev.agropragueiro.model.AmostragemTalhao;
 import br.net.olimpiodev.agropragueiro.model.ChaveValor;
+import br.net.olimpiodev.agropragueiro.presenter.AmostragemCadastroPresenter;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
+import br.net.olimpiodev.agropragueiro.view.fragment.Lista.AmostragemListaFragment;
 
 
-public class AmostragemCadastroFragment extends Fragment {
+public class AmostragemCadastroFragment extends Fragment
+        implements AmostragemCadastroContrato.AmostragemCadastroView {
 
-    private AppDatabase db;
     private EditText etNomeAmostragem, etDataAmostragem, etObservacaoAmostragem;
     private Spinner spTalhao;
-    private Button btnCadastrar, btnPontos, btnNovo;
+    private Button btnPontos, btnNovo;
     private Amostragem amostragem;
     private List<ChaveValor> talhaoList;
     private Bundle bundle;
     private int talhaoSelecionado;
     private int year, month, day = 0;
+    private AmostragemCadastroContrato.AmostragemCadastroPresenter presenter;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_amostragem_cadastro, container, false);
-        db = Room.databaseBuilder(getContext(), AppDatabase.class, AppDatabase.DB_NAME).build();
-
+        setupView(view);
         bundle = this.getArguments();
-
-        GetTalhoes getTalhoes = new GetTalhoes();
-        getTalhoes.execute();
-
-        setRefs(view);
-        amostragem = new Amostragem();
-        amostragem.setId(0);
-
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Cadastrar Amostragem");
-
+        presenter = new AmostragemCadastroPresenter(this, getContext());
+        presenter.getTalhoes();
         return view;
     }
 
-    private void setRefs(View view) {
-        etNomeAmostragem = view.findViewById(R.id.et_nome_amostragem);
-        etNomeAmostragem.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+    private void setupView(View view) {
+        try {
+            Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity()))
+                    .getSupportActionBar()).setTitle(getString(R.string.cadastrar_amostragem));
 
-            }
+            etNomeAmostragem = view.findViewById(R.id.et_nome_amostragem);
+            etNomeAmostragem.requestFocus();
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (etNomeAmostragem.getText().toString().length() > 3) {
-                    String nome = etNomeAmostragem.getText().toString().trim().toUpperCase();
-                    amostragem.setNome(nome);
-                    btnCadastrar.setEnabled(true);
-                } else {
-                    btnCadastrar.setEnabled(false);
+            etDataAmostragem = view.findViewById(R.id.et_data_amostragem);
+            etDataAmostragem.setFocusable(false);
+
+            etDataAmostragem.setOnClickListener(view12 ->
+                    new DatePickerDialog(getContext(), date,
+                            myCalendar.get(Calendar.YEAR),
+                            myCalendar.get(Calendar.MONTH),
+                            myCalendar.get(Calendar.DAY_OF_MONTH)).show());
+
+            etObservacaoAmostragem = view.findViewById(R.id.et_observacao_amostragem);
+
+            spTalhao = view.findViewById(R.id.sp_talhoes_amostragem);
+            spTalhao.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                    amostragem.setTalhaoId(talhaoList.get(position).getChave());
                 }
-            }
 
-            @Override
-            public void afterTextChanged(Editable editable) {
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
 
-            }
-        });
-        etNomeAmostragem.requestFocus();
-
-        etDataAmostragem = view.findViewById(R.id.et_data_amostragem);
-        etDataAmostragem.setFocusable(false);
-
-        etDataAmostragem.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (etDataAmostragem.getText().toString().length() != 0) {
-                    String data = etDataAmostragem.getText().toString().trim().toUpperCase();
-                    amostragem.setData(data);
-                    btnCadastrar.setEnabled(true);
-                } else {
-                    btnCadastrar.setEnabled(false);
                 }
-            }
+            });
 
-            @Override
-            public void afterTextChanged(Editable editable) {
+            Button btnCancelar = view.findViewById(R.id.btn_cancelar_amostragem);
+            btnCancelar.setOnClickListener(view1 -> cancelarAmostragem());
 
-            }
-        });
-        Utils.logar(year + " " + month + " " + day);
+            Button btnCadastrar = view.findViewById(R.id.btn_cadastrar_amostragem);
+            btnCadastrar.setOnClickListener(view1 -> cadastrar());
 
-        etDataAmostragem.setOnClickListener(view12 ->
-            new DatePickerDialog(getContext(), date,
-                    myCalendar.get(Calendar.YEAR),
-                    myCalendar.get(Calendar.MONTH),
-                    myCalendar.get(Calendar.DAY_OF_MONTH)).show());
+            btnPontos = view.findViewById(R.id.btn_pontos_amostragem);
+            btnPontos.setOnClickListener(view1 -> openMapa());
 
-        etObservacaoAmostragem = view.findViewById(R.id.et_observacao_amostragem);
+            btnNovo = view.findViewById(R.id.btn_nova_amostragem);
+            btnNovo.setOnClickListener(view1 -> novoCadastro());
 
-        spTalhao = view.findViewById(R.id.sp_talhoes_amostragem);
-        spTalhao.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                amostragem.setTalhaoId(talhaoList.get(position).getChave());
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-        Button btnCancelar = view.findViewById(R.id.btn_cancelar_amostragem);
-        AmostragemListaFragment alf = new AmostragemListaFragment();
-
-        btnCancelar.setOnClickListener(view1 ->
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.frg_principal, alf).commit()
-        );
-
-        btnCadastrar = view.findViewById(R.id.btn_cadastrar_amostragem);
-        btnCadastrar.setOnClickListener(view1 -> cadastrar());
-
-        btnPontos = view.findViewById(R.id.btn_pontos_amostragem);
-        btnPontos.setOnClickListener(view1 -> openMapa());
-
-        btnNovo = view.findViewById(R.id.btn_nova_amostragem);
-        btnNovo.setOnClickListener(view1 -> {
-            etNomeAmostragem.setEnabled(true);
-            etObservacaoAmostragem.setEnabled(true);
-            etNomeAmostragem.setText("");
-            etObservacaoAmostragem.setText("");
-            btnCadastrar.setEnabled(true);
-            btnPontos.setEnabled(false);
-            btnNovo.setEnabled(false);
-            btnNovo.setVisibility(View.INVISIBLE);
-            amostragem = new Amostragem();
-            amostragem.setId(0);
-            amostragem.setTalhaoId(talhaoSelecionado);
-            year = 0;
-            month = 0;
-            day = 0;
-        });
-    }
-
-    private void startSpinners(List<ChaveValor> talhoes) {
-        ArrayAdapter<ChaveValor> adapterTalhoes = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_dropdown_item, talhoes);
-        spTalhao.setAdapter(adapterTalhoes);
-
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private void cadastrar() {
-        talhaoSelecionado = amostragem.getTalhaoId();
-
-        if (etObservacaoAmostragem.getText().length() > 0) {
-            String obs = etObservacaoAmostragem.getText().toString().trim().toUpperCase();
-            amostragem.setObservacao(obs);
+        } catch (Exception ex) {
+            Utils.showMessage(getContext(), getString(R.string.erro_view_amostragem), 0);
         }
+    }
 
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... voids) {
-                if (amostragem.getId() == 0) db.amostragemDao().insert(amostragem);
-                else db.amostragemDao().update(amostragem);
-                return null;
-            }
-        }.execute();
-
-        Utils.showMessage(getContext(), "", 1);
-
+    private void disabledCampos() {
         etNomeAmostragem.setEnabled(false);
         etObservacaoAmostragem.setEnabled(false);
-        btnCadastrar.setEnabled(false);
         btnPontos.setEnabled(true);
         btnNovo.setVisibility(View.VISIBLE);
     }
 
-    private void openMapa() {
-
-    }
-
     private void getArgumentos(Bundle bundle) {
         try {
+            amostragem = new Amostragem();
+            amostragem.setId(0);
+
             if (bundle != null) {
-                String keyBundle = getResources().getString(R.string.amostragem_param);
+                String keyBundle = getString(R.string.amostragem_param);
                 AmostragemTalhao at = (AmostragemTalhao) bundle.getSerializable(keyBundle);
                 amostragem.setId(at.getIdAmostragem());
                 amostragem.setTalhaoId(at.getIdTalhao());
@@ -226,33 +130,40 @@ public class AmostragemCadastroFragment extends Fragment {
                 etDataAmostragem.setText(amostragem.getData());
 
                 spTalhao.setSelection(Utils.getIndexChaveValor(talhaoList, at.getTalhaoNome()));
-                Utils.logar(amostragem.getData());
+
                 String[] dataSplit = amostragem.getData().split("/");
                 day = Integer.parseInt(dataSplit[0]);
                 month = Integer.parseInt(dataSplit[1]);
                 year = Integer.parseInt(dataSplit[2]);
             }
         } catch (Exception e) {
-            Utils.logar(e.getMessage());
+            Utils.showMessage(getContext(), getString(R.string.erro_args_amostragem), 0);
         }
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private class GetTalhoes extends AsyncTask<Void, Void, List<ChaveValor>> {
-
-        @Override
-        protected List<ChaveValor> doInBackground(Void... voids) {
-            List<ChaveValor> talhoes = db.talhaoDao().getTalhoesDropDown(true);
-            return talhoes;
-        }
-
-        @Override
-        protected void onPostExecute(List<ChaveValor> talhoes) {
-            talhaoList = talhoes;
-            startSpinners(talhoes);
-            getArgumentos(bundle);
-        }
+    private void cancelarAmostragem() {
+        AmostragemListaFragment alf = new AmostragemListaFragment();
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frg_principal, alf).commit();
     }
+
+    private void novoCadastro() {
+        etNomeAmostragem.setEnabled(true);
+        etObservacaoAmostragem.setEnabled(true);
+        etNomeAmostragem.setText("");
+        etObservacaoAmostragem.setText("");
+        btnPontos.setEnabled(false);
+        btnNovo.setEnabled(false);
+        btnNovo.setVisibility(View.INVISIBLE);
+        amostragem = new Amostragem();
+        amostragem.setId(0);
+        amostragem.setTalhaoId(talhaoSelecionado);
+        year = 0;
+        month = 0;
+        day = 0;
+    }
+
+    private void openMapa() { }
 
     private void updateLabel() {
         String myFormat = "dd/MM/yyyy";
@@ -268,4 +179,42 @@ public class AmostragemCadastroFragment extends Fragment {
         myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         updateLabel();
     };
+
+    @Override
+    public void startSpinners(List<ChaveValor> talhoes) {
+        try {
+            talhaoList = talhoes;
+            ArrayAdapter<ChaveValor> adapterTalhoes = new ArrayAdapter<>(getContext(),
+                    android.R.layout.simple_spinner_dropdown_item, talhoes);
+            spTalhao.setAdapter(adapterTalhoes);
+            getArgumentos(bundle);
+        } catch (Exception ex) {
+            Utils.showMessage(getContext(), getString(R.string.erro_carregar_dados_cadastro_amostragem), 0);
+        }
+
+    }
+
+    @Override
+    public void cadastrar() {
+        talhaoSelecionado = amostragem.getTalhaoId();
+        String nome = etNomeAmostragem.getText().toString().trim().toUpperCase();
+        String obs = etObservacaoAmostragem.getText().toString().trim().toUpperCase();
+        String data = etDataAmostragem.getText().toString().trim().toUpperCase();
+
+        if (nome.length() > 3 && data.length() != 0) {
+            amostragem.setNome(nome);
+            amostragem.setData(data);
+            amostragem.setObservacao(obs);
+            presenter.cadastrar(amostragem);
+            disabledCampos();
+        } else {
+            Utils.showMessage(getContext(), getString(R.string.erro_validacao_amostragem), 0);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.destroyView();
+    }
 }

@@ -162,11 +162,15 @@
     <string name="erro_cadastrar_talhao">Erro ao cadastrar talhão</string>
 
     <!-- erros amostragem -->
+    <string name="erro_view_amostragem">Erro ao carregar view amostragem</string>
     <string name="erro_args_amostragem">Erro ao ler argumentos amostragem</string>
     <string name="erro_carregar_view_amostragem">Erro ao carregar view amostragem</string>
     <string name="erro_cadastro_amostragem">Erro ao abrir cadastro amostragem</string>
     <string name="erro_abrir_opcoes_amostragem">Erro ao abrir opções amostragem</string>
     <string name="erro_buscar_amostragens">Erro ao buscar amostragens</string>
+    <string name="erro_carregar_dados_cadastro_amostragem">Erro ao carregar dados cadastro amostragem</string>
+    <string name="erro_validacao_amostragem">O nome da amostragem deve ter mais que 3 caracteres e data deve ser preenchida</string>
+    <string name="erro_cadastrar_amostragem">Erro ao cadastrar amostragem</string>
 
     <!-- erros mapa -->
     <string name="erro_salvar_contorno">Erro ao salvar contorno</string>
