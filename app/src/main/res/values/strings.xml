@@ -185,4 +185,15 @@
 
     <!-- erros mapa pontos -->
     <string name="erro_cadastrar_pontos">Erro ao cadastrar Pontos</string>
+    <string name="erro_carregar_pontos">Erro ao carregar pontos no mapa</string>
+    <string name="erro_adicionar_pontos">Erro ao adicionar pontos</string>
+    <string name="erro_exibir_opcoes_ponto">Erro ao exibir opções</string>
+    <string name="erro_adicionar_ponto">Erro ao adicionar ponto</string>
+
+    <!-- erros ponto amostragem registro -->
+    <string name="erro_validacao_pontos_registro">Erro na validação ponto registro</string>
+    <string name="erro_carregar_view_coletar_dados">Erro ao carregar view coletar dados</string>
+    <string name="erro_salvar_ponto_registro">Erro ao salvar registro</string>
+    <string name="erro_salvar_foto_registro">Erro ao salvar foto registro</string>
+
 </resources>

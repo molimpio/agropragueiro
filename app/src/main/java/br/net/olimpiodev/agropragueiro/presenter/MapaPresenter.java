@@ -78,8 +78,6 @@ public class MapaPresenter implements MapaContrato.MapaPresenter {
     @Override
     public void exibirContorno(String contorno) {
         try {
-            Log.i("contorno", contorno);
-            // TODO: ver como pegar o centro do polygono para centralizar o zoom
             LatLng primeiraCoordenada = null;
             JSONArray jsonArray = new JSONArray(contorno);
             PolylineOptions polylineOptions = new PolylineOptions();
