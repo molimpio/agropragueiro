@@ -79,4 +79,16 @@ public class FotoRegistro implements Serializable {
     public void setPontoAmostragemRegistroId(int pontoAmostragemRegistroId) {
         this.pontoAmostragemRegistroId = pontoAmostragemRegistroId;
     }
+
+    @Override
+    public String toString() {
+        return "FotoRegistro{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", path='" + path + '\'' +
+                ", ativo=" + ativo +
+                ", sincronizado=" + sincronizado +
+                ", pontoAmostragemRegistroId=" + pontoAmostragemRegistroId +
+                '}';
+    }
 }

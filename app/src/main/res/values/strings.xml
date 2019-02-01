@@ -124,6 +124,7 @@
     <string name="dano_causado">Dano causado</string>
     <string name="registrar_fotos">Registrar fotos</string>
     <string name="validar_praga_qtde">Os campos praga e qtde são obrigatórios</string>
+    <string name="prefix_foto">foto.jpg</string>
 
     <!-- erros cliente -->
     <string name="erro_get_clientes">Erro ao buscar clientes</string>
@@ -195,5 +196,6 @@
     <string name="erro_carregar_view_coletar_dados">Erro ao carregar view coletar dados</string>
     <string name="erro_salvar_ponto_registro">Erro ao salvar registro</string>
     <string name="erro_salvar_foto_registro">Erro ao salvar foto registro</string>
+    <string name="erro_salvar_foto">Erro ao salvar foto</string>
 
 </resources>

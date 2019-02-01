@@ -4,12 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.arch.persistence.room.Room;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
 import android.view.View;
@@ -21,20 +16,17 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import java.io.File;
-
 import br.net.olimpiodev.agropragueiro.AppDatabase;
 import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.contracts.ColetarDadosContrato;
+import br.net.olimpiodev.agropragueiro.model.FotoRegistro;
 import br.net.olimpiodev.agropragueiro.model.PontoAmostragemRegistro;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
-import livroandroid.lib.utils.SDCardUtils;
 
 public class ColetarDadosPresenter implements ColetarDadosContrato.ColetarDadosPresenter {
 
     private ColetarDadosContrato.ColetarDadosView view;
     private Context context;
-    private Activity activity;
     private LatLng pponto;
     private int pontoAmostragemId;
     private AppDatabase db;
@@ -43,16 +35,17 @@ public class ColetarDadosPresenter implements ColetarDadosContrato.ColetarDadosP
     private SeekBar sbDano;
     private Button btRegistraFotos, btSalvar, btNovo;
     private PontoAmostragemRegistro pontoAmostragemRegistro;
+    private String fotoName;
 
     public ColetarDadosPresenter(ColetarDadosContrato.ColetarDadosView view, Context context,
-                                 LatLng pponto, int pontoAmostragemId, Activity activity) {
+                                 LatLng pponto, int pontoAmostragemId) {
         this.view = view;
         this.context = context;
         this.pponto = pponto;
         this.pontoAmostragemId = pontoAmostragemId;
-        this.activity = activity;
         this.db = Room.databaseBuilder(context, AppDatabase.class, AppDatabase.DB_NAME).build();
         this.pontoAmostragemRegistro = new PontoAmostragemRegistro();
+        this.fotoName = "";
     }
 
     @Override
@@ -98,7 +91,7 @@ public class ColetarDadosPresenter implements ColetarDadosContrato.ColetarDadosP
             btCancelar.setOnClickListener(v -> alertDialog.dismiss());
 
             btRegistraFotos = dialogView.findViewById(R.id.bt_registrar_fotos);
-            btRegistraFotos.setOnClickListener(v -> registrarFotos());
+            btRegistraFotos.setOnClickListener(v -> view.registrarFotos(fotoName));
 
             btNovo = dialogView.findViewById(R.id.bt_novo_registro);
             btNovo.setOnClickListener(v -> novoCadastro());
@@ -180,6 +173,9 @@ public class ColetarDadosPresenter implements ColetarDadosContrato.ColetarDadosP
                 @Override
                 protected Void doInBackground(Void... voids) {
                     db.pontoAmostragemRegistroDao().insert(pontoAmostragemRegistro);
+                    pontoAmostragemRegistro.setId(db.pontoAmostragemRegistroDao().getIdInsert());
+                    int id = db.fotoRegistroDao().getLastID();
+                    fotoName = id + "_foto.jpg";
                     return null;
                 }
 
@@ -194,18 +190,31 @@ public class ColetarDadosPresenter implements ColetarDadosContrato.ColetarDadosP
         }
     }
 
-    private void registrarFotos() {
+    @SuppressLint("StaticFieldLeak")
+    public void salvarFotoRegistro(String path) {
         try {
-            File file = SDCardUtils.getPrivateFile(context, "foto.jpg", Environment.DIRECTORY_PICTURES);
-            Intent intentCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".provider", file);
-            intentCamera.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-            activity.startActivityForResult(intentCamera, 0);
-            // salvar em foto registro
-            // nome (imagem_ponto_amostragem_registro_id)
-            // path
+            new AsyncTask<Void, Void, Void>(){
+                @Override
+                protected Void doInBackground(Void... voids) {
+                    FotoRegistro fotoRegistro = new FotoRegistro();
+                    fotoRegistro.setNome(fotoName);
+                    fotoRegistro.setPath(path);
+                    fotoRegistro.setPontoAmostragemRegistroId(pontoAmostragemRegistro.getId());
+                    Utils.logar(fotoRegistro.toString());
+                    db.fotoRegistroDao().insert(fotoRegistro);
+                    int id = db.fotoRegistroDao().getLastID();
+                    fotoName = id + context.getString(R.string.prefix_foto);
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    showToast(context.getString(R.string.sucesso));
+                }
+            }.execute();
         } catch (Exception ex) {
-            showToast(context.getString(R.string.erro_salvar_foto_registro));
+            showToast(context.getString(R.string.erro_salvar_foto));
         }
     }
+
 }

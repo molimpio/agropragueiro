@@ -2,14 +2,22 @@ package br.net.olimpiodev.agropragueiro.view.activity;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -19,6 +27,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +38,7 @@ import br.net.olimpiodev.agropragueiro.model.PontoAmostragem;
 import br.net.olimpiodev.agropragueiro.presenter.ColetarDadosPresenter;
 import br.net.olimpiodev.agropragueiro.presenter.MapaPontosPresenter;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
+import livroandroid.lib.utils.SDCardUtils;
 
 public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleMap.OnMarkerClickListener,
@@ -46,6 +56,8 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
     private int pontoAcaoSelecionado = 2;
     private boolean coletarDados;
     private MapaPontosContrato.MapaPontosPresenter presenter;
+    private ColetarDadosContrato.ColetarDadosPresenter presenterColetor;
+    private File file;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -232,10 +244,37 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
     private void exibirViewRegistro(Marker marker) {
         int pontoAmostragemId = Integer.parseInt(marker.getSnippet());
 
-        ColetarDadosContrato.ColetarDadosPresenter presenter;
-        presenter = new ColetarDadosPresenter(this, MapaPontosActivity.this,
-                marker.getPosition(), pontoAmostragemId, this);
-        presenter.exibirView();
+        presenterColetor = new ColetarDadosPresenter(this, MapaPontosActivity.this,
+                marker.getPosition(), pontoAmostragemId);
+        presenterColetor.exibirView();
     }
 
+    @Override
+    public void registrarFotos(String fotoName) {
+        try {
+            file = SDCardUtils.getPrivateFile(getApplicationContext(), fotoName,
+                    Environment.DIRECTORY_PICTURES);
+
+            Intent intentCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            Uri uri = FileProvider.getUriForFile(getApplicationContext(),
+                    getApplicationContext().getPackageName() + ".provider", file);
+            intentCamera.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+
+            this.startActivityForResult(intentCamera, 0);
+
+        } catch (Exception ex) {
+            Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.erro_salvar_foto_registro), Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 270);
+            toast.show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && file != null) {
+            String path = file.getAbsolutePath();
+            presenterColetor.salvarFotoRegistro(path);
+        }
+    }
 }
