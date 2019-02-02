@@ -12,7 +12,7 @@ public interface MapaPontosContrato {
 
     interface MapaPontosPresenter {
 
-        void salvarPontos(List<PontoAmostragem> pontosAmostragem);
+        void salvarPontos();
 
         void removerPontos();
 

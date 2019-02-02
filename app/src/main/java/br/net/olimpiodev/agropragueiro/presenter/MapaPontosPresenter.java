@@ -50,7 +50,7 @@ public class MapaPontosPresenter implements MapaPontosContrato.MapaPontosPresent
 
     @SuppressLint("StaticFieldLeak")
     @Override
-    public void salvarPontos(List<PontoAmostragem> pontosAmostragem) {
+    public void salvarPontos() {
         try {
             new AsyncTask<Void, Void, Void>() {
                 @Override

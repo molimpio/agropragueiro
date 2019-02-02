@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -52,7 +53,6 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
     private String contorno;
     private String pontos;
     private int amostragemId;
-    private List<PontoAmostragem> pontosAmostragem = new ArrayList<>();
     private int pontoAcaoSelecionado = 2;
     private boolean coletarDados;
     private MapaPontosContrato.MapaPontosPresenter presenter;
@@ -173,7 +173,7 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.salvar:
-                presenter.salvarPontos(pontosAmostragem);
+                presenter.salvarPontos();
                 finish();
                 return true;
             case R.id.remover:

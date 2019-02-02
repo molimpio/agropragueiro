@@ -168,14 +168,18 @@ public class AmostragemListaFragment extends Fragment
             mapaPontosIntent.putExtra(getResources().getString(R.string.amostragem_id_param), amostragem.getIdAmostragem());
             mapaPontosIntent.putExtra(getString(R.string.coletar_dados), coletarDados);
 
-            if (pontoAmostragens.size() > 0) {
-                Gson gson = new Gson();
-                String pontos = gson.toJson(pontoAmostragens);
-                mapaPontosIntent.putExtra(getResources().getString(R.string.amostragem_pontos), pontos);
+            if (!talhao.getContorno().isEmpty()) {
+                if (pontoAmostragens.size() > 0) {
+                    Gson gson = new Gson();
+                    String pontos = gson.toJson(pontoAmostragens);
+                    mapaPontosIntent.putExtra(getResources().getString(R.string.amostragem_pontos), pontos);
+                }
                 startActivity(mapaPontosIntent);
             } else {
-                Toast.makeText(getContext(), getString(R.string.amostragem_sem_contorno), Toast.LENGTH_LONG).show();
+                Utils.showMessage(getContext(), getString(R.string.amostragem_sem_contorno), 0);
             }
+
+
         } catch (Exception ex) {
             Utils.showMessage(getContext(), getString(R.string.erro_carregar_dados_mapa), 0);
         }
