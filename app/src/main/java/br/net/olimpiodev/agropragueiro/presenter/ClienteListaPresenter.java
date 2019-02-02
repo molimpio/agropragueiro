@@ -11,6 +11,7 @@ import br.net.olimpiodev.agropragueiro.AppDatabase;
 import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.contracts.ClienteListaContrato;
 import br.net.olimpiodev.agropragueiro.model.Cliente;
+import br.net.olimpiodev.agropragueiro.utils.Utils;
 
 public class ClienteListaPresenter implements ClienteListaContrato.ClienteListaPresenter {
 
@@ -42,7 +43,7 @@ public class ClienteListaPresenter implements ClienteListaContrato.ClienteListaP
                 }
             }.execute();
         } catch (Exception ex) {
-            view.exibirError(context.getString(R.string.erro_get_clientes));
+            Utils.showMessage(context, context.getString(R.string.erro_get_clientes), 0);
         }
     }
 

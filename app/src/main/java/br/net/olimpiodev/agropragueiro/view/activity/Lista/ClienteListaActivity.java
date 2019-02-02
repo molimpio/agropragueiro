@@ -1,16 +1,12 @@
-package br.net.olimpiodev.agropragueiro.view.fragment.Lista;
+package br.net.olimpiodev.agropragueiro.view.activity.Lista;
 
 import android.app.AlertDialog;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
@@ -18,47 +14,52 @@ import java.util.Objects;
 
 import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.adapter.ClienteAdapter;
+import br.net.olimpiodev.agropragueiro.contracts.ClienteCadastroContrato;
 import br.net.olimpiodev.agropragueiro.contracts.ClienteListaContrato;
 import br.net.olimpiodev.agropragueiro.model.Cliente;
+import br.net.olimpiodev.agropragueiro.presenter.ClienteCadastroPresenter;
 import br.net.olimpiodev.agropragueiro.presenter.ClienteListaPresenter;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
-import br.net.olimpiodev.agropragueiro.view.fragment.Cadastro.ClienteCadastroFragment;
 
-public class ClienteListaFragment extends Fragment implements ClienteListaContrato.ClienteListaView {
+public class ClienteListaActivity extends AppCompatActivity 
+        implements ClienteListaContrato.ClienteListaView,
+        ClienteCadastroContrato.ClienteCadastroView {
 
     private RecyclerView rvClientes;
     private TextView tvListaVazia;
     private ClienteListaContrato.ClienteListaPresenter presenter;
+    private ClienteCadastroContrato.ClienteCadastroPresenter presenterCadastro;
     private ClienteAdapter clienteAdapter;
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             final Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_cliente_lista, container, false);
-        setupView(view);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_cliente_lista);
+
+        setupView();
         setupRecyclerView();
-        presenter = new ClienteListaPresenter(this, getContext());
+        presenter = new ClienteListaPresenter(this, ClienteListaActivity.this);
         presenter.getClientes();
-        return view;
+        presenterCadastro = new ClienteCadastroPresenter(this, ClienteListaActivity.this);
     }
 
-    private void setupView(View view) {
+    private void setupView() {
         try {
-            Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity()))
-                    .getSupportActionBar()).setTitle(getString(R.string.clientes));
+            Objects.requireNonNull(getSupportActionBar()).setTitle(getString(R.string.clientes));
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-            rvClientes = view.findViewById(R.id.rv_clientes);
-            tvListaVazia = view.findViewById(R.id.tv_lista_vazia_cliente);
+            rvClientes = findViewById(R.id.rv_clientes);
+            tvListaVazia = findViewById(R.id.tv_lista_vazia_cliente);
 
-            FloatingActionButton fabCadastroCliente = view.findViewById(R.id.fab_cadastro_cliente);
+            FloatingActionButton fabCadastroCliente = findViewById(R.id.fab_cadastro_cliente);
             fabCadastroCliente.setOnClickListener(view1 -> openCadastro(null));
         } catch (Exception ex) {
-            Utils.showMessage(getContext(), getString(R.string.erro_view_clientes), 0);
+            Utils.showMessage(this, getString(R.string.erro_view_clientes), 0);
         }
     }
 
     private void setupRecyclerView() {
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         rvClientes.setLayoutManager(layoutManager);
         clienteAdapter = new ClienteAdapter();
         rvClientes.setAdapter(clienteAdapter);
@@ -66,29 +67,24 @@ public class ClienteListaFragment extends Fragment implements ClienteListaContra
 
     private void openCadastro(Cliente cliente) {
         try {
-            ClienteCadastroFragment cdf = new ClienteCadastroFragment();
-
-            if (cliente != null) {
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(getString(R.string.cliente_param), cliente);
-                cdf.setArguments(bundle);
-            }
-
-            getFragmentManager().beginTransaction().replace(R.id.frg_principal, cdf).commit();
+            presenterCadastro.exibirView(cliente);
+//            Intent clienteCadastroIntent = new Intent(this, ClienteCadastroActivity.class);
+//            if (cliente != null) clienteCadastroIntent.putExtra(getString(R.string.cliente_param), cliente);
+//            startActivity(clienteCadastroIntent);
         } catch (Exception ex) {
-            Utils.showMessage(getContext(), getString(R.string.erro_abrir_cadastro_clientes), 0);
+            Utils.showMessage(this, getString(R.string.erro_abrir_cadastro_clientes), 0);
         }
     }
 
     private void openListaFazendas(Cliente cliente) {
         try {
-            FazendaListaFragment flf = new FazendaListaFragment();
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(getString(R.string.cliente_param), cliente);
-            flf.setArguments(bundle);
-            getFragmentManager().beginTransaction().replace(R.id.frg_principal, flf).commit();
+//            FazendaListaFragment flf = new FazendaListaFragment();
+//            Bundle bundle = new Bundle();
+//            bundle.putSerializable(getString(R.string.cliente_param), cliente);
+//            flf.setArguments(bundle);
+//            getFragmentManager().beginTransaction().replace(R.id.frg_principal, flf).commit();
         } catch (Exception ex) {
-            Utils.showMessage(getContext(), getString(R.string.erro_abrir_lista_fazendas_cliente), 0);
+            Utils.showMessage(this, getString(R.string.erro_abrir_lista_fazendas_cliente), 0);
         }
     }
 
@@ -97,7 +93,7 @@ public class ClienteListaFragment extends Fragment implements ClienteListaContra
             final String[] OPCOES = getResources().getStringArray(R.array.opcoes_cliente_card);
             final String dialogTitle = getString(R.string.titulo_opcoes_card);
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(dialogTitle);
 
             builder.setSingleChoiceItems(OPCOES, 3, (dialog, item) -> {
@@ -123,7 +119,7 @@ public class ClienteListaFragment extends Fragment implements ClienteListaContra
             alertDialog.setCanceledOnTouchOutside(true);
             alertDialog.show();
         } catch (Exception ex) {
-            Utils.showMessage(getContext(), getString(R.string.erro_abrir_opcoes_cliente), 0);
+            Utils.showMessage(this, getString(R.string.erro_abrir_opcoes_cliente), 0);
         }
     }
 
@@ -144,13 +140,13 @@ public class ClienteListaFragment extends Fragment implements ClienteListaContra
     }
 
     @Override
-    public void exibirError(String mensagem) {
-        Utils.showMessage(getContext(), mensagem, 0);
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         presenter.destroyView();
+    }
+
+    @Override
+    public void atualizarAdapter(List<Cliente> clientes) {
+        listarClientes(clientes);
     }
 }

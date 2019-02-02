@@ -18,7 +18,7 @@ public interface ClienteDao {
     @Update
     void update(Cliente... cliente);
 
-    @Query("SELECT * FROM cliente WHERE ativo = :ativo")
+    @Query("SELECT * FROM cliente WHERE ativo = :ativo ORDER BY nome ASC")
     List<Cliente> getClientes(boolean ativo);
 
     @Query("SELECT c.id AS chave, c.nome AS valor FROM cliente AS c WHERE ativo = :ativo")

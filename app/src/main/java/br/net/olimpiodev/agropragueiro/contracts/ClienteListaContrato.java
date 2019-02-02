@@ -11,8 +11,6 @@ public interface ClienteListaContrato {
         void listarClientes(List<Cliente> clientes);
 
         void exibirListaVazia();
-
-        void exibirError(String mensagem);
     }
 
     interface ClienteListaPresenter {

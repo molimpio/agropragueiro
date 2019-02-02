@@ -46,6 +46,7 @@
     <string name="cadastrar_cliente">Cadastrar Cliente</string>
     <string name="amostragens">Amostragens</string>
     <string name="cliente_param">Cliente_Param</string>
+    <string name="cliente_validacao">Nome deve ser maior que 3 caracteres e cidade maior que 1 caractere</string>
     <string-array name="opcoes_cliente_card">
         <item>Ver fazendas</item>
         <item>Editar</item>
@@ -116,6 +117,7 @@
         <item>Coletar dados amostragem</item>
         <item>Editar dados amostragem</item>
         <item>Excluir amostragem</item>
+        <item>Visualizar lista de pontos da amostragem com detalhes</item>
     </string-array>
 
     <!-- registro -->
@@ -197,5 +199,6 @@
     <string name="erro_salvar_ponto_registro">Erro ao salvar registro</string>
     <string name="erro_salvar_foto_registro">Erro ao salvar foto registro</string>
     <string name="erro_salvar_foto">Erro ao salvar foto</string>
+    <string name="erro_abrir_lista_pontos">Erro ao abrir lista de pontos</string>
 
 </resources>

@@ -1,5 +1,6 @@
 package br.net.olimpiodev.agropragueiro.view.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -12,8 +13,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import br.net.olimpiodev.agropragueiro.R;
+import br.net.olimpiodev.agropragueiro.view.activity.Lista.ClienteListaActivity;
 import br.net.olimpiodev.agropragueiro.view.fragment.Lista.AmostragemListaFragment;
-import br.net.olimpiodev.agropragueiro.view.fragment.Lista.ClienteListaFragment;
 import br.net.olimpiodev.agropragueiro.view.fragment.Lista.FazendaListaFragment;
 import br.net.olimpiodev.agropragueiro.view.fragment.Lista.TalhaoListaFragment;
 
@@ -77,8 +78,10 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            ClienteListaFragment clf = new ClienteListaFragment();
-            fm.beginTransaction().replace(R.id.frg_principal, clf).commit();
+
+            Intent clienteListaIntent = new Intent(this, ClienteListaActivity.class);
+            startActivity(clienteListaIntent);
+
         } else if (id == R.id.nav_gallery) {
             FazendaListaFragment flf = new FazendaListaFragment();
             fm.beginTransaction().replace(R.id.frg_principal, flf).commit();
