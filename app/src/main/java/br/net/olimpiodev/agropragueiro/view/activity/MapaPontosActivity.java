@@ -130,6 +130,7 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
     public void onMapReady(GoogleMap googleMap) {
         mapa = googleMap;
         mapa.getUiSettings().setZoomControlsEnabled(true);
+        mapa.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
 
         presenter = new MapaPontosPresenter(this, MapaPontosActivity.this, mapa,
                 amostragemId, pontos, contorno);
@@ -178,6 +179,9 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
                 return true;
             case R.id.remover:
                 presenter.removerPontos();
+                return true;
+            case R.id.layers:
+                presenter.opcoesLayer();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -2,10 +2,6 @@ package br.net.olimpiodev.agropragueiro.contracts;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import java.util.List;
-
-import br.net.olimpiodev.agropragueiro.model.PontoAmostragem;
-
 public interface MapaPontosContrato {
 
     interface MapaPontosView { }
@@ -21,5 +17,7 @@ public interface MapaPontosContrato {
         void exibirPontos();
 
         void exibirContorno();
+
+        void opcoesLayer();
     }
 }

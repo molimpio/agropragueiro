@@ -1,6 +1,7 @@
 package br.net.olimpiodev.agropragueiro.presenter;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.graphics.Color;
@@ -35,6 +36,7 @@ public class MapaPontosPresenter implements MapaPontosContrato.MapaPontosPresent
     private int amostragemId;
     private String pontos;
     private String contorno;
+    private int layerSelecionado = 2;
 
     public MapaPontosPresenter(MapaPontosContrato.MapaPontosView view, Context context,
                                GoogleMap mapa, int amostragemId, String pontos, String contorno) {
@@ -162,6 +164,44 @@ public class MapaPontosPresenter implements MapaPontosContrato.MapaPontosPresent
             }
         } catch (Exception ex) {
             Utils.showMessage(context, context.getString(R.string.erro_carregar_contorno), 0);
+        }
+    }
+
+    @Override
+    public void opcoesLayer() {
+        try {
+            final String[] MAPA_TYPES = context.getResources().getStringArray(R.array.mapa_types);
+            final String dialogTitle = context.getResources().getString(R.string.titulo_dialog);
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle(dialogTitle);
+
+            builder.setSingleChoiceItems(
+                    MAPA_TYPES, layerSelecionado,
+                    (dialog, item) -> {
+                        switch (item) {
+                            case 0:
+                                mapa.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                                break;
+                            case 1:
+                                mapa.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                                break;
+                            case 2:
+                                mapa.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                                break;
+                            case 3:
+                                mapa.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                                break;
+                        }
+                        layerSelecionado = item;
+                        dialog.dismiss();
+                    }
+            );
+
+            AlertDialog alertDialog = builder.create();
+            alertDialog.setCanceledOnTouchOutside(true);
+            alertDialog.show();
+        } catch (Exception ex) {
+            Utils.showMessage(context, context.getString(R.string.erro_carregar_opcoes_layer), 0);
         }
     }
 }
