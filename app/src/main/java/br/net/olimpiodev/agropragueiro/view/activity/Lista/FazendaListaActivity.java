@@ -1,16 +1,12 @@
-package br.net.olimpiodev.agropragueiro.view.fragment.Lista;
+package br.net.olimpiodev.agropragueiro.view.activity.Lista;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
@@ -18,65 +14,69 @@ import java.util.Objects;
 
 import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.adapter.FazendaAdapter;
+import br.net.olimpiodev.agropragueiro.contracts.FazendaCadastroContrato;
 import br.net.olimpiodev.agropragueiro.contracts.FazendaListaContrato;
 import br.net.olimpiodev.agropragueiro.model.Cliente;
 import br.net.olimpiodev.agropragueiro.model.FazendaCliente;
+import br.net.olimpiodev.agropragueiro.presenter.FazendaCadastroPresenter;
 import br.net.olimpiodev.agropragueiro.presenter.FazendaListaPresenter;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
-import br.net.olimpiodev.agropragueiro.view.fragment.Cadastro.FazendaCadastroFragment;
 
-public class FazendaListaFragment extends Fragment implements FazendaListaContrato.FazendaListaView {
+public class FazendaListaActivity extends AppCompatActivity
+        implements FazendaListaContrato.FazendaListaView,
+        FazendaCadastroContrato.FazendaCadastroView {
 
     private RecyclerView rvFazendas;
     private TextView tvListaVazia;
     private FazendaListaContrato.FazendaListaPresenter presenter;
+    private FazendaCadastroContrato.FazendaCadastroPresenter presenterCadastro;
     private FazendaAdapter fazendaAdapter;
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_fazenda_lista, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_fazenda_lista);
+
         getFazendas();
-        setupView(view);
+        setupView();
         setupRecyclerView();
-        return view;
     }
 
     private void getFazendas() {
         try {
             int clienteId = 0;
-            Bundle bundle = this.getArguments();
 
-            if (bundle != null) {
+            if (getIntent().hasExtra(getString(R.string.cliente_param))) {
                 String keyBundle = getString(R.string.cliente_param);
-                Cliente c = (Cliente) bundle.getSerializable(keyBundle);
+                Cliente c = (Cliente) getIntent().getSerializableExtra(keyBundle);
                 clienteId = c.getId();
             }
 
-            presenter = new FazendaListaPresenter(this, getContext());
+            presenter = new FazendaListaPresenter(this, FazendaListaActivity.this);
             presenter.getFazendas(clienteId);
+            presenterCadastro = new FazendaCadastroPresenter(this, FazendaListaActivity.this);
         } catch (Exception ex) {
-            Utils.showMessage(getContext(), getString(R.string.erro_argumentos_fazenda), 0);
+            Utils.showMessage(this, getString(R.string.erro_argumentos_fazenda), 0);
         }
     }
 
-    private void setupView(View view) {
+    private void setupView() {
         try {
-            Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity()))
-                    .getSupportActionBar()).setTitle(getString(R.string.fazendas));
+            Objects.requireNonNull(getSupportActionBar()).setTitle(getString(R.string.fazendas));
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-            rvFazendas = view.findViewById(R.id.rv_fazendas);
-            tvListaVazia = view.findViewById(R.id.tv_lista_vazia_fazenda);
+            rvFazendas = findViewById(R.id.rv_fazendas);
+            tvListaVazia = findViewById(R.id.tv_lista_vazia_fazenda);
 
-            FloatingActionButton fabCadastroFazenda = view.findViewById(R.id.fab_cadastro_fazenda);
+            FloatingActionButton fabCadastroFazenda = findViewById(R.id.fab_cadastro_fazenda);
             fabCadastroFazenda.setOnClickListener(view1 -> openCadastro(null));
         } catch (Exception ex) {
-            Utils.showMessage(getContext(), getString(R.string.erro_view_fazendas), 0);
+            Utils.showMessage(this, getString(R.string.erro_view_fazendas), 0);
         }
     }
 
     private void setupRecyclerView() {
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         rvFazendas.setLayoutManager(layoutManager);
         fazendaAdapter = new FazendaAdapter();
         rvFazendas.setAdapter(fazendaAdapter);
@@ -84,29 +84,21 @@ public class FazendaListaFragment extends Fragment implements FazendaListaContra
 
     private void openCadastro(FazendaCliente fazenda) {
         try {
-            FazendaCadastroFragment fdf = new FazendaCadastroFragment();
-
-            if (fazenda != null) {
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(getString(R.string.fazenda_param), fazenda);
-                fdf.setArguments(bundle);
-            }
-
-            getFragmentManager().beginTransaction().replace(R.id.frg_principal, fdf).commit();
+            presenterCadastro.exibirView(fazenda);
         } catch (Exception ex) {
-            Utils.showMessage(getContext(), getString(R.string.erro_abrir_cadastro_fazendas), 0);
+            Utils.showMessage(this, getString(R.string.erro_abrir_cadastro_fazendas), 0);
         }
     }
 
     private void openListaTalhoes(FazendaCliente fazenda) {
         try {
-            TalhaoListaFragment tlf = new TalhaoListaFragment();
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(getString(R.string.fazenda_param), fazenda);
-            tlf.setArguments(bundle);
-            getFragmentManager().beginTransaction().replace(R.id.frg_principal, tlf).commit();
+//            TalhaoListaFragment tlf = new TalhaoListaFragment();
+//            Bundle bundle = new Bundle();
+//            bundle.putSerializable(getString(R.string.fazenda_param), fazenda);
+//            tlf.setArguments(bundle);
+//            getFragmentManager().beginTransaction().replace(R.id.frg_principal, tlf).commit();
         } catch (Exception ex) {
-            Utils.showMessage(getContext(), getString(R.string.erro_abrir_lista_talhoes_fazenda), 0);
+            Utils.showMessage(this, getString(R.string.erro_abrir_lista_talhoes_fazenda), 0);
         }
     }
 
@@ -115,7 +107,7 @@ public class FazendaListaFragment extends Fragment implements FazendaListaContra
             final String[] OPCOES = getResources().getStringArray(R.array.opcoes_fazenda_card);
             final String dialogTitle = getResources().getString(R.string.titulo_opcoes_card);
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(dialogTitle);
 
             builder.setSingleChoiceItems(OPCOES, 3, (dialog, item) -> {
@@ -141,7 +133,7 @@ public class FazendaListaFragment extends Fragment implements FazendaListaContra
             alertDialog.setCanceledOnTouchOutside(true);
             alertDialog.show();
         } catch (Exception ex) {
-            Utils.showMessage(getContext(), getString(R.string.erro_abrir_opcoes_fazenda), 0);
+            Utils.showMessage(this, getString(R.string.erro_abrir_opcoes_fazenda), 0);
         }
     }
 
@@ -162,13 +154,13 @@ public class FazendaListaFragment extends Fragment implements FazendaListaContra
     }
 
     @Override
-    public void exibirError(String mensagem) {
-        Utils.showMessage(getContext(), mensagem, 0);
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         presenter.destroyView();
+    }
+
+    @Override
+    public void atualizarAdapter(List<FazendaCliente> fazendas) {
+        listarFazendas(fazendas);
     }
 }

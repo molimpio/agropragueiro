@@ -11,6 +11,7 @@ import br.net.olimpiodev.agropragueiro.AppDatabase;
 import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.contracts.FazendaListaContrato;
 import br.net.olimpiodev.agropragueiro.model.FazendaCliente;
+import br.net.olimpiodev.agropragueiro.utils.Utils;
 
 public class FazendaListaPresenter implements FazendaListaContrato.FazendaListaPresenter {
 
@@ -48,7 +49,7 @@ public class FazendaListaPresenter implements FazendaListaContrato.FazendaListaP
                 }
             }.execute();
         } catch (Exception ex) {
-            view.exibirError(context.getString(R.string.erro_get_fazendas));
+            Utils.showMessage(context, context.getString(R.string.erro_get_fazendas), 0);
         }
     }
 

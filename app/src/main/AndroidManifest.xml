@@ -52,10 +52,12 @@
         <activity
             android:name=".view.activity.Lista.PontoAmostragemListaActivity"
             android:parentActivityName=".view.activity.Lista.AmostragemListaActivity" />
-        <activity android:name=".view.activity.Lista.ClienteListaActivity"
+        <activity
+            android:name=".view.activity.Lista.ClienteListaActivity"
             android:parentActivityName=".view.activity.MainActivity" />
-        <activity android:name=".view.activity.Cadastro.ClienteCadastroActivity"
-            android:parentActivityName=".view.activity.Lista.ClienteListaActivity"/>
+
+        <activity android:name=".view.activity.Lista.FazendaListaActivity"
+            android:parentActivityName=".view.activity.MainActivity" />
     </application>
 
 </manifest>

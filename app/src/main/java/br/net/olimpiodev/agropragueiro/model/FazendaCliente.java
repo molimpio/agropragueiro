@@ -7,6 +7,7 @@ public class FazendaCliente implements Serializable {
 
     private int idFazenda;
     private String nomeFazenda;
+    private int idCliente;
     private String nomeCliente;
     private String ufFazenda;
     private String cidadeFazenda;
@@ -25,6 +26,14 @@ public class FazendaCliente implements Serializable {
 
     public void setNomeFazenda(String nomeFazenda) {
         this.nomeFazenda = nomeFazenda;
+    }
+
+    public int getIdCliente() {
+        return idCliente;
+    }
+
+    public void setIdCliente(int idCliente) {
+        this.idCliente = idCliente;
     }
 
     public String getNomeCliente() {
@@ -49,5 +58,17 @@ public class FazendaCliente implements Serializable {
 
     public void setCidadeFazenda(String cidadeFazenda) {
         this.cidadeFazenda = cidadeFazenda;
+    }
+
+    @Override
+    public String toString() {
+        return "FazendaCliente{" +
+                "idFazenda=" + idFazenda +
+                ", nomeFazenda='" + nomeFazenda + '\'' +
+                ", idCliente=" + idCliente +
+                ", nomeCliente='" + nomeCliente + '\'' +
+                ", ufFazenda='" + ufFazenda + '\'' +
+                ", cidadeFazenda='" + cidadeFazenda + '\'' +
+                '}';
     }
 }

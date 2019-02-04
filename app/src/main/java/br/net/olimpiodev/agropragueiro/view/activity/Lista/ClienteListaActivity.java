@@ -68,9 +68,6 @@ public class ClienteListaActivity extends AppCompatActivity
     private void openCadastro(Cliente cliente) {
         try {
             presenterCadastro.exibirView(cliente);
-//            Intent clienteCadastroIntent = new Intent(this, ClienteCadastroActivity.class);
-//            if (cliente != null) clienteCadastroIntent.putExtra(getString(R.string.cliente_param), cliente);
-//            startActivity(clienteCadastroIntent);
         } catch (Exception ex) {
             Utils.showMessage(this, getString(R.string.erro_abrir_cadastro_clientes), 0);
         }

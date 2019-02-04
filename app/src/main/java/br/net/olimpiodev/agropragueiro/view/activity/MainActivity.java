@@ -14,8 +14,8 @@ import android.view.MenuItem;
 
 import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.view.activity.Lista.ClienteListaActivity;
+import br.net.olimpiodev.agropragueiro.view.activity.Lista.FazendaListaActivity;
 import br.net.olimpiodev.agropragueiro.view.fragment.Lista.AmostragemListaFragment;
-import br.net.olimpiodev.agropragueiro.view.fragment.Lista.FazendaListaFragment;
 import br.net.olimpiodev.agropragueiro.view.fragment.Lista.TalhaoListaFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -83,8 +83,10 @@ public class MainActivity extends AppCompatActivity
             startActivity(clienteListaIntent);
 
         } else if (id == R.id.nav_gallery) {
-            FazendaListaFragment flf = new FazendaListaFragment();
-            fm.beginTransaction().replace(R.id.frg_principal, flf).commit();
+
+            Intent fazendaListaIntent = new Intent(this, FazendaListaActivity.class);
+            startActivity(fazendaListaIntent);
+
         } else if (id == R.id.nav_slideshow) {
             TalhaoListaFragment tlf = new TalhaoListaFragment();
             fm.beginTransaction().replace(R.id.frg_principal, tlf).commit();

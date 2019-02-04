@@ -114,6 +114,7 @@ public class ClienteCadastroPresenter implements ClienteCadastroContrato.Cliente
                     AppDatabase db = Room.databaseBuilder(context, AppDatabase.class, AppDatabase.DB_NAME).build();
                     List<Usuario> usuario = db.usuarioDao().getUsuario();
                     cliente.setUsuarioId(usuario.get(0).getId());
+
                     if (cliente.getId() == 0) db.clienteDao().insert(cliente);
                     else db.clienteDao().update(cliente);
                     return db.clienteDao().getClientes(true);

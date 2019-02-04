@@ -57,6 +57,7 @@
     <string name="cadastrar_fazenda">Cadastrar Fazenda</string>
     <string name="cliente">Cliente</string>
     <string name="fazenda_param">Fazenda_Param</string>
+    <string name="fazenda_validacao">Nome da fazenda deve ser maior que 3 caracteres e cidade maior que 1 caractere</string>
     <string-array name="opcoes_fazenda_card">
         <item>Ver talhões</item>
         <item>Editar</item>
@@ -150,7 +151,7 @@
     <string name="erro_abrir_opcoes_fazenda">Erro abrir opções da fazenda</string>
     <string name="erro_argumentos_fazenda">Erro ao ler argumentos fazenda</string>
     <string name="erro_carregar_dados_cadastro_fazenda">Erro ao carregar dados cadastro fazenda</string>
-    <string name="fazenda_erro_cadastro">O nome da fazenda deve ter mais que 2 caracteres e a cidade mais que 2</string>
+    <string name="fazenda_erro_validacao">Erro na validação da fazenda</string>
     <string name="erro_cadastrar_fazenda">Erro ao cadastrar fazenda</string>
     <string name="erro_buscar_dados_cliente">Erro ao buscar dados cliente</string>
 

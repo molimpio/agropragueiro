@@ -11,8 +11,6 @@ public interface FazendaListaContrato {
         void listarFazendas(List<FazendaCliente> fazendas);
 
         void exibirListaVazia();
-
-        void exibirError(String mensagem);
     }
 
     interface FazendaListaPresenter {
