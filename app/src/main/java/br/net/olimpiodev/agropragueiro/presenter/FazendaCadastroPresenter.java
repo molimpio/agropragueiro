@@ -85,7 +85,7 @@ public class FazendaCadastroPresenter implements FazendaCadastroContrato.Fazenda
 
     private void getArgumentos() {
         if (fazendaView != null) {
-            Utils.logar(fazendaView.toString());
+
             fazenda.setId(fazendaView.getIdFazenda());
             fazenda.setNome(fazendaView.getNomeFazenda());
             fazenda.setUf(fazendaView.getUfFazenda());

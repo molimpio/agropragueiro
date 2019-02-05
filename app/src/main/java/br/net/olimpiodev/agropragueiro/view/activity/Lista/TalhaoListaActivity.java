@@ -15,21 +15,23 @@ import java.util.Objects;
 
 import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.adapter.TalhaoAdapter;
+import br.net.olimpiodev.agropragueiro.contracts.TalhaoCadastroContrato;
 import br.net.olimpiodev.agropragueiro.contracts.TalhaoListaContrato;
-import br.net.olimpiodev.agropragueiro.model.FazendaCliente;
 import br.net.olimpiodev.agropragueiro.model.Talhao;
 import br.net.olimpiodev.agropragueiro.model.TalhaoFazenda;
+import br.net.olimpiodev.agropragueiro.presenter.TalhaoCadastroPresenter;
 import br.net.olimpiodev.agropragueiro.presenter.TalhaoListaPresenter;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 import br.net.olimpiodev.agropragueiro.view.activity.MapaActivity;
-import br.net.olimpiodev.agropragueiro.view.fragment.Cadastro.TalhaoCadastroFragment;
-import br.net.olimpiodev.agropragueiro.view.fragment.Lista.AmostragemListaFragment;
 
-public class TalhaoListaActivity extends AppCompatActivity implements TalhaoListaContrato.TalhaoListaView {
+public class TalhaoListaActivity extends AppCompatActivity
+        implements TalhaoListaContrato.TalhaoListaView,
+        TalhaoCadastroContrato.TalhaoCadastroView {
 
     private RecyclerView rvTalhoes;
     private TextView tvListaVazia;
     private TalhaoListaContrato.TalhaoListaPresenter presenter;
+    private TalhaoCadastroContrato.TalhaoCadastroPresenter presenterCadastro;
     private TalhaoAdapter talhaoAdapter;
     
     @Override
@@ -37,8 +39,9 @@ public class TalhaoListaActivity extends AppCompatActivity implements TalhaoList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_talhao_lista);
 
-        presenter = new TalhaoListaPresenter(this, this);
+        presenter = new TalhaoListaPresenter(this, TalhaoListaActivity.this);
         presenter.getTalhoes();
+        presenterCadastro = new TalhaoCadastroPresenter(this, TalhaoListaActivity.this);
         setupView();
         setupRecyclerView();
     }
@@ -67,15 +70,7 @@ public class TalhaoListaActivity extends AppCompatActivity implements TalhaoList
 
     private void openCadastro(TalhaoFazenda talhaoFazenda) {
         try {
-//            TalhaoCadastroFragment tcf = new TalhaoCadastroFragment();
-//
-//            if (talhaoFazenda != null) {
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable(getResources().getString(R.string.talhao_param), talhaoFazenda);
-//                tcf.setArguments(bundle);
-//            }
-//
-//            getFragmentManager().beginTransaction().replace(R.id.frg_principal, tcf).commit();
+            presenterCadastro.exibirView(talhaoFazenda);
         } catch (Exception ex) {
             Utils.showMessage(this, getString(R.string.erro_abrir_cadastro_talhao), 0);
         }
@@ -129,11 +124,6 @@ public class TalhaoListaActivity extends AppCompatActivity implements TalhaoList
     }
 
     @Override
-    public void exibirListaVazia() {
-        tvListaVazia.setVisibility(View.VISIBLE);
-    }
-
-    @Override
     public void openMapa(Talhao talhao) {
         try {
             Intent mapaIntent = new Intent(this, MapaActivity.class);
@@ -147,6 +137,16 @@ public class TalhaoListaActivity extends AppCompatActivity implements TalhaoList
         } catch (Exception ex) {
             Utils.showMessage(this, getString(R.string.erro_carregar_dados_mapa), 0);
         }
+    }
+
+    @Override
+    public void atualizarAdapter(List<TalhaoFazenda> talhoes) {
+        listarTalhoes(talhoes);
+    }
+
+    @Override
+    public void exibirListaVazia() {
+        tvListaVazia.setVisibility(View.VISIBLE);
     }
 
     @Override

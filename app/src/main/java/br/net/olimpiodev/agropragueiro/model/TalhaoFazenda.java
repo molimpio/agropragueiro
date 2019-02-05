@@ -8,6 +8,7 @@ public class TalhaoFazenda implements Serializable {
     private int idTalhao;
     private String nomeTalhao;
     private Double areaHa;
+    private int idFazenda;
     private String nomeFazenda;
     private String contorno;
 
@@ -33,6 +34,14 @@ public class TalhaoFazenda implements Serializable {
 
     public void setAreaHa(Double areaHa) {
         this.areaHa = areaHa;
+    }
+
+    public int getIdFazenda() {
+        return idFazenda;
+    }
+
+    public void setIdFazenda(int idFazenda) {
+        this.idFazenda = idFazenda;
     }
 
     public String getNomeFazenda() {

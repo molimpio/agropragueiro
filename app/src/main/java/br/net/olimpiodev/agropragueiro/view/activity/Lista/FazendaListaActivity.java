@@ -90,18 +90,6 @@ public class FazendaListaActivity extends AppCompatActivity
         }
     }
 
-    private void openListaTalhoes(FazendaCliente fazenda) {
-        try {
-//            TalhaoListaFragment tlf = new TalhaoListaFragment();
-//            Bundle bundle = new Bundle();
-//            bundle.putSerializable(getString(R.string.fazenda_param), fazenda);
-//            tlf.setArguments(bundle);
-//            getFragmentManager().beginTransaction().replace(R.id.frg_principal, tlf).commit();
-        } catch (Exception ex) {
-            Utils.showMessage(this, getString(R.string.erro_abrir_lista_talhoes_fazenda), 0);
-        }
-    }
-
     private void opcoesDialog(final FazendaCliente fazenda) {
         try {
             final String[] OPCOES = getResources().getStringArray(R.array.opcoes_fazenda_card);
@@ -114,13 +102,9 @@ public class FazendaListaActivity extends AppCompatActivity
                 switch (item) {
                     case 0:
                         dialog.dismiss();
-                        openListaTalhoes(fazenda);
-                        break;
-                    case 1:
-                        dialog.dismiss();
                         openCadastro(fazenda);
                         break;
-                    case 2:
+                    case 1:
                         // excluir
                         break;
                 }

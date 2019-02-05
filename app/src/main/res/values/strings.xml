@@ -59,7 +59,6 @@
     <string name="fazenda_param">Fazenda_Param</string>
     <string name="fazenda_validacao">Nome da fazenda deve ser maior que 3 caracteres e cidade maior que 1 caractere</string>
     <string-array name="opcoes_fazenda_card">
-        <item>Ver talhões</item>
         <item>Editar</item>
         <item>Excluir</item>
     </string-array>
@@ -79,6 +78,7 @@
     <string name="talhao_param">Talhao_Param</string>
     <string name="talhao_id_param">Talhao_id_Param</string>
     <string name="contorno_param">Contorno_Param</string>
+    <string name="talhao_erro_cadastro">O nome do talhão deve ter mais que 1 caractere</string>
     <string-array name="opcoes_talhao_card">
         <item>Ver contorno no mapa</item>
         <item>Editar</item>
@@ -163,7 +163,6 @@
     <string name="erro_ler_argumentos_talhao">Erro ao ler argumentos talhão</string>
     <string name="erro_buscar_talhoes">Erro buscar talhões</string>
     <string name="erro_carregar_dados_cadastro_talhao">Erro ao carregar dados cadastro talhão</string>
-    <string name="talhao_erro_cadastro">O nome do talhão deve ter mais que 1 caractere</string>
     <string name="erro_cadastrar_talhao">Erro ao cadastrar talhão</string>
 
     <!-- erros amostragem -->
