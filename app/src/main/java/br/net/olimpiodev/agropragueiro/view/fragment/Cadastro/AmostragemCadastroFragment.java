@@ -28,7 +28,6 @@ import br.net.olimpiodev.agropragueiro.model.AmostragemTalhao;
 import br.net.olimpiodev.agropragueiro.model.ChaveValor;
 import br.net.olimpiodev.agropragueiro.presenter.AmostragemCadastroPresenter;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
-import br.net.olimpiodev.agropragueiro.view.fragment.Lista.AmostragemListaFragment;
 
 
 public class AmostragemCadastroFragment extends Fragment
@@ -142,9 +141,7 @@ public class AmostragemCadastroFragment extends Fragment
     }
 
     private void cancelarAmostragem() {
-        AmostragemListaFragment alf = new AmostragemListaFragment();
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frg_principal, alf).commit();
+
     }
 
     private void novoCadastro() {

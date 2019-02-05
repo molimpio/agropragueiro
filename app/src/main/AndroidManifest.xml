@@ -48,7 +48,7 @@
         <activity android:name=".view.activity.MapaPontosActivity" />
         <activity
             android:name=".view.activity.Lista.AmostragemListaActivity"
-            android:label="@string/amostragens" />
+            android:parentActivityName=".view.activity.MainActivity" />
         <activity
             android:name=".view.activity.Lista.PontoAmostragemListaActivity"
             android:parentActivityName=".view.activity.Lista.AmostragemListaActivity" />

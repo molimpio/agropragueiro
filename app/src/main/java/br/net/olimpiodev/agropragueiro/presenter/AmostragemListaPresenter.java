@@ -29,18 +29,12 @@ public class AmostragemListaPresenter implements AmostragemListaContrato.Amostra
 
     @SuppressLint("StaticFieldLeak")
     @Override
-    public void getAmostragens(int talhaoId) {
+    public void getAmostragens() {
         try {
             new AsyncTask<Void, Void, List<AmostragemTalhao>>(){
                 @Override
                 protected List<AmostragemTalhao> doInBackground(Void... voids) {
-                    List<AmostragemTalhao> amostragens;
-                    if (talhaoId != 0) {
-                        amostragens = db.amostragemDao().getAmostragensByTalhaoId(true, talhaoId);
-                    } else {
-                        amostragens = db.amostragemDao().getAmostragensTalhao(true);
-                    }
-                    return amostragens;
+                    return db.amostragemDao().getAmostragensTalhao(true);
                 }
 
                 @Override

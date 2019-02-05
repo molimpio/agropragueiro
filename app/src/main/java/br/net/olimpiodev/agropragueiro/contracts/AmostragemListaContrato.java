@@ -20,7 +20,7 @@ public interface AmostragemListaContrato {
 
     interface AmostragemListaPresenter {
 
-        void getAmostragens(int talhaoId);
+        void getAmostragens();
 
         void openMapa(AmostragemTalhao amostragemTalhao, boolean coletarDados);
 

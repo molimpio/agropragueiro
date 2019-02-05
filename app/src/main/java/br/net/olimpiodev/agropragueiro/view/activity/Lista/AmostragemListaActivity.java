@@ -2,9 +2,9 @@ package br.net.olimpiodev.agropragueiro.view.activity.Lista;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -21,11 +21,9 @@ import br.net.olimpiodev.agropragueiro.contracts.AmostragemListaContrato;
 import br.net.olimpiodev.agropragueiro.model.AmostragemTalhao;
 import br.net.olimpiodev.agropragueiro.model.PontoAmostragem;
 import br.net.olimpiodev.agropragueiro.model.Talhao;
-import br.net.olimpiodev.agropragueiro.model.TalhaoFazenda;
 import br.net.olimpiodev.agropragueiro.presenter.AmostragemListaPresenter;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 import br.net.olimpiodev.agropragueiro.view.activity.MapaPontosActivity;
-import br.net.olimpiodev.agropragueiro.view.fragment.Cadastro.AmostragemCadastroFragment;
 
 public class AmostragemListaActivity extends AppCompatActivity
         implements AmostragemListaContrato.AmostragemListaView  {
@@ -47,18 +45,8 @@ public class AmostragemListaActivity extends AppCompatActivity
 
     private void getAmostragens() {
         try {
-            int talhaoId = 0;
-//            Bundle bundle = this.getArguments();
-//
-//            if (bundle != null) {
-//                String keyBunle = getResources().getString(R.string.amostragem_param);
-//                TalhaoFazenda tf = (TalhaoFazenda) bundle.getSerializable(keyBunle);
-//                talhaoId = tf.getIdTalhao();
-//            }
-
             presenter = new AmostragemListaPresenter(this, AmostragemListaActivity.this);
-//            presenter = new AmostragemListaPresenter(this, getApplicationContext());
-            presenter.getAmostragens(talhaoId);
+            presenter.getAmostragens();
         } catch (Exception ex) {
             Utils.showMessage(this, getString(R.string.erro_args_amostragem), 0);
         }
@@ -66,8 +54,8 @@ public class AmostragemListaActivity extends AppCompatActivity
 
     private void setupView() {
         try {
-//            Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull())
-//                    .getSupportActionBar()).setTitle(getString(R.string.amostragens));
+            Objects.requireNonNull(getSupportActionBar()).setTitle(getString(R.string.amostragens));
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
             rvAmostragem = findViewById(R.id.rv_amostragem);
             tvListaVazia = findViewById(R.id.tv_lista_vazia_amostragem);
@@ -88,26 +76,9 @@ public class AmostragemListaActivity extends AppCompatActivity
 
     private void openCadastro(AmostragemTalhao amostragem) {
         try {
-//            AmostragemCadastroFragment acf = new AmostragemCadastroFragment();
-//
-//            if (amostragem != null) {
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable(getResources().getString(R.string.amostragem_param), amostragem);
-//                acf.setArguments(bundle);
-//            }
-//            getFragmentManager().beginTransaction().replace(R.id.frg_principal, acf).commit();
+//            presenter.exibirView(amostragem);
         } catch (Exception ex) {
             Utils.showMessage(this, getString(R.string.erro_cadastro_amostragem), 0);
-        }
-    }
-
-    private void openListaPontosAmostragem(AmostragemTalhao amostragem) {
-        try {
-            Intent pontosAmostragemIntent = new Intent(this, PontoAmostragemListaActivity.class);
-            pontosAmostragemIntent.putExtra(getString(R.string.amostragem_id_param), amostragem.getIdAmostragem());
-            startActivity(pontosAmostragemIntent);
-        } catch (Exception ex) {
-            Utils.showMessage(this, getString(R.string.erro_abrir_lista_pontos), 0);
         }
     }
 
@@ -134,10 +105,6 @@ public class AmostragemListaActivity extends AppCompatActivity
                         break;
                     case 3:
                         //excluir
-                        break;
-                    case 4:
-                        dialog.dismiss();
-                        openListaPontosAmostragem(amostragem);
                         break;
                 }
             });

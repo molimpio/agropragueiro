@@ -3,7 +3,6 @@ package br.net.olimpiodev.agropragueiro.view.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -13,10 +12,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import br.net.olimpiodev.agropragueiro.R;
+import br.net.olimpiodev.agropragueiro.view.activity.Lista.AmostragemListaActivity;
 import br.net.olimpiodev.agropragueiro.view.activity.Lista.ClienteListaActivity;
 import br.net.olimpiodev.agropragueiro.view.activity.Lista.FazendaListaActivity;
 import br.net.olimpiodev.agropragueiro.view.activity.Lista.TalhaoListaActivity;
-import br.net.olimpiodev.agropragueiro.view.fragment.Lista.AmostragemListaFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -74,7 +73,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
-        FragmentManager fm = getSupportFragmentManager();
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
@@ -93,8 +91,10 @@ public class MainActivity extends AppCompatActivity
             startActivity(talhaoListaIntent);
 
         } else if (id == R.id.nav_manage) {
-            AmostragemListaFragment alf = new AmostragemListaFragment();
-            fm.beginTransaction().replace(R.id.frg_principal, alf).commit();
+
+            Intent amostragemListaIntent = new Intent(this, AmostragemListaActivity.class);
+            startActivity(amostragemListaIntent);
+
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
