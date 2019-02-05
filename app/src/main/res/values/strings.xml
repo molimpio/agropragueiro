@@ -81,7 +81,6 @@
     <string name="contorno_param">Contorno_Param</string>
     <string-array name="opcoes_talhao_card">
         <item>Ver contorno no mapa</item>
-        <item>Ver lista amostragens</item>
         <item>Editar</item>
         <item>Excluir</item>
     </string-array>

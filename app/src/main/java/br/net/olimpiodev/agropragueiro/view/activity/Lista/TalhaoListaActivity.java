@@ -1,19 +1,13 @@
-package br.net.olimpiodev.agropragueiro.view.fragment.Lista;
-
+package br.net.olimpiodev.agropragueiro.view.activity.Lista;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
@@ -29,61 +23,43 @@ import br.net.olimpiodev.agropragueiro.presenter.TalhaoListaPresenter;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 import br.net.olimpiodev.agropragueiro.view.activity.MapaActivity;
 import br.net.olimpiodev.agropragueiro.view.fragment.Cadastro.TalhaoCadastroFragment;
+import br.net.olimpiodev.agropragueiro.view.fragment.Lista.AmostragemListaFragment;
 
-import static android.app.Activity.RESULT_OK;
-
-public class TalhaoListaFragment extends Fragment implements TalhaoListaContrato.TalhaoListaView {
+public class TalhaoListaActivity extends AppCompatActivity implements TalhaoListaContrato.TalhaoListaView {
 
     private RecyclerView rvTalhoes;
     private TextView tvListaVazia;
     private TalhaoListaContrato.TalhaoListaPresenter presenter;
     private TalhaoAdapter talhaoAdapter;
-
+    
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_talhao_lista, container, false);
-        getTalhoes();
-        setupView(view);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_talhao_lista);
+
+        presenter = new TalhaoListaPresenter(this, this);
+        presenter.getTalhoes();
+        setupView();
         setupRecyclerView();
-        return view;
     }
 
-    private void getTalhoes() {
+    private void setupView() {
         try {
-            int fazendaId = 0;
-            Bundle bundle = this.getArguments();
+            Objects.requireNonNull(getSupportActionBar()).setTitle(getString(R.string.talhoes));
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-            if (bundle != null) {
-                String keyBundle = getString(R.string.fazenda_param);
-                FazendaCliente fc = (FazendaCliente) bundle.getSerializable(keyBundle);
-                fazendaId = fc.getIdFazenda();
-            }
+            rvTalhoes = findViewById(R.id.rv_talhoes);
+            tvListaVazia = findViewById(R.id.tv_lista_vazia_talhao);
 
-            presenter = new TalhaoListaPresenter(this, getContext());
-            presenter.getTalhoes(fazendaId);
-        } catch (Exception ex) {
-            Utils.showMessage(getContext(), getString(R.string.erro_ler_argumentos_talhao), 0);
-        }
-    }
-
-    private void setupView(View view) {
-        try {
-            Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity()))
-                    .getSupportActionBar()).setTitle(getString(R.string.talhoes));
-
-            rvTalhoes = view.findViewById(R.id.rv_talhoes);
-            tvListaVazia = view.findViewById(R.id.tv_lista_vazia_talhao);
-
-            FloatingActionButton fabCadastroTalhao = view.findViewById(R.id.fab_cadastro_talhao);
+            FloatingActionButton fabCadastroTalhao = findViewById(R.id.fab_cadastro_talhao);
             fabCadastroTalhao.setOnClickListener(view1 -> openCadastro(null));
         } catch (Exception ex) {
-            Utils.showMessage(getContext(), getString(R.string.erro_view_talhao), 0);
+            Utils.showMessage(this, getString(R.string.erro_view_talhao), 0);
         }
     }
 
     private void setupRecyclerView() {
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         rvTalhoes.setLayoutManager(layoutManager);
         talhaoAdapter = new TalhaoAdapter();
         rvTalhoes.setAdapter(talhaoAdapter);
@@ -91,29 +67,17 @@ public class TalhaoListaFragment extends Fragment implements TalhaoListaContrato
 
     private void openCadastro(TalhaoFazenda talhaoFazenda) {
         try {
-            TalhaoCadastroFragment tcf = new TalhaoCadastroFragment();
-
-            if (talhaoFazenda != null) {
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(getResources().getString(R.string.talhao_param), talhaoFazenda);
-                tcf.setArguments(bundle);
-            }
-
-            getFragmentManager().beginTransaction().replace(R.id.frg_principal, tcf).commit();
+//            TalhaoCadastroFragment tcf = new TalhaoCadastroFragment();
+//
+//            if (talhaoFazenda != null) {
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable(getResources().getString(R.string.talhao_param), talhaoFazenda);
+//                tcf.setArguments(bundle);
+//            }
+//
+//            getFragmentManager().beginTransaction().replace(R.id.frg_principal, tcf).commit();
         } catch (Exception ex) {
-            Utils.showMessage(getContext(), getString(R.string.erro_abrir_cadastro_talhao), 0);
-        }
-    }
-
-    private void openListaAmostragens(TalhaoFazenda talhaoFazenda) {
-        try {
-            AmostragemListaFragment alf = new AmostragemListaFragment();
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(getResources().getString(R.string.amostragem_param), talhaoFazenda);
-            alf.setArguments(bundle);
-            getFragmentManager().beginTransaction().replace(R.id.frg_principal, alf).commit();
-        } catch (Exception ex) {
-            Utils.showMessage(getContext(), getString(R.string.erro_abrir_lista_amostragens_talhao), 0);
+            Utils.showMessage(this, getString(R.string.erro_abrir_cadastro_talhao), 0);
         }
     }
 
@@ -122,7 +86,7 @@ public class TalhaoListaFragment extends Fragment implements TalhaoListaContrato
             final String[] OPCOES = getResources().getStringArray(R.array.opcoes_talhao_card);
             final String dialogTitle = getResources().getString(R.string.titulo_opcoes_card);
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(dialogTitle);
 
             builder.setSingleChoiceItems(OPCOES, 4, (dialog, item) -> {
@@ -133,14 +97,11 @@ public class TalhaoListaFragment extends Fragment implements TalhaoListaContrato
                         break;
                     case 1:
                         dialog.dismiss();
-                        openListaAmostragens(talhaoFazenda);
-                        break;
-                    case 2:
-                        dialog.dismiss();
                         openCadastro(talhaoFazenda);
                         break;
-                    case 3:
+                    case 2:
                         //excluir
+                        dialog.dismiss();
                         break;
                 }
             });
@@ -152,7 +113,7 @@ public class TalhaoListaFragment extends Fragment implements TalhaoListaContrato
             alertDialog.setCanceledOnTouchOutside(true);
             alertDialog.show();
         } catch (Exception ex) {
-            Utils.showMessage(getContext(), getString(R.string.erro_abrir_opcoes_talhao), 0);
+            Utils.showMessage(this, getString(R.string.erro_abrir_opcoes_talhao), 0);
         }
     }
 
@@ -175,7 +136,7 @@ public class TalhaoListaFragment extends Fragment implements TalhaoListaContrato
     @Override
     public void openMapa(Talhao talhao) {
         try {
-            Intent mapaIntent = new Intent(getContext(), MapaActivity.class);
+            Intent mapaIntent = new Intent(this, MapaActivity.class);
             mapaIntent.putExtra(getString(R.string.talhao_id_param), talhao.getId());
 
             if (!talhao.getContorno().isEmpty()) {
@@ -184,13 +145,8 @@ public class TalhaoListaFragment extends Fragment implements TalhaoListaContrato
 
             startActivity(mapaIntent);
         } catch (Exception ex) {
-            Utils.showMessage(getContext(), getString(R.string.erro_carregar_dados_mapa), 0);
+            Utils.showMessage(this, getString(R.string.erro_carregar_dados_mapa), 0);
         }
-    }
-
-    @Override
-    public void exibirError(String mensagem) {
-        Utils.showMessage(getContext(), mensagem, 0);
     }
 
     @Override
@@ -198,5 +154,4 @@ public class TalhaoListaFragment extends Fragment implements TalhaoListaContrato
         super.onDestroy();
         presenter.destroyView();
     }
-
 }

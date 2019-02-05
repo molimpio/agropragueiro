@@ -26,7 +26,6 @@ import br.net.olimpiodev.agropragueiro.model.TalhaoFazenda;
 import br.net.olimpiodev.agropragueiro.presenter.TalhaoCadastroPresenter;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 import br.net.olimpiodev.agropragueiro.view.activity.MapaActivity;
-import br.net.olimpiodev.agropragueiro.view.fragment.Lista.TalhaoListaFragment;
 
 public class TalhaoCadastroFragment extends Fragment
         implements TalhaoCadastroContrato.TalhaoCadastroView {
@@ -116,9 +115,9 @@ public class TalhaoCadastroFragment extends Fragment
     }
 
     private void cancelarTalhao() {
-        TalhaoListaFragment tlf = new TalhaoListaFragment();
-        Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frg_principal, tlf).commit();
+//        TalhaoListaFragment tlf = new TalhaoListaFragment();
+//        Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
+//                .replace(R.id.frg_principal, tlf).commit();
     }
 
     private void novoCadastro() {

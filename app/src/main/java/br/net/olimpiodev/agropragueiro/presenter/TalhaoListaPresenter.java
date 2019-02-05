@@ -28,18 +28,12 @@ public class TalhaoListaPresenter implements TalhaoListaContrato.TalhaoListaPres
 
     @SuppressLint("StaticFieldLeak")
     @Override
-    public void getTalhoes(int fazendaId) {
+    public void getTalhoes() {
         try {
             new AsyncTask<Void, Void, List<TalhaoFazenda>>() {
                 @Override
                 protected List<TalhaoFazenda> doInBackground(Void... voids) {
-                    List<TalhaoFazenda> talhoes;
-                    if (fazendaId != 0) {
-                        talhoes = db.talhaoDao().getTalhoesByFazendaID(true, fazendaId);
-                    } else {
-                        talhoes = db.talhaoDao().getTalhoesFazenda(true);
-                    }
-                    return talhoes;
+                    return db.talhaoDao().getTalhoesFazenda(true);
                 }
 
                 @Override
@@ -51,7 +45,7 @@ public class TalhaoListaPresenter implements TalhaoListaContrato.TalhaoListaPres
                 }
             }.execute();
         } catch (Exception ex) {
-            view.exibirError(context.getString(R.string.erro_buscar_talhoes));
+            Utils.showMessage(context, context.getString(R.string.erro_buscar_talhoes), 0);
         }
     }
 

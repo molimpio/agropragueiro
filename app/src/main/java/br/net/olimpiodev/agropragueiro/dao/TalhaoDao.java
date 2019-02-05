@@ -27,7 +27,8 @@ public interface TalhaoDao {
     List<ChaveValor> getTalhoesDropDown(boolean ativo);
 
     @Query("SELECT t.id AS idTalhao, t.nome AS nomeTalhao, t.areaHa, t.contorno, f.nome AS nomeFazenda" +
-            " FROM talhao AS t INNER JOIN fazenda AS f ON f.id = t.fazenda_id WHERE t.ativo = :ativo")
+            " FROM talhao AS t INNER JOIN fazenda AS f ON f.id = t.fazenda_id " +
+            "WHERE t.ativo = :ativo ORDER BY f.nome ASC, t.nome ASC")
     List<TalhaoFazenda> getTalhoesFazenda(boolean ativo);
 
     @Query("SELECT t.id AS idTalhao, t.nome AS nomeTalhao, t.areaHa, f.nome AS nomeFazenda" +

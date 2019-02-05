@@ -55,8 +55,11 @@
         <activity
             android:name=".view.activity.Lista.ClienteListaActivity"
             android:parentActivityName=".view.activity.MainActivity" />
+        <activity
+            android:name=".view.activity.Lista.FazendaListaActivity"
+            android:parentActivityName=".view.activity.MainActivity" />
 
-        <activity android:name=".view.activity.Lista.FazendaListaActivity"
+        <activity android:name=".view.activity.Lista.TalhaoListaActivity"
             android:parentActivityName=".view.activity.MainActivity" />
     </application>
 

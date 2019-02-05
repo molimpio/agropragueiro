@@ -14,13 +14,11 @@ public interface TalhaoListaContrato {
         void exibirListaVazia();
 
         void openMapa(Talhao talhao);
-
-        void exibirError(String mensagem);
     }
 
     interface TalhaoListaPresenter {
 
-        void getTalhoes(int fazendaId);
+        void getTalhoes();
 
         void openMapa(int talhaoId);
 
