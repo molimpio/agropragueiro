@@ -15,7 +15,7 @@ public interface FazendaListaContrato {
 
     interface FazendaListaPresenter {
 
-        void getFazendas(int clienteId);
+        void getFazendas();
 
         void destroyView();
     }

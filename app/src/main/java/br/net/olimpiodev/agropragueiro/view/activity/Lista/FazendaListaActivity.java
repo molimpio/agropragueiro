@@ -16,7 +16,6 @@ import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.adapter.FazendaAdapter;
 import br.net.olimpiodev.agropragueiro.contracts.FazendaCadastroContrato;
 import br.net.olimpiodev.agropragueiro.contracts.FazendaListaContrato;
-import br.net.olimpiodev.agropragueiro.model.Cliente;
 import br.net.olimpiodev.agropragueiro.model.FazendaCliente;
 import br.net.olimpiodev.agropragueiro.presenter.FazendaCadastroPresenter;
 import br.net.olimpiodev.agropragueiro.presenter.FazendaListaPresenter;
@@ -44,16 +43,8 @@ public class FazendaListaActivity extends AppCompatActivity
 
     private void getFazendas() {
         try {
-            int clienteId = 0;
-
-            if (getIntent().hasExtra(getString(R.string.cliente_param))) {
-                String keyBundle = getString(R.string.cliente_param);
-                Cliente c = (Cliente) getIntent().getSerializableExtra(keyBundle);
-                clienteId = c.getId();
-            }
-
             presenter = new FazendaListaPresenter(this, FazendaListaActivity.this);
-            presenter.getFazendas(clienteId);
+            presenter.getFazendas();
             presenterCadastro = new FazendaCadastroPresenter(this, FazendaListaActivity.this);
         } catch (Exception ex) {
             Utils.showMessage(this, getString(R.string.erro_argumentos_fazenda), 0);
@@ -133,6 +124,11 @@ public class FazendaListaActivity extends AppCompatActivity
     }
 
     @Override
+    public void atualizarAdapter(List<FazendaCliente> fazendas) {
+        listarFazendas(fazendas);
+    }
+
+    @Override
     public void exibirListaVazia() {
         tvListaVazia.setVisibility(View.VISIBLE);
     }
@@ -141,10 +137,5 @@ public class FazendaListaActivity extends AppCompatActivity
     public void onDestroy() {
         super.onDestroy();
         presenter.destroyView();
-    }
-
-    @Override
-    public void atualizarAdapter(List<FazendaCliente> fazendas) {
-        listarFazendas(fazendas);
     }
 }

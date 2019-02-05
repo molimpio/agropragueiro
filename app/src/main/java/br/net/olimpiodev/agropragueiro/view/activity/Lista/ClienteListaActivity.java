@@ -73,18 +73,6 @@ public class ClienteListaActivity extends AppCompatActivity
         }
     }
 
-    private void openListaFazendas(Cliente cliente) {
-        try {
-//            FazendaListaFragment flf = new FazendaListaFragment();
-//            Bundle bundle = new Bundle();
-//            bundle.putSerializable(getString(R.string.cliente_param), cliente);
-//            flf.setArguments(bundle);
-//            getFragmentManager().beginTransaction().replace(R.id.frg_principal, flf).commit();
-        } catch (Exception ex) {
-            Utils.showMessage(this, getString(R.string.erro_abrir_lista_fazendas_cliente), 0);
-        }
-    }
-
     public void opcoesDialog(final Cliente cliente) {
         try {
             final String[] OPCOES = getResources().getStringArray(R.array.opcoes_cliente_card);
@@ -97,13 +85,9 @@ public class ClienteListaActivity extends AppCompatActivity
                 switch (item) {
                     case 0:
                         dialog.dismiss();
-                        openListaFazendas(cliente);
-                        break;
-                    case 1:
-                        dialog.dismiss();
                         openCadastro(cliente);
                         break;
-                    case 2:
+                    case 1:
                         // excluir
                         break;
                 }

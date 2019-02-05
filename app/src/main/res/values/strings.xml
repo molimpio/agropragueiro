@@ -48,7 +48,6 @@
     <string name="cliente_param">Cliente_Param</string>
     <string name="cliente_validacao">Nome deve ser maior que 3 caracteres e cidade maior que 1 caractere</string>
     <string-array name="opcoes_cliente_card">
-        <item>Ver fazendas</item>
         <item>Editar</item>
         <item>Excluir</item>
     </string-array>

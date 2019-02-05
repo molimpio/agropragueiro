@@ -25,19 +25,13 @@ public class FazendaListaPresenter implements FazendaListaContrato.FazendaListaP
 
     @SuppressLint("StaticFieldLeak")
     @Override
-    public void getFazendas(int clienteId) {
+    public void getFazendas() {
         try {
             new AsyncTask<Void, Void, List<FazendaCliente>>() {
                 @Override
                 protected List<FazendaCliente> doInBackground(Void... voids) {
                     AppDatabase db = Room.databaseBuilder(context, AppDatabase.class, AppDatabase.DB_NAME).build();
-                    List<FazendaCliente> fazendas;
-                    if (clienteId != 0) {
-                        fazendas = db.fazendaDao().getFazendasByClienteID(true, clienteId);
-                    } else {
-                        fazendas = db.fazendaDao().getFazendasCliente(true);
-                    }
-                    return fazendas;
+                    return db.fazendaDao().getFazendasCliente(true);
                 }
 
                 @Override
