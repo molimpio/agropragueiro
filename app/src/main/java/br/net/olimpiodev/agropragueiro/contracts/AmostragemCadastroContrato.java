@@ -2,24 +2,17 @@ package br.net.olimpiodev.agropragueiro.contracts;
 
 import java.util.List;
 
-import br.net.olimpiodev.agropragueiro.model.Amostragem;
-import br.net.olimpiodev.agropragueiro.model.ChaveValor;
+import br.net.olimpiodev.agropragueiro.model.AmostragemTalhao;
 
 public interface AmostragemCadastroContrato {
 
     interface AmostragemCadastroView {
 
-        void startSpinners(List<ChaveValor> talhoes);
-
-        void cadastrar();
+        void atualizarAdapter(List<AmostragemTalhao> amostragens);
     }
 
     interface AmostragemCadastroPresenter {
 
-        void getTalhoes();
-
-        void cadastrar(Amostragem amostragem);
-
-        void destroyView();
+        void exibirView(AmostragemTalhao amostragem);
     }
 }

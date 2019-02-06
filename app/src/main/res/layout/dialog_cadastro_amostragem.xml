@@ -3,12 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:context=".view.fragment.Cadastro.AmostragemCadastroFragment">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -53,7 +47,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:text="@string/observacao" />
 
             <EditText
@@ -63,54 +57,11 @@
                 android:layout_height="wrap_content"
                 android:inputType="text" />
 
-            <LinearLayout
+            <Button
+                android:id="@+id/btn_cadastrar_amostragem"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/btn_cancelar_amostragem"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:layout_weight="1"
-                    android:text="@string/cancelar" />
-
-                <Button
-                    android:id="@+id/btn_cadastrar_amostragem"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:layout_weight="1"
-                    android:text="@string/cadastrar" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/btn_pontos_amostragem"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:layout_weight="1"
-                    android:enabled="false"
-                    android:text="@string/pontos" />
-
-                <Button
-                    android:id="@+id/btn_nova_amostragem"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:layout_weight="1"
-                    android:layout_marginTop="15dp"
-                    android:text="@string/novo"
-                    android:visibility="visible" />
-            </LinearLayout>
+                android:layout_marginTop="15dp"
+                android:text="@string/cadastrar" />
         </LinearLayout>
-    </FrameLayout>
 </ScrollView>

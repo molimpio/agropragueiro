@@ -17,20 +17,24 @@ import java.util.Objects;
 
 import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.adapter.AmostragemAdapter;
+import br.net.olimpiodev.agropragueiro.contracts.AmostragemCadastroContrato;
 import br.net.olimpiodev.agropragueiro.contracts.AmostragemListaContrato;
 import br.net.olimpiodev.agropragueiro.model.AmostragemTalhao;
 import br.net.olimpiodev.agropragueiro.model.PontoAmostragem;
 import br.net.olimpiodev.agropragueiro.model.Talhao;
+import br.net.olimpiodev.agropragueiro.presenter.AmostragemCadastroPresenter;
 import br.net.olimpiodev.agropragueiro.presenter.AmostragemListaPresenter;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 import br.net.olimpiodev.agropragueiro.view.activity.MapaPontosActivity;
 
 public class AmostragemListaActivity extends AppCompatActivity
-        implements AmostragemListaContrato.AmostragemListaView  {
+        implements AmostragemListaContrato.AmostragemListaView,
+        AmostragemCadastroContrato.AmostragemCadastroView {
 
     private RecyclerView rvAmostragem;
     private TextView tvListaVazia;
     private AmostragemListaContrato.AmostragemListaPresenter presenter;
+    private AmostragemCadastroContrato.AmostragemCadastroPresenter presenterCadastro;
     private AmostragemAdapter amostragemAdapter;
 
     @Override
@@ -47,6 +51,7 @@ public class AmostragemListaActivity extends AppCompatActivity
         try {
             presenter = new AmostragemListaPresenter(this, AmostragemListaActivity.this);
             presenter.getAmostragens();
+            presenterCadastro = new AmostragemCadastroPresenter(this, AmostragemListaActivity.this);
         } catch (Exception ex) {
             Utils.showMessage(this, getString(R.string.erro_args_amostragem), 0);
         }
@@ -76,7 +81,7 @@ public class AmostragemListaActivity extends AppCompatActivity
 
     private void openCadastro(AmostragemTalhao amostragem) {
         try {
-//            presenter.exibirView(amostragem);
+            presenterCadastro.exibirView(amostragem);
         } catch (Exception ex) {
             Utils.showMessage(this, getString(R.string.erro_cadastro_amostragem), 0);
         }
@@ -151,15 +156,24 @@ public class AmostragemListaActivity extends AppCompatActivity
             } else {
                 Utils.showMessage(this, getString(R.string.amostragem_sem_contorno), 0);
             }
-
-
         } catch (Exception ex) {
             Utils.showMessage(this, getString(R.string.erro_carregar_dados_mapa), 0);
         }
     }
 
     @Override
+    public void atualizarAdapter(List<AmostragemTalhao> amostragens) {
+        listarAmostragens(amostragens);
+    }
+
+    @Override
     public void exibirListaVazia() {
         tvListaVazia.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.destroyView();
     }
 }
