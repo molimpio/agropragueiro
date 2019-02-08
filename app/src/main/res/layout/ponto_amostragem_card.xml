@@ -74,7 +74,7 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="100dp"
                 android:layout_alignParentEnd="true"
-                android:drawableEnd="@mipmap/baseline_more_vert_black_24"/>
+                android:drawableEnd="@drawable/ic_menu_gallery"/>
 
         </RelativeLayout>
 

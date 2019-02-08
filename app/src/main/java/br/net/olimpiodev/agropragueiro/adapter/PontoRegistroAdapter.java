@@ -47,6 +47,12 @@ public class PontoRegistroAdapter extends
         pontoRegistroViewHolder.cliente.setText(cliente);
         pontoRegistroViewHolder.fazenda.setText(fazenda);
         pontoRegistroViewHolder.talhao.setText(talhao);
+
+        if (ponto.getQtdeFotos() > 0) {
+            pontoRegistroViewHolder.btOpcoes.setVisibility(View.VISIBLE);
+        } else {
+            pontoRegistroViewHolder.btOpcoes.setVisibility(View.GONE);
+        }
     }
 
     @Override
