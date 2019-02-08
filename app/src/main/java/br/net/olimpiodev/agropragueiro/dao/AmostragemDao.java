@@ -23,7 +23,8 @@ public interface AmostragemDao {
 
     @Query("SELECT a.id AS idAmostragem, a.nome AS nomeAmostragem, a.qtde_pontos AS qtdePontos," +
             " a.observacao AS observacaoAmostragem, a.data AS data, t.nome AS talhaoNome, t.id AS idTalhao" +
-            " FROM amostragem AS a INNER JOIN talhao AS t ON t.id = a.talhao_id WHERE a.ativo = :ativo")
+            " FROM amostragem AS a INNER JOIN talhao AS t ON t.id = a.talhao_id WHERE a.ativo = :ativo " +
+            "ORDER BY t.nome ASC, a.id ASC")
     List<AmostragemTalhao> getAmostragensTalhao(boolean ativo);
 
     @Query("SELECT a.id AS idAmostragem, a.nome AS nomeAmostragem, a.qtde_pontos AS qtdePontos," +

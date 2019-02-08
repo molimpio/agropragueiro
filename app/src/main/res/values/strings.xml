@@ -112,6 +112,7 @@
     <string name="amostragem_sem_contorno">O talhão desta amostragem não tem contorno, para
         continuar adicione um contorno ao talhão</string>
     <string-array name="opcoes_amostragem_card">
+        <item>Visualizar dados dos pontos</item>
         <item>Visualizar pontos no mapa</item>
         <item>Coletar dados amostragem</item>
         <item>Editar dados amostragem</item>
@@ -120,6 +121,7 @@
 
     <!-- registro -->
     <string name="coletar_dados">Coletar Dados</string>
+    <string name="pontos_amostragem">Pontos Amostragem</string>
     <string name="praga">Praga</string>
     <string name="dano_causado">Dano causado</string>
     <string name="registrar_fotos">Registrar fotos</string>
@@ -197,5 +199,6 @@
     <string name="erro_salvar_foto_registro">Erro ao salvar foto registro</string>
     <string name="erro_salvar_foto">Erro ao salvar foto</string>
     <string name="erro_abrir_lista_pontos">Erro ao abrir lista de pontos</string>
+    <string name="erro_param_pontos">Erro ao ler parametros na view pontos</string>
 
 </resources>

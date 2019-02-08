@@ -87,6 +87,16 @@ public class AmostragemListaActivity extends AppCompatActivity
         }
     }
 
+    private void openListaPontos(AmostragemTalhao amostragem) {
+        try {
+            Intent pontosIntent = new Intent(this, PontoAmostragemListaActivity.class);
+            pontosIntent.putExtra(getString(R.string.amostragem_id_param), amostragem.getIdAmostragem());
+            startActivity(pontosIntent);
+        } catch (Exception ex) {
+            Utils.showMessage(this, getString(R.string.erro_abrir_lista_pontos), 0);
+        }
+    }
+
     private void opcoesDialog(final AmostragemTalhao amostragem) {
         try {
             final String[] OPCOES = getResources().getStringArray(R.array.opcoes_amostragem_card);
@@ -95,20 +105,26 @@ public class AmostragemListaActivity extends AppCompatActivity
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(dialogTitle);
 
-            builder.setSingleChoiceItems(OPCOES, 5, (dialog, item) -> {
+            builder.setSingleChoiceItems(OPCOES, 6, (dialog, item) -> {
                 switch (item) {
                     case 0:
                         dialog.dismiss();
-                        presenter.openMapa(amostragem, false);
+                        openListaPontos(amostragem);
                         break;
                     case 1:
-                        presenter.openMapa(amostragem, true);
+                        dialog.dismiss();
+                        presenter.openMapa(amostragem, false);
                         break;
                     case 2:
                         dialog.dismiss();
-                        openCadastro(amostragem);
+                        presenter.openMapa(amostragem, true);
                         break;
                     case 3:
+                        dialog.dismiss();
+                        openCadastro(amostragem);
+                        break;
+                    case 4:
+                        dialog.dismiss();
                         //excluir
                         break;
                 }

@@ -15,6 +15,7 @@ import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.view.activity.Lista.AmostragemListaActivity;
 import br.net.olimpiodev.agropragueiro.view.activity.Lista.ClienteListaActivity;
 import br.net.olimpiodev.agropragueiro.view.activity.Lista.FazendaListaActivity;
+import br.net.olimpiodev.agropragueiro.view.activity.Lista.PontoAmostragemListaActivity;
 import br.net.olimpiodev.agropragueiro.view.activity.Lista.TalhaoListaActivity;
 
 public class MainActivity extends AppCompatActivity
