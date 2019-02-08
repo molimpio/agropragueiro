@@ -26,6 +26,6 @@ public interface PontoAmostragemRegistroDao {
             "INNER JOIN cliente AS c ON c.id == f.cliente_id " +
             "INNER JOIN ponto_amostragem_registro AS par ON par.ponto_amostragem_id == pa.id " +
             "INNER JOIN foto_registro AS fr ON fr.ponto_amostragem_registro_id == par.id " +
-            "WHERE pa.amostragem_id = :amostragemId AND pa.ativo = 1 ORDER BY pa.id ASC")
+            "WHERE a.id = :amostragemId AND pa.ativo = 1 GROUP BY par.id ORDER BY pa.id ASC")
     List<PontoAmostragemRegistroInfo> getPontosAmostragemByAmostragemId(int amostragemId);
 }

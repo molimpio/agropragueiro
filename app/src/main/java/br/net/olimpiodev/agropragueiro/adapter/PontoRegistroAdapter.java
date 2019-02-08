@@ -32,7 +32,8 @@ public class PontoRegistroAdapter extends
     public void onBindViewHolder(@NonNull PontoRegistroViewHolder pontoRegistroViewHolder, int position) {
         PontoAmostragemRegistroInfo ponto = pontos.get(position);
 
-        String pontoString = "Ponto: " + ponto.getIdPontoRegistro();
+        String pontoString = "Ponto: " + ponto.getIdPontoRegistro() +
+                "    Qtde Fotos: " + ponto.getQtdeFotos();
         String amostragem = "Amostragem: " + ponto.getAmostragem();
         String pragaQtdeDano = "Praga: " + ponto.getPraga() + "  Qtde: "
                 + ponto.getQtde() + "  Dano: " + ponto.getDano();
