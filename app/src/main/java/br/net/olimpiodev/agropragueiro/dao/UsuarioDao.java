@@ -11,8 +11,8 @@ import br.net.olimpiodev.agropragueiro.model.Usuario;
 @Dao
 public interface UsuarioDao {
     @Insert
-    public void insert(Usuario... usuario);
+    void insert(Usuario... usuario);
 
     @Query("SELECT * FROM usuario limit 1")
-    public List<Usuario> getUsuario();
+    List<Usuario> getUsuario();
 }

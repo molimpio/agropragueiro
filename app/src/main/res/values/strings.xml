@@ -31,6 +31,8 @@
     <string name="qtde">Qtde</string>
     <string name="zero">0</string>
     <string name="cinquenta">50</string>
+    <string name="sobre">Sobre</string>
+    <string name="informacoes">Informações</string>
 
     <!-- hints -->
     <string name="minimo_dois_caracteres">Mínimo 2 caracteres</string>
@@ -133,6 +135,9 @@
 
     <!-- fotos -->
     <string name="fotos">Fotos</string>
+
+    <!-- usuario -->
+    <string name="erro_info_usuario">Erro ao buscar informações do usuário</string>
 
     <!-- erros cliente -->
     <string name="erro_get_clientes">Erro ao buscar clientes</string>

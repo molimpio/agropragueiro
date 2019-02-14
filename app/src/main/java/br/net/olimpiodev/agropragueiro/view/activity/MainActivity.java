@@ -1,6 +1,9 @@
 package br.net.olimpiodev.agropragueiro.view.activity;
 
+import android.annotation.SuppressLint;
+import android.arch.persistence.room.Room;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -10,12 +13,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
+import java.util.List;
+
+import br.net.olimpiodev.agropragueiro.AppDatabase;
 import br.net.olimpiodev.agropragueiro.R;
+import br.net.olimpiodev.agropragueiro.model.Usuario;
+import br.net.olimpiodev.agropragueiro.utils.Utils;
 import br.net.olimpiodev.agropragueiro.view.activity.Lista.AmostragemListaActivity;
 import br.net.olimpiodev.agropragueiro.view.activity.Lista.ClienteListaActivity;
 import br.net.olimpiodev.agropragueiro.view.activity.Lista.FazendaListaActivity;
-import br.net.olimpiodev.agropragueiro.view.activity.Lista.PontoAmostragemListaActivity;
 import br.net.olimpiodev.agropragueiro.view.activity.Lista.TalhaoListaActivity;
 
 public class MainActivity extends AppCompatActivity
@@ -36,6 +48,48 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        getUsuario();
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private void getUsuario() {
+        try {
+            new AsyncTask<Void, Void, List<Usuario>>() {
+                @Override
+                protected List<Usuario> doInBackground(Void... voids) {
+                    AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+                            AppDatabase.class, AppDatabase.DB_NAME).build();
+
+                    return db.usuarioDao().getUsuario();
+                }
+
+                @Override
+                protected void onPostExecute(List<Usuario> usuarios) {
+                    setUsuario(usuarios.get(0));
+
+                }
+            }.execute();
+        } catch (Exception ex) {
+            Utils.showMessage(getApplicationContext(), getString(R.string.erro_info_usuario), 0);
+        }
+    }
+
+    private void setUsuario(Usuario usuario) {
+        try {
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            View headerView = navigationView.getHeaderView(0);
+            TextView navUserName = (TextView) headerView.findViewById(R.id.tv_username);
+            navUserName.setText(usuario.getNome());
+
+            TextView navUserEmail = (TextView) headerView.findViewById(R.id.tv_useremail);
+            navUserEmail.setText(usuario.getEmail());
+
+            ImageView ivUserAvatar = (ImageView) headerView.findViewById(R.id.iv_useravatar);
+            ivUserAvatar.setImageResource(R.mipmap.ic_launcher_round);
+        } catch (Exception ex) {
+            Utils.showMessage(getApplicationContext(), getString(R.string.erro_info_usuario), 0);
+        }
     }
 
     @Override
@@ -76,29 +130,27 @@ public class MainActivity extends AppCompatActivity
 
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_clientes) {
 
             Intent clienteListaIntent = new Intent(this, ClienteListaActivity.class);
             startActivity(clienteListaIntent);
 
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_fazendas) {
 
             Intent fazendaListaIntent = new Intent(this, FazendaListaActivity.class);
             startActivity(fazendaListaIntent);
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_talhoes) {
 
             Intent talhaoListaIntent = new Intent(this, TalhaoListaActivity.class);
             startActivity(talhaoListaIntent);
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_amostragens) {
 
             Intent amostragemListaIntent = new Intent(this, AmostragemListaActivity.class);
             startActivity(amostragemListaIntent);
 
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_sobre) {
 
         }
 
