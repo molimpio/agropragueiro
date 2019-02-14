@@ -1,9 +1,7 @@
 package br.net.olimpiodev.agropragueiro.adapter;
 
 import android.support.annotation.NonNull;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +15,6 @@ import java.util.List;
 
 import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.model.FotoRegistro;
-import br.net.olimpiodev.agropragueiro.utils.Utils;
 
 public class FotoPontoAdapter extends RecyclerView.Adapter<FotoPontoAdapter.FotoViewHolder> {
 
@@ -40,7 +37,7 @@ public class FotoPontoAdapter extends RecyclerView.Adapter<FotoPontoAdapter.Foto
 
         FotoRegistro foto = fotos.get(position);
         String url = "file://" + foto.getPath();
-        Picasso.get().load(url).resize(screenSize, screenSize).into(fotoViewHolder.ivFoto);
+        Picasso.get().load(url).placeholder( R.drawable.progress_animation ).resize(screenSize, screenSize).into(fotoViewHolder.ivFoto);
 
         fotoViewHolder.tvPontoFoto.setText(pontoString);
         fotoViewHolder.tvDetalheFoto.setText(detalhes);

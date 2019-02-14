@@ -1,12 +1,10 @@
 package br.net.olimpiodev.agropragueiro.view.activity.Lista;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
 
 import java.util.List;
 import java.util.Objects;
