@@ -10,7 +10,6 @@ import java.util.List;
 import br.net.olimpiodev.agropragueiro.AppDatabase;
 import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.contracts.PontoAmostragemListaContrato;
-import br.net.olimpiodev.agropragueiro.model.PontoAmostragem;
 import br.net.olimpiodev.agropragueiro.model.PontoAmostragemRegistroInfo;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 

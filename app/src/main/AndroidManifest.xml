@@ -58,9 +58,12 @@
         <activity
             android:name=".view.activity.Lista.FazendaListaActivity"
             android:parentActivityName=".view.activity.MainActivity" />
-
-        <activity android:name=".view.activity.Lista.TalhaoListaActivity"
+        <activity
+            android:name=".view.activity.Lista.TalhaoListaActivity"
             android:parentActivityName=".view.activity.MainActivity" />
+
+        <activity android:name=".view.activity.Lista.FotoPontoListaActivity"
+            android:parentActivityName=".view.activity.Lista.PontoAmostragemListaActivity" />
     </application>
 
 </manifest>

@@ -6,6 +6,7 @@ public class PontoAmostragemRegistroInfo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private int idPontoRegistro;
+    private int idPontoAmostragemRegistro;
     private String cliente;
     private String fazenda;
     private String talhao;
@@ -21,6 +22,14 @@ public class PontoAmostragemRegistroInfo implements Serializable {
 
     public void setIdPontoRegistro(int idPontoRegistro) {
         this.idPontoRegistro = idPontoRegistro;
+    }
+
+    public int getIdPontoAmostragemRegistro() {
+        return idPontoAmostragemRegistro;
+    }
+
+    public void setIdPontoAmostragemRegistro(int idPontoAmostragemRegistro) {
+        this.idPontoAmostragemRegistro = idPontoAmostragemRegistro;
     }
 
     public String getCliente() {

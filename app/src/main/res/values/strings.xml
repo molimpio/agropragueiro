@@ -127,6 +127,12 @@
     <string name="registrar_fotos">Registrar fotos</string>
     <string name="validar_praga_qtde">Os campos praga e qtde são obrigatórios</string>
     <string name="prefix_foto">foto.jpg</string>
+    <string name="ponto_registro_id">ponto_registro_id</string>
+    <string name="ponto_registro_detalhes">ponto_registro_detalhes</string>
+    <string name="ponto_registro_string">ponto_registro_string</string>
+
+    <!-- fotos -->
+    <string name="fotos">Fotos</string>
 
     <!-- erros cliente -->
     <string name="erro_get_clientes">Erro ao buscar clientes</string>
@@ -200,5 +206,9 @@
     <string name="erro_salvar_foto">Erro ao salvar foto</string>
     <string name="erro_abrir_lista_pontos">Erro ao abrir lista de pontos</string>
     <string name="erro_param_pontos">Erro ao ler parametros na view pontos</string>
+
+    <!-- fotos -->
+    <string name="erro_view_fotos">Erro ao exibir fotos</string>
+    <string name="erro_buscar_fotos">Erro ao buscar fotos</string>
 
 </resources>

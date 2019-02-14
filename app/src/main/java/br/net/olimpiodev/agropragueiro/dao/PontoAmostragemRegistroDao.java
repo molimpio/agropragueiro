@@ -18,8 +18,8 @@ public interface PontoAmostragemRegistroDao {
     int getIdInsert();
 
     @Query("SELECT c.nome AS cliente, f.nome AS fazenda, t.nome AS talhao, a.nome AS amostragem, " +
-            "pa.id AS idPontoRegistro, par.praga, par.qtde, par.dano_causado AS dano, " +
-            "COUNT(fr.id) AS qtdeFotos FROM ponto_amostragem AS pa " +
+            "pa.id AS idPontoRegistro, par.id AS idPontoAmostragemRegistro, par.praga, par.qtde," +
+            " par.dano_causado AS dano, COUNT(fr.id) AS qtdeFotos FROM ponto_amostragem AS pa " +
             "INNER JOIN amostragem AS a ON a.id == pa.amostragem_id " +
             "INNER JOIN talhao AS t ON t.id == a.talhao_id " +
             "INNER JOIN fazenda AS f ON f.id == t.fazenda_id " +

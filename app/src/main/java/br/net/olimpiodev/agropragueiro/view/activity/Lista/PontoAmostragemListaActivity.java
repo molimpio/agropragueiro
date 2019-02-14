@@ -1,10 +1,10 @@
 package br.net.olimpiodev.agropragueiro.view.activity.Lista;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -74,7 +74,19 @@ public class PontoAmostragemListaActivity extends AppCompatActivity
         pontoRegistroAdapter.setClickListener((((position, view) -> {
             if (view.getId() == R.id.btn_opoes_ponto_amostragem) {
                 final PontoAmostragemRegistroInfo ponto = pontosAmostragens.get(position);
-                Log.i("ponto", ponto.toString());
+
+                String pontoString = "Ponto: " + ponto.getIdPontoAmostragemRegistro();
+
+                String detalhes = "Praga: " + ponto.getPraga() + "  |  "
+                        + "Qtde: " + ponto.getQtde() + "  |  "
+                        + "Dano: " + ponto.getDano();
+
+                Intent fotoIntent = new Intent(this, FotoPontoListaActivity.class);
+                fotoIntent.putExtra(getString(R.string.ponto_registro_id), ponto.getIdPontoAmostragemRegistro());
+                fotoIntent.putExtra(getString(R.string.ponto_registro_detalhes), detalhes);
+                fotoIntent.putExtra(getString(R.string.ponto_registro_string), pontoString);
+
+                startActivity(fotoIntent);
             }
         })));
     }
@@ -87,6 +99,5 @@ public class PontoAmostragemListaActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        presenter.destroyView();
     }
 }

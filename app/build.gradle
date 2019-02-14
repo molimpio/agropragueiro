@@ -37,4 +37,5 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:15.0.0'
     implementation 'com.google.maps.android:android-maps-utils:0.5+'
     implementation 'br.com.livroandroid:android-utils:5.0.1'
+    implementation 'com.squareup.picasso:picasso:2.71828'
 }
