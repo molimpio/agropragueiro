@@ -84,7 +84,7 @@
     <string name="contorno_param">Contorno_Param</string>
     <string name="talhao_erro_cadastro">O nome do talhão deve ter mais que 1 caractere</string>
     <string-array name="opcoes_talhao_card">
-        <item>Ver contorno no mapa</item>
+        <item>Ver ou adicionar contorno no mapa</item>
         <item>Editar</item>
         <item>Excluir</item>
     </string-array>

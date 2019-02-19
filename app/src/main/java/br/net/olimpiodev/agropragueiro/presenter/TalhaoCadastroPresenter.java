@@ -85,6 +85,11 @@ public class TalhaoCadastroPresenter implements TalhaoCadastroContrato.TalhaoCad
             talhao.setNome(talhaoView.getNomeTalhao());
             talhao.setFazendaId(talhaoView.getIdFazenda());
 
+            if (!talhaoView.getContorno().isEmpty()) {
+                talhao.setContorno(talhaoView.getContorno());
+                talhao.setAreaHa(talhaoView.getAreaHa());
+            }
+
             etNomeTalhao.setText(talhao.getNome());
             spFazenda.setSelection(Utils.getIndexChaveValor(fazendaList, talhaoView.getNomeFazenda()));
         } else {
