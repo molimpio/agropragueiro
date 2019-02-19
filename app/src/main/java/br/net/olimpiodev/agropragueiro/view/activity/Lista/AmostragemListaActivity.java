@@ -144,6 +144,9 @@ public class AmostragemListaActivity extends AppCompatActivity
 
     @Override
     public void listarAmostragens(List<AmostragemTalhao> amostragens) {
+        if (amostragens.size() == 0) rvAmostragem.setVisibility(View.GONE);
+        else rvAmostragem.setVisibility(View.VISIBLE);
+
         amostragemAdapter.setAmostragens(amostragens);
         amostragemAdapter.setClickListener(((position, view) -> {
             if (view.getId() == R.id.btn_opoes_ac) {
@@ -179,11 +182,15 @@ public class AmostragemListaActivity extends AppCompatActivity
 
     @Override
     public void atualizarAdapter(List<AmostragemTalhao> amostragens) {
+        if (amostragens.size() == 0) rvAmostragem.setVisibility(View.GONE);
+        else rvAmostragem.setVisibility(View.VISIBLE);
+
         listarAmostragens(amostragens);
     }
 
     @Override
     public void exibirListaVazia() {
+        rvAmostragem.setVisibility(View.GONE);
         tvListaVazia.setVisibility(View.VISIBLE);
     }
 

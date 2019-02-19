@@ -114,6 +114,9 @@ public class FazendaListaActivity extends AppCompatActivity
 
     @Override
     public void listarFazendas(List<FazendaCliente> fazendas) {
+        if (fazendas.size() == 0) rvFazendas.setVisibility(View.GONE);
+        else rvFazendas.setVisibility(View.VISIBLE);
+
         fazendaAdapter.setFazendas(fazendas);
         fazendaAdapter.setClickListener((position, view1) -> {
             if (view1.getId() == R.id.btn_opoes_fc) {
@@ -125,11 +128,15 @@ public class FazendaListaActivity extends AppCompatActivity
 
     @Override
     public void atualizarAdapter(List<FazendaCliente> fazendas) {
+        if (fazendas.size() == 0) rvFazendas.setVisibility(View.GONE);
+        else rvFazendas.setVisibility(View.VISIBLE);
+
         listarFazendas(fazendas);
     }
 
     @Override
     public void exibirListaVazia() {
+        rvFazendas.setVisibility(View.GONE);
         tvListaVazia.setVisibility(View.VISIBLE);
     }
 

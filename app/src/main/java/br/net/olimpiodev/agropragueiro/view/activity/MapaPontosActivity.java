@@ -53,7 +53,6 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
     private String contorno;
     private String pontos;
     private int amostragemId;
-    private int pontoAcaoSelecionado = 2;
     private boolean coletarDados;
     private MapaPontosContrato.MapaPontosPresenter presenter;
     private ColetarDadosContrato.ColetarDadosPresenter presenterColetor;
@@ -178,6 +177,7 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
                 finish();
                 return true;
             case R.id.remover:
+                // adicionar dialog para confirmação de remoção dos pontos...
                 presenter.removerPontos();
                 return true;
             case R.id.layers:
@@ -218,16 +218,17 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
             builder.setTitle(dialogTitle);
 
             builder.setSingleChoiceItems(
-                    MAPA_PONTOS, pontoAcaoSelecionado, (dialog, item) -> {
+                    MAPA_PONTOS, 2, (dialog, item) -> {
                         switch (item) {
                             case 0:
+                                int pontoId = Integer.parseInt(marker.getSnippet());
+                                presenter.removerPonto(pontoId);
                                 marker.remove();
                                 break;
                             case 1:
                                 moveMarker(marker);
                                 break;
                         }
-                        pontoAcaoSelecionado = item;
                         dialog.dismiss();
                     });
 

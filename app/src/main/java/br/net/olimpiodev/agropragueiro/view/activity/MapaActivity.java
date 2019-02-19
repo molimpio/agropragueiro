@@ -1,6 +1,7 @@
 package br.net.olimpiodev.agropragueiro.view.activity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
@@ -102,6 +103,8 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (!contorno.isEmpty()) {
             presenter.exibirContorno(contorno);
         }
+
+        presenter.openInstrucoesDialog();
     }
 
     @Override
@@ -176,6 +179,8 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void cadastrarContorno() {
         presenter.cadastrar(talhaoId, coordenadas);
+        Intent resultIntent = new Intent();
+        setResult(Utils.COD_CONTORNO_CADASTRADO, resultIntent);
         finish();
     }
 

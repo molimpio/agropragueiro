@@ -25,6 +25,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
         db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, AppDatabase.DB_NAME).build();
+
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {

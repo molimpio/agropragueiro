@@ -106,6 +106,9 @@ public class ClienteListaActivity extends AppCompatActivity
 
     @Override
     public void listarClientes(List<Cliente> clientes) {
+        if (clientes.size() == 0) rvClientes.setVisibility(View.GONE);
+        else rvClientes.setVisibility(View.VISIBLE);
+
         clienteAdapter.setClientes(clientes);
         clienteAdapter.setClickListener((position, view1) -> {
             if (view1.getId() == R.id.btn_opoes_cc) {
@@ -117,6 +120,7 @@ public class ClienteListaActivity extends AppCompatActivity
 
     @Override
     public void exibirListaVazia() {
+        rvClientes.setVisibility(View.GONE);
         tvListaVazia.setVisibility(View.VISIBLE);
     }
 
@@ -128,6 +132,9 @@ public class ClienteListaActivity extends AppCompatActivity
 
     @Override
     public void atualizarAdapter(List<Cliente> clientes) {
+        if (clientes.size() == 0) rvClientes.setVisibility(View.GONE);
+        else rvClientes.setVisibility(View.VISIBLE);
+
         listarClientes(clientes);
     }
 }

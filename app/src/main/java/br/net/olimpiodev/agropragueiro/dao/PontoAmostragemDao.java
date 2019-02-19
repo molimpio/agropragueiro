@@ -20,4 +20,10 @@ public interface PontoAmostragemDao {
 
     @Query("DELETE FROM ponto_amostragem WHERE amostragem_id = :amostragemId")
     void delete(int amostragemId);
+
+    @Query("DELETE FROM ponto_amostragem WHERE id = :pontoId")
+    void deletePontoById(int pontoId);
+
+    @Query("UPDATE ponto_amostragem SET possui_dados = 1 WHERE id = :pontoAmostragemId")
+    void setPossuiDadosPontoAmostragem(int pontoAmostragemId);
 }

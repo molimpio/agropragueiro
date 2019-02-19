@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.arch.persistence.room.Room;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 
@@ -27,6 +29,8 @@ import br.net.olimpiodev.agropragueiro.contracts.MapaContrato;
 import br.net.olimpiodev.agropragueiro.model.Talhao;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class MapaPresenter implements MapaContrato.MapaPresenter {
 
     private MapaContrato.MapaView view;
@@ -36,6 +40,7 @@ public class MapaPresenter implements MapaContrato.MapaPresenter {
     private LatLng ultimaCoordenada;
     private AppDatabase db;
     private int layerSelecionado = 2;
+    private SharedPreferences sharedPreferences;
 
     public MapaPresenter(MapaContrato.MapaView view, Context context, GoogleMap mapa) {
         this.view = view;
@@ -189,6 +194,54 @@ public class MapaPresenter implements MapaContrato.MapaPresenter {
             }
         } catch (Exception ex) {
             Utils.showMessage(context, context.getString(R.string.erro_desenhar_contorno), 0);
+        }
+    }
+
+    @Override
+    public void openInstrucoesDialog() {
+        try {
+            String sharedPreferencesString = context.getString(R.string.sharedpreferences_file);
+
+            sharedPreferences = context.getSharedPreferences(sharedPreferencesString, MODE_PRIVATE);
+            if (sharedPreferences.contains(context.getString(R.string.exibir_instrucao_mapa_contorno))) {
+
+                boolean instrucao = sharedPreferences.getBoolean(
+                        context.getString(R.string.exibir_instrucao_mapa_contorno), true);
+
+                if (instrucao) instrucoesDialog();
+
+            } else {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean(context.getString(R.string.exibir_instrucao_mapa_contorno), true);
+                editor.apply();
+                instrucoesDialog();
+            }
+        } catch (Exception ex) {
+            Utils.showMessage(context, context.getString(R.string.erro_abrir_instrucao_mapa_contorno), 0);
+        }
+    }
+
+    private void instrucoesDialog() {
+        try {
+            final String dialogTitle = context.getString(R.string.mapa_instrucao_titulo);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle(dialogTitle);
+            builder.setMessage(context.getString(R.string.mapa_instrucao_texto));
+
+            builder.setPositiveButton(context.getString(R.string.ok), (dialog, which) -> dialog.dismiss());
+
+            builder.setNegativeButton(context.getString(R.string.nao_exibir), (dialog, which) -> {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean(context.getString(R.string.exibir_instrucao_mapa_contorno), false);
+                editor.apply();
+            });
+
+            AlertDialog alertDialog = builder.create();
+            alertDialog.setCanceledOnTouchOutside(true);
+            alertDialog.show();
+        } catch (Exception ex) {
+            Utils.showMessage(context, context.getString(R.string.erro_abrir_instrucao_mapa_contorno), 0);
         }
     }
 

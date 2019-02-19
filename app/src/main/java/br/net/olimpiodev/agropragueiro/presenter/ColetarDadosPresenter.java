@@ -176,6 +176,9 @@ public class ColetarDadosPresenter implements ColetarDadosContrato.ColetarDadosP
                     pontoAmostragemRegistro.setId(db.pontoAmostragemRegistroDao().getIdInsert());
                     int id = db.fotoRegistroDao().getLastID();
                     fotoName = id + "_foto.jpg";
+
+                    int pontoAmostragemId = pontoAmostragemRegistro.getPontoAmostragemId();
+                    db.pontoAmostragemDao().setPossuiDadosPontoAmostragem(pontoAmostragemId);
                     return null;
                 }
 

@@ -10,6 +10,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- gerais -->
+    <string name="sharedpreferences_file">br.net.olimpiodev.agropragueiro.CONFIGURACOES</string>
     <string name="clientes">Clientes</string>
     <string name="fazendas">Fazendas</string>
     <string name="ok">OK</string>
@@ -17,7 +18,7 @@
     <string name="nome">Nome</string>
     <string name="uf">UF</string>
     <string name="cidade">Cidade</string>
-    <string name="cancelar">Voltar</string>
+    <string name="cancelar">Cancelar</string>
     <string name="opcional">Opcional</string>
     <string name="obrigatorio">Obrigatório</string>
     <string name="categoria">Categoria</string>
@@ -33,6 +34,8 @@
     <string name="cinquenta">50</string>
     <string name="sobre">Sobre</string>
     <string name="informacoes">Informações</string>
+    <string name="nao_exibir">Não exibir novamente</string>
+    <string name="exibir_instrucao_mapa_contorno">EXIBIR_INSTRUCAO_MAPA_CONTORNO</string>
 
     <!-- hints -->
     <string name="minimo_dois_caracteres">Mínimo 2 caracteres</string>
@@ -91,6 +94,9 @@
     <string name="titulo_dialog_ponto">Escolha ação que deseja aplicar no ponto</string>
     <string name="my_location">Centralizando na localização do usuário</string>
     <string name="basemaps">Tipos mapas</string>
+    <string name="mapa_instrucao_titulo">Desenhar contorno no mapa</string>
+    <string name="mapa_instrucao_texto">Para desenhar o contorno no mapa marque dois pontos,
+        será exibido a primeira linha do contorno.</string>
     <string-array name="mapa_types">
         <item>Normal</item>
         <item>Híbrido</item>
@@ -120,6 +126,9 @@
         <item>Editar dados amostragem</item>
         <item>Excluir amostragem</item>
     </string-array>
+
+    <!-- ponto -->
+    <string name="ponto_removido">Ponto removido com sucesso!</string>
 
     <!-- registro -->
     <string name="coletar_dados">Coletar Dados</string>
@@ -195,6 +204,7 @@
     <string name="erro_carregar_dados_mapa">Erro ao carregar dados mapa</string>
     <string name="erro_carregar_opcoes_layer">Erro ao carregar opções de layer</string>
     <string name="erro_desenhar_contorno">Erro ao desenhar contorno</string>
+    <string name="erro_abrir_instrucao_mapa_contorno">Erro ao abrir instrução mapa contorno</string>
 
     <!-- erros mapa pontos -->
     <string name="erro_cadastrar_pontos">Erro ao cadastrar Pontos</string>
@@ -202,6 +212,7 @@
     <string name="erro_adicionar_pontos">Erro ao adicionar pontos</string>
     <string name="erro_exibir_opcoes_ponto">Erro ao exibir opções</string>
     <string name="erro_adicionar_ponto">Erro ao adicionar ponto</string>
+    <string name="erro_remover_ponto">Erro ao remover ponto</string>
 
     <!-- erros ponto amostragem registro -->
     <string name="erro_validacao_pontos_registro">Erro na validação ponto registro</string>

@@ -24,5 +24,7 @@ public interface MapaContrato {
         void drawContorno(int contador,  LatLng latLng);
 
         void destroyView();
+
+        void openInstrucoesDialog();
     }
 }

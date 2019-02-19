@@ -22,6 +22,10 @@ public class PontoAmostragem implements Serializable {
     private int id;
     private Double latitude;
     private Double longitude;
+
+    @ColumnInfo(name = "possui_dados")
+    private Boolean possuiDados = false;
+
     private Boolean ativo = true;
     private Boolean sincronizado = false;
 
@@ -52,6 +56,14 @@ public class PontoAmostragem implements Serializable {
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
+    }
+
+    public Boolean getPossuiDados() {
+        return possuiDados;
+    }
+
+    public void setPossuiDados(Boolean possuiDados) {
+        this.possuiDados = possuiDados;
     }
 
     public Boolean getAtivo() {

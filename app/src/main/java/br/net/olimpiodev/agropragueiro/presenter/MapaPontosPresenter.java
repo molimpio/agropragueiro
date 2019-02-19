@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -25,6 +26,7 @@ import br.net.olimpiodev.agropragueiro.R;
 import br.net.olimpiodev.agropragueiro.contracts.MapaPontosContrato;
 import br.net.olimpiodev.agropragueiro.model.PontoAmostragem;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
+import okhttp3.internal.Util;
 
 public class MapaPontosPresenter implements MapaPontosContrato.MapaPontosPresenter {
 
@@ -57,9 +59,15 @@ public class MapaPontosPresenter implements MapaPontosContrato.MapaPontosPresent
             new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... voids) {
+
                     for (PontoAmostragem pontoAmostragem: pontosAmostragem) {
-                        db.pontoAmostragemDao().insert(pontoAmostragem);
+                        if (pontoAmostragem.getId() == 0) {
+                            db.pontoAmostragemDao().insert(pontoAmostragem);
+                        }
                     }
+
+                    // atualizar qtde_pontos em amostragem
+                    db.amostragemDao().updateQtdePontosAmostragem(pontosAmostragem.size(), amostragemId);
                     return null;
                 }
 
@@ -80,6 +88,9 @@ public class MapaPontosPresenter implements MapaPontosContrato.MapaPontosPresent
             @Override
             protected Void doInBackground(Void... voids) {
                 db.pontoAmostragemDao().delete(amostragemId);
+
+                // atualizar qtde_pontos em amostragem
+                db.amostragemDao().updateQtdePontosAmostragem(pontosAmostragem.size(), amostragemId);
                 return null;
             }
         }.execute();
@@ -87,6 +98,30 @@ public class MapaPontosPresenter implements MapaPontosContrato.MapaPontosPresent
         mapa.clear();
         pontosAmostragem.clear();
         exibirContorno();
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    @Override
+    public void removerPonto(int pontoId) {
+        try {
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... voids) {
+                    db.pontoAmostragemDao().deletePontoById(pontoId);
+
+                    // atualizar qtde_pontos em amostragem
+                    db.amostragemDao().updateQtdePontosAmostragem(pontosAmostragem.size(), amostragemId);
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    Utils.showMessage(context, context.getString(R.string.ponto_removido), 0);
+                }
+            }.execute();
+        } catch (Exception e) {
+            Utils.showMessage(context, context.getString(R.string.erro_remover_ponto), 0);
+        }
     }
 
     @Override
@@ -117,11 +152,17 @@ public class MapaPontosPresenter implements MapaPontosContrato.MapaPontosPresent
                 Double lat = Double.parseDouble(jsonObject.getString("latitude"));
                 Double lng = Double.parseDouble(jsonObject.getString("longitude"));
                 int pontoAmostragemId = Integer.parseInt(jsonObject.getString("id"));
+                boolean possuiDados = Boolean.parseBoolean(jsonObject.getString("possuiDados"));
 
                 LatLng ponto = new LatLng(lat, lng);
                 MarkerOptions marcador = new MarkerOptions();
                 marcador.position(ponto);
                 marcador.snippet(pontoAmostragemId + "");
+
+                if (possuiDados) {
+                    marcador.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                }
+
                 mapa.addMarker(marcador);
 
                 adicionarPontos(ponto, pontoAmostragemId);

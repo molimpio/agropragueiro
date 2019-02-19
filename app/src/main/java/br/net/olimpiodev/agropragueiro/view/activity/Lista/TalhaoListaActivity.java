@@ -2,6 +2,7 @@ package br.net.olimpiodev.agropragueiro.view.activity.Lista;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -79,7 +80,7 @@ public class TalhaoListaActivity extends AppCompatActivity
     private void opcoesDialog(final TalhaoFazenda talhaoFazenda) {
         try {
             final String[] OPCOES = getResources().getStringArray(R.array.opcoes_talhao_card);
-            final String dialogTitle = getResources().getString(R.string.titulo_opcoes_card);
+            final String dialogTitle = getString(R.string.titulo_opcoes_card);
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(dialogTitle);
@@ -114,6 +115,9 @@ public class TalhaoListaActivity extends AppCompatActivity
 
     @Override
     public void listarTalhoes(List<TalhaoFazenda> talhoes) {
+        if (talhoes.size() == 0) rvTalhoes.setVisibility(View.GONE);
+        else rvTalhoes.setVisibility(View.VISIBLE);
+
         talhaoAdapter.setTalhoes(talhoes);
         talhaoAdapter.setClickListener((position, view1) -> {
             if (view1.getId() == R.id.btn_opoes_tc) {
@@ -133,7 +137,8 @@ public class TalhaoListaActivity extends AppCompatActivity
                 mapaIntent.putExtra(getResources().getString(R.string.contorno_param), talhao.getContorno());
             }
 
-            startActivity(mapaIntent);
+            startActivityForResult(mapaIntent, Utils.COD_CONTORNO_CADASTRADO);
+
         } catch (Exception ex) {
             Utils.showMessage(this, getString(R.string.erro_carregar_dados_mapa), 0);
         }
@@ -141,12 +146,25 @@ public class TalhaoListaActivity extends AppCompatActivity
 
     @Override
     public void atualizarAdapter(List<TalhaoFazenda> talhoes) {
+        if (talhoes.size() == 0) rvTalhoes.setVisibility(View.GONE);
+        else rvTalhoes.setVisibility(View.VISIBLE);
+
         listarTalhoes(talhoes);
     }
 
     @Override
     public void exibirListaVazia() {
+        rvTalhoes.setVisibility(View.GONE);
         tvListaVazia.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == 1) {
+            if (resultCode == Utils.COD_CONTORNO_CADASTRADO) {
+                presenter.getTalhoes();
+            }
+        }
     }
 
     @Override

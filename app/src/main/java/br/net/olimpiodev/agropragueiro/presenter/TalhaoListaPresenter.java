@@ -1,6 +1,7 @@
 package br.net.olimpiodev.agropragueiro.presenter;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -73,4 +74,5 @@ public class TalhaoListaPresenter implements TalhaoListaContrato.TalhaoListaPres
     public void destroyView() {
         this.view = null;
     }
+
 }

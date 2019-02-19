@@ -10,6 +10,8 @@ public interface MapaPontosContrato {
 
         void salvarPontos();
 
+        void removerPonto(int pontoId);
+
         void removerPontos();
 
         void adicionarPontos(LatLng ponto, int pontoAmostragemId);
