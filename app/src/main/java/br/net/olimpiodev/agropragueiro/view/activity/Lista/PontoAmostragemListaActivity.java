@@ -70,6 +70,9 @@ public class PontoAmostragemListaActivity extends AppCompatActivity
 
     @Override
     public void listarPontoAmostragens(List<PontoAmostragemRegistroInfo> pontosAmostragens) {
+        if (pontosAmostragens.size() > 0) rvPontos.setVisibility(View.VISIBLE);
+        else rvPontos.setVisibility(View.GONE);
+
         pontoRegistroAdapter.setPontos(pontosAmostragens);
         pontoRegistroAdapter.setClickListener((((position, view) -> {
             if (view.getId() == R.id.btn_opoes_ponto_amostragem) {
@@ -93,6 +96,7 @@ public class PontoAmostragemListaActivity extends AppCompatActivity
 
     @Override
     public void exibirListaVazia() {
+        rvPontos.setVisibility(View.GONE);
         tvListaVazia.setVisibility(View.VISIBLE);
     }
 

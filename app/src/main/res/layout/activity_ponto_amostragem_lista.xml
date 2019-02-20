@@ -16,7 +16,7 @@
     <TextView
         android:id="@+id/tv_lista_vazia_ponto_amostragem"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="440dp"
         android:gravity="center"
         android:visibility="gone"
         android:text="@string/n_o_existem_dados_cadastrados"
