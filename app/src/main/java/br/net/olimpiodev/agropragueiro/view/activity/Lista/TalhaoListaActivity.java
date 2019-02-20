@@ -128,10 +128,12 @@ public class TalhaoListaActivity extends AppCompatActivity
     }
 
     @Override
-    public void openMapa(Talhao talhao) {
+    public void openMapa(Talhao talhao, int qtdeAmostragemByTalhaoId) {
         try {
+
             Intent mapaIntent = new Intent(this, MapaActivity.class);
             mapaIntent.putExtra(getString(R.string.talhao_id_param), talhao.getId());
+            mapaIntent.putExtra(getString(R.string.qtde_amostragem_by_talhao), qtdeAmostragemByTalhaoId);
 
             if (!talhao.getContorno().isEmpty()) {
                 mapaIntent.putExtra(getResources().getString(R.string.contorno_param), talhao.getContorno());
@@ -161,9 +163,7 @@ public class TalhaoListaActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == 1) {
-            if (resultCode == Utils.COD_CONTORNO_CADASTRADO) {
-                presenter.getTalhoes();
-            }
+            presenter.getTalhoes();
         }
     }
 

@@ -78,8 +78,32 @@ public class MapaPresenter implements MapaContrato.MapaPresenter {
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     @Override
-    public void exibirContorno(String contorno) {
+    public void removerContorno(int talhaoId) {
+        try {
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... voids) {
+                    Talhao talhaoDb = db.talhaoDao().getTalhaoById(talhaoId);
+                    talhaoDb.setContorno("");
+                    talhaoDb.setAreaHa(0.0);
+                    db.talhaoDao().update(talhaoDb);
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    Utils.showMessage(context, context.getString(R.string.contorno_removido), 0);
+                }
+            }.execute();
+        } catch (Exception ex) {
+            Utils.showMessage(context, context.getString(R.string.erro_salvar_contorno), 0);
+        }
+    }
+
+    @Override
+    public void exibirContorno(String contorno, int qtdeAmostragemByTalhaoId) {
         try {
             LatLng primeiraCoordenada = null;
             JSONArray jsonArray = new JSONArray(contorno);
@@ -89,15 +113,18 @@ public class MapaPresenter implements MapaContrato.MapaPresenter {
 
                 JSONObject jsonObject = new JSONObject(jsonArray.get(i).toString());
 
-                Double lat = Double.parseDouble(jsonObject.getString("latitude"));
-                Double lng = Double.parseDouble(jsonObject.getString("longitude"));
+                double lat = Double.parseDouble(jsonObject.getString("latitude"));
+                double lng = Double.parseDouble(jsonObject.getString("longitude"));
 
                 if (i == 0) {
                     primeiraCoordenada = new LatLng(lat, lng);
                 }
 
                 LatLng coordenada = new LatLng(lat, lng);
-                polylineOptions.color(Color.RED);
+
+                if (qtdeAmostragemByTalhaoId == 0) polylineOptions.color(Color.RED);
+                else if (qtdeAmostragemByTalhaoId > 0) polylineOptions.color(Color.BLUE);
+
                 polylineOptions.add(coordenada);
 
                 if ((i + 1) == jsonArray.length()) {

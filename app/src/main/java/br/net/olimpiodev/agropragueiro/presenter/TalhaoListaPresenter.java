@@ -20,11 +20,13 @@ public class TalhaoListaPresenter implements TalhaoListaContrato.TalhaoListaPres
     private TalhaoListaContrato.TalhaoListaView view;
     private Context context;
     private AppDatabase db;
+    private int qtdeAmostragemByTalhaoId;
 
     public TalhaoListaPresenter(TalhaoListaContrato.TalhaoListaView view, Context context) {
         this.view = view;
         this.context = context;
         this.db = Room.databaseBuilder(context, AppDatabase.class, AppDatabase.DB_NAME).build();
+        this.qtdeAmostragemByTalhaoId = 0;
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -57,12 +59,13 @@ public class TalhaoListaPresenter implements TalhaoListaContrato.TalhaoListaPres
             new AsyncTask<Void, Void, Talhao>() {
                 @Override
                 protected Talhao doInBackground(Void... voids) {
+                    qtdeAmostragemByTalhaoId = db.amostragemDao().getQtdemostragemByTalhaoId(talhaoId);
                     return db.talhaoDao().getTalhaoById(talhaoId);
                 }
 
                 @Override
                 protected void onPostExecute(Talhao talhao) {
-                    view.openMapa(talhao);
+                    view.openMapa(talhao, qtdeAmostragemByTalhaoId);
                 }
             }.execute();
         } catch (Exception ex) {

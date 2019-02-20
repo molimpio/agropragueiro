@@ -17,7 +17,9 @@ public interface MapaContrato {
 
         void cadastrar(int talhaoId, List<LatLng> coordenadas);
 
-        void exibirContorno(String contorno);
+        void removerContorno(int talhaoId);
+
+        void exibirContorno(String contorno, int qtdeAmostragemByTalhaoId);
 
         void opcoesLayer();
 

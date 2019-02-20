@@ -13,7 +13,7 @@ public interface TalhaoListaContrato {
 
         void exibirListaVazia();
 
-        void openMapa(Talhao talhao);
+        void openMapa(Talhao talhao, int qtdeAmostragemByTalhaoId);
     }
 
     interface TalhaoListaPresenter {

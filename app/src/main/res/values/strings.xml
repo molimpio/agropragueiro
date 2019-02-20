@@ -81,6 +81,7 @@
     <string name="cadastrar_talhao">Cadastrar Talhão</string>
     <string name="talhao_param">Talhao_Param</string>
     <string name="talhao_id_param">Talhao_id_Param</string>
+    <string name="qtde_amostragem_by_talhao">Qtde_amostragem_by_talhao</string>
     <string name="contorno_param">Contorno_Param</string>
     <string name="talhao_erro_cadastro">O nome do talhão deve ter mais que 1 caractere</string>
     <string-array name="opcoes_talhao_card">
@@ -95,8 +96,11 @@
     <string name="my_location">Centralizando na localização do usuário</string>
     <string name="basemaps">Tipos mapas</string>
     <string name="mapa_instrucao_titulo">Desenhar contorno no mapa</string>
+    <string name="contorno_removido">Contorno removido com sucesso</string>
     <string name="mapa_instrucao_texto">Para desenhar o contorno no mapa marque dois pontos,
-        será exibido a primeira linha do contorno.</string>
+        será exibido a primeira linha do contorno. \nContorno na cor azul não pode ser alterado, ele
+        tem referência com amostragem. \nContorno em vermelho não tem referência e pode ser
+        modificado.</string>
     <string-array name="mapa_types">
         <item>Normal</item>
         <item>Híbrido</item>
@@ -199,6 +203,7 @@
 
     <!-- erros mapa -->
     <string name="erro_salvar_contorno">Erro ao salvar contorno</string>
+    <string name="erro_remover_contorno">Erro ao remover contorno</string>
     <string name="erro_carregar_contorno">Erro ao carregar contorno no mapa</string>
     <string name="erro_carregar_mapa">Erro ao carregar mapa</string>
     <string name="erro_carregar_dados_mapa">Erro ao carregar dados mapa</string>

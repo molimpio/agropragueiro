@@ -40,6 +40,7 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
     private int contador = 0;
     private int talhaoId;
     private String contorno = "";
+    private int qtdeAmostragemByTalhaoId = 0;
     private List<LatLng> coordenadas = new ArrayList<>();
     private MapaContrato.MapaPresenter presenter;
 
@@ -63,6 +64,10 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
             if (getIntent().hasExtra(getResources().getString(R.string.contorno_param))) {
                 contorno = (String) getIntent().getSerializableExtra(getResources().getString(R.string.contorno_param));
             }
+
+            if (getIntent().hasExtra(getString(R.string.qtde_amostragem_by_talhao))) {
+                qtdeAmostragemByTalhaoId = (int) getIntent().getSerializableExtra(getString(R.string.qtde_amostragem_by_talhao));
+            }
         } catch (Exception ex) {
             showMessage(getString(R.string.erro_carregar_mapa), 0);
         }
@@ -77,9 +82,6 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapa.getUiSettings().setMyLocationButtonEnabled(true);
 
         mapa.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-        //LatLng sydney = new LatLng(-22.7347888 , -47.6675419);
-        //mapa.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        //mapa.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
         // verifica se tem a permissao por triangulação e por GPS
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
@@ -101,7 +103,7 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapa.setOnMapClickListener(this);
 
         if (!contorno.isEmpty()) {
-            presenter.exibirContorno(contorno);
+            presenter.exibirContorno(contorno, qtdeAmostragemByTalhaoId);
         }
 
         presenter.openInstrucoesDialog();
@@ -130,7 +132,6 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onMapClick(LatLng latLng) {
-        //TODO: limpar ultima coordenada...
         coordenadas.add(latLng);
         presenter.drawContorno(contador, latLng);
         contador++;
@@ -148,12 +149,11 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_mapa, menu);
 
-        // usar quando não tem contorno, somente mostra adicionar
-        // caso seja adicionar não mostra a opção de excluir
-//        if (!getIntent().hasExtra("contato")) {
-//            MenuItem item = menu.findItem(R.id.delContato);
-//            item.setVisible(false);
-//        }
+        // somente exibe excluir quando talhao não tem amostragem
+        if (qtdeAmostragemByTalhaoId > 0) {
+            MenuItem item = menu.findItem(R.id.remover);
+            item.setVisible(false);
+        }
         return true;
     }
 
@@ -164,7 +164,7 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
                 cadastrarContorno();
                 return true;
             case R.id.remover:
-                //TODO: verificar pq não está apagando.
+                presenter.removerContorno(talhaoId);
                 mapa.clear();
                 coordenadas.clear();
                 return true;

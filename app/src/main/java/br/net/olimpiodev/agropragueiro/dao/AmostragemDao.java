@@ -32,4 +32,7 @@ public interface AmostragemDao {
 
     @Query("UPDATE amostragem SET qtde_pontos = :qtdePontos WHERE id = :amostragemId")
     void updateQtdePontosAmostragem(int qtdePontos, int amostragemId);
+
+    @Query("SELECT COUNT(id) AS qtde FROM amostragem WHERE ativo = 1 AND talhao_id = :talhaoId")
+    int getQtdemostragemByTalhaoId(int talhaoId);
 }
