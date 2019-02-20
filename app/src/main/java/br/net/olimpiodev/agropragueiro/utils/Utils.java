@@ -21,6 +21,7 @@ public class Utils {
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
     public static final int COD_CONTORNO_CADASTRADO = 1;
+    public static final int COD_PONTO_CADASTRADO = 2;
 
     public static void showMessage(Context context, String message, int codigo) {
         if (codigo == 1) message = context.getResources().getString(R.string.sucesso);

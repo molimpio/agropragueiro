@@ -68,4 +68,6 @@ public class AmostragemTalhao implements Serializable {
     public void setTalhaoNome(String talhaoNome) {
         this.talhaoNome = talhaoNome;
     }
+
+
 }

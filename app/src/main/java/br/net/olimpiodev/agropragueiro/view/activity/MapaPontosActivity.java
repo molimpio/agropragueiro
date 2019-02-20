@@ -174,6 +174,8 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
         switch (item.getItemId()) {
             case R.id.salvar:
                 presenter.salvarPontos();
+                Intent resultIntent = new Intent();
+                setResult(Utils.COD_PONTO_CADASTRADO, resultIntent);
                 finish();
                 return true;
             case R.id.remover:

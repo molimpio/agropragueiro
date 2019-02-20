@@ -125,8 +125,14 @@
         continuar adicione um contorno ao talhão</string>
     <string-array name="opcoes_amostragem_card">
         <item>Visualizar dados dos pontos</item>
-        <item>Visualizar pontos no mapa</item>
+        <item>Ver ou adicionar pontos no mapa</item>
         <item>Coletar dados amostragem</item>
+        <item>Editar dados amostragem</item>
+        <item>Excluir amostragem</item>
+    </string-array>
+
+    <string-array name="opcoes_amostragem_card_sem_pontos">
+        <item>Ver ou adicionar pontos no mapa</item>
         <item>Editar dados amostragem</item>
         <item>Excluir amostragem</item>
     </string-array>

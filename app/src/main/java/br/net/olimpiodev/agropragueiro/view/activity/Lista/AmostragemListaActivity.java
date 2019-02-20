@@ -3,11 +3,13 @@ package br.net.olimpiodev.agropragueiro.view.activity.Lista;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -142,6 +144,43 @@ public class AmostragemListaActivity extends AppCompatActivity
         }
     }
 
+    private void opcoesDialogSemPontos(final AmostragemTalhao amostragem) {
+        try {
+            final String[] OPCOES = getResources().getStringArray(R.array.opcoes_amostragem_card_sem_pontos);
+            final String dialogTitle = getResources().getString(R.string.titulo_opcoes_card);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(dialogTitle);
+
+            builder.setSingleChoiceItems(OPCOES, 4, (dialog, item) -> {
+                switch (item) {
+                    case 0:
+                        dialog.dismiss();
+                        presenter.openMapa(amostragem, false);
+                        break;
+                    case 1:
+                        dialog.dismiss();
+                        openCadastro(amostragem);
+                        break;
+                    case 2:
+                        dialog.dismiss();
+                        //excluir
+                        break;
+                }
+            });
+
+            builder.setNegativeButton(getString(R.string.cancelar), (dialogInterface, i) ->
+                    dialogInterface.dismiss()
+            );
+
+            AlertDialog alertDialog = builder.create();
+            alertDialog.setCanceledOnTouchOutside(true);
+            alertDialog.show();
+        } catch (Exception ex) {
+            Utils.showMessage(this, getString(R.string.erro_abrir_opcoes_amostragem), 0);
+        }
+    }
+
     @Override
     public void listarAmostragens(List<AmostragemTalhao> amostragens) {
         if (amostragens.size() == 0) rvAmostragem.setVisibility(View.GONE);
@@ -151,7 +190,12 @@ public class AmostragemListaActivity extends AppCompatActivity
         amostragemAdapter.setClickListener(((position, view) -> {
             if (view.getId() == R.id.btn_opoes_ac) {
                 final AmostragemTalhao amostragemTalhao = amostragens.get(position);
-                opcoesDialog(amostragemTalhao);
+
+                if (amostragemTalhao.getQtdePontos() == 0) {
+                    opcoesDialogSemPontos(amostragemTalhao);
+                } else {
+                    opcoesDialog(amostragemTalhao);
+                }
             }
         }));
     }
@@ -171,7 +215,7 @@ public class AmostragemListaActivity extends AppCompatActivity
                     String pontos = gson.toJson(pontoAmostragens);
                     mapaPontosIntent.putExtra(getResources().getString(R.string.amostragem_pontos), pontos);
                 }
-                startActivity(mapaPontosIntent);
+                startActivityForResult(mapaPontosIntent, Utils.COD_PONTO_CADASTRADO);
             } else {
                 Utils.showMessage(this, getString(R.string.amostragem_sem_contorno), 0);
             }
@@ -192,6 +236,13 @@ public class AmostragemListaActivity extends AppCompatActivity
     public void exibirListaVazia() {
         rvAmostragem.setVisibility(View.GONE);
         tvListaVazia.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == 2) {
+            presenter.getAmostragens();
+        }
     }
 
     @Override
