@@ -87,6 +87,14 @@ public class AmostragemCadastroPresenter implements AmostragemCadastroContrato.A
             amostragemView = amostragemTalhao;
             getTalhoes();
 
+            if (amostragemTalhao.getQtdePontos() == 0) {
+                spTalhao.setEnabled(true);
+                spTalhao.setClickable(true);
+            } else if (amostragemTalhao.getQtdePontos() > 0) {
+                spTalhao.setEnabled(false);
+                spTalhao.setClickable(false);
+            }
+
             alertDialogBuilder.setView(dialogView);
             alertDialog = alertDialogBuilder.create();
             alertDialog.show();
@@ -118,6 +126,7 @@ public class AmostragemCadastroPresenter implements AmostragemCadastroContrato.A
             amostragem.setObservacao(amostragemView.getObservacaoAmostragem());
             amostragem.setTalhaoId(amostragemView.getIdTalhao());
             amostragem.setData(amostragemView.getData());
+            amostragem.setQtdePontos(amostragemView.getQtdePontos());
 
             etNomeAmostragem.setText(amostragem.getNome());
             etObservacaoAmostragem.setText(amostragem.getObservacao());
