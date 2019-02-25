@@ -36,6 +36,7 @@
     <string name="informacoes">Informações</string>
     <string name="nao_exibir">Não exibir novamente</string>
     <string name="exibir_instrucao_mapa_contorno">EXIBIR_INSTRUCAO_MAPA_CONTORNO</string>
+    <string name="exibir_instrucao_coletar_dados">EXIBIR_INSTRUCAO_COLETAR_DADOS</string>
 
     <!-- hints -->
     <string name="minimo_dois_caracteres">Mínimo 2 caracteres</string>
@@ -96,11 +97,15 @@
     <string name="my_location">Centralizando na localização do usuário</string>
     <string name="basemaps">Tipos mapas</string>
     <string name="mapa_instrucao_titulo">Desenhar contorno no mapa</string>
+    <string name="coletar_dados_instrucao">Coletar dados</string>
     <string name="contorno_removido">Contorno removido com sucesso</string>
     <string name="mapa_instrucao_texto">Para desenhar o contorno no mapa marque dois pontos,
         será exibido a primeira linha do contorno. \nContorno na cor azul não pode ser alterado, ele
         tem referência com amostragem. \nContorno em vermelho não tem referência e pode ser
         modificado.</string>
+    <string name="coletar_dados_texto">Para coletar dados, clique no ponto desejado</string>
+    <string name="ponto_com_dados_acao">Não é possível mover ou remover ponto que já tenha
+        dados coletados</string>
     <string-array name="mapa_types">
         <item>Normal</item>
         <item>Híbrido</item>
@@ -224,6 +229,7 @@
     <string name="erro_exibir_opcoes_ponto">Erro ao exibir opções</string>
     <string name="erro_adicionar_ponto">Erro ao adicionar ponto</string>
     <string name="erro_remover_ponto">Erro ao remover ponto</string>
+    <string name="erro_abrir_instrucao_coletar_dados">Erro ao abrir instrução coletar dados</string>
 
     <!-- erros ponto amostragem registro -->
     <string name="erro_validacao_pontos_registro">Erro na validação ponto registro</string>

@@ -21,5 +21,7 @@ public interface MapaPontosContrato {
         void exibirContorno();
 
         void opcoesLayer();
+
+        void openInstrucoesDialog();
     }
 }

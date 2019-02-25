@@ -110,9 +110,15 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
     @Override
     public boolean onMarkerClick(Marker marker) {
         try {
-            if (marker != null) {
-                if (!coletarDados) opcoesPonto(marker);
-                else exibirViewRegistro(marker);
+            if (!coletarDados) {
+                String parts[] = marker.getSnippet().split("-");
+                if (parts[1].equals("comdados")) {
+                    Utils.showMessage(getApplicationContext(), getString(R.string.ponto_com_dados_acao), 0);
+                } else {
+                    opcoesPonto(marker);
+                }
+            } else {
+                exibirViewRegistro(marker);
             }
         } catch (Exception ex) {
             Utils.showMessage(getApplicationContext(), getString(R.string.erro_exibir_opcoes_ponto), 0);
@@ -152,6 +158,8 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
         mapa.setOnMapClickListener(this);
         mapa.setOnMarkerClickListener(this);
 
+        presenter.openInstrucoesDialog();
+
         if (contorno != null) presenter.exibirContorno();
         if (pontos != null) presenter.exibirPontos();
     }
@@ -160,12 +168,19 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_mapa, menu);
 
-        // usar quando não tem contorno, somente mostra adicionar
-        // caso seja adicionar não mostra a opção de excluir
-//        if (!getIntent().hasExtra("contato")) {
-//            MenuItem item = menu.findItem(R.id.delContato);
-//            item.setVisible(false);
-//        }
+        if (coletarDados) {
+            MenuItem itemSalvar = menu.findItem(R.id.salvar);
+            itemSalvar.setVisible(false);
+
+            MenuItem itemRemover = menu.findItem(R.id.remover);
+            itemRemover.setVisible(false);
+        } else {
+            MenuItem itemSalvar = menu.findItem(R.id.salvar);
+            itemSalvar.setVisible(true);
+
+            MenuItem itemRemover = menu.findItem(R.id.remover);
+            itemRemover.setVisible(true);
+        }
         return true;
     }
 
@@ -223,7 +238,8 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
                     MAPA_PONTOS, 2, (dialog, item) -> {
                         switch (item) {
                             case 0:
-                                int pontoId = Integer.parseInt(marker.getSnippet());
+                                String parts[] = marker.getSnippet().split("-");
+                                int pontoId = Integer.parseInt(parts[0]);
                                 presenter.removerPonto(pontoId);
                                 marker.remove();
                                 break;
@@ -249,7 +265,8 @@ public class MapaPontosActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     private void exibirViewRegistro(Marker marker) {
-        int pontoAmostragemId = Integer.parseInt(marker.getSnippet());
+        String parts[] = marker.getSnippet().split("-");
+        int pontoAmostragemId = Integer.parseInt(parts[0]);
 
         presenterColetor = new ColetarDadosPresenter(this, MapaPontosActivity.this,
                 marker.getPosition(), pontoAmostragemId);

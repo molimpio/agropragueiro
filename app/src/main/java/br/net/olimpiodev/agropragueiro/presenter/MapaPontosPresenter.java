@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.arch.persistence.room.Room;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 
@@ -11,6 +12,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -28,6 +30,8 @@ import br.net.olimpiodev.agropragueiro.model.PontoAmostragem;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 import okhttp3.internal.Util;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class MapaPontosPresenter implements MapaPontosContrato.MapaPontosPresenter {
 
     private MapaPontosContrato.MapaPontosView view;
@@ -39,6 +43,7 @@ public class MapaPontosPresenter implements MapaPontosContrato.MapaPontosPresent
     private String pontos;
     private String contorno;
     private int layerSelecionado = 2;
+    private SharedPreferences sharedPreferences;
 
     public MapaPontosPresenter(MapaPontosContrato.MapaPontosView view, Context context,
                                GoogleMap mapa, int amostragemId, String pontos, String contorno) {
@@ -157,13 +162,13 @@ public class MapaPontosPresenter implements MapaPontosContrato.MapaPontosPresent
                 LatLng ponto = new LatLng(lat, lng);
                 MarkerOptions marcador = new MarkerOptions();
                 marcador.position(ponto);
-                marcador.snippet(pontoAmostragemId + "");
+                marcador.snippet(pontoAmostragemId + "-semdados");
+                marcador.title(""+pontoAmostragemId);
 
                 if (possuiDados) {
                     marcador.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                    marcador.snippet(pontoAmostragemId + "-comdados");
                 }
-
-                mapa.addMarker(marcador);
 
                 adicionarPontos(ponto, pontoAmostragemId);
             }
@@ -183,8 +188,8 @@ public class MapaPontosPresenter implements MapaPontosContrato.MapaPontosPresent
 
                 JSONObject jsonObject = new JSONObject(jsonArray.get(i).toString());
 
-                Double lat = Double.parseDouble(jsonObject.getString("latitude"));
-                Double lng = Double.parseDouble(jsonObject.getString("longitude"));
+                double lat = Double.parseDouble(jsonObject.getString("latitude"));
+                double lng = Double.parseDouble(jsonObject.getString("longitude"));
 
                 if (i == 0) {
                     primeiraCoordenada = new LatLng(lat, lng);
@@ -243,6 +248,54 @@ public class MapaPontosPresenter implements MapaPontosContrato.MapaPontosPresent
             alertDialog.show();
         } catch (Exception ex) {
             Utils.showMessage(context, context.getString(R.string.erro_carregar_opcoes_layer), 0);
+        }
+    }
+
+    @Override
+    public void openInstrucoesDialog() {
+        try {
+            String sharedPreferencesString = context.getString(R.string.sharedpreferences_file);
+
+            sharedPreferences = context.getSharedPreferences(sharedPreferencesString, MODE_PRIVATE);
+            if (sharedPreferences.contains(context.getString(R.string.exibir_instrucao_coletar_dados))) {
+
+                boolean instrucao = sharedPreferences.getBoolean(
+                        context.getString(R.string.exibir_instrucao_coletar_dados), true);
+
+                if (instrucao) instrucoesDialog();
+
+            } else {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean(context.getString(R.string.exibir_instrucao_coletar_dados), true);
+                editor.apply();
+                instrucoesDialog();
+            }
+        } catch (Exception ex) {
+            Utils.showMessage(context, context.getString(R.string.erro_abrir_instrucao_coletar_dados), 0);
+        }
+    }
+
+    private void instrucoesDialog() {
+        try {
+            final String dialogTitle = context.getString(R.string.coletar_dados_instrucao);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle(dialogTitle);
+            builder.setMessage(context.getString(R.string.coletar_dados_texto));
+
+            builder.setPositiveButton(context.getString(R.string.ok), (dialog, which) -> dialog.dismiss());
+
+            builder.setNegativeButton(context.getString(R.string.nao_exibir), (dialog, which) -> {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean(context.getString(R.string.exibir_instrucao_coletar_dados), false);
+                editor.apply();
+            });
+
+            AlertDialog alertDialog = builder.create();
+            alertDialog.setCanceledOnTouchOutside(true);
+            alertDialog.show();
+        } catch (Exception ex) {
+            Utils.showMessage(context, context.getString(R.string.erro_abrir_instrucao_coletar_dados), 0);
         }
     }
 }
