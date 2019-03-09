@@ -5,6 +5,7 @@ import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -29,12 +30,14 @@ public class ClienteCadastroPresenter implements ClienteCadastroContrato.Cliente
     private Spinner spUfCliente;
     private Cliente cliente;
     private String ufs[];
+    private String dadosCidades[];
     private AlertDialog alertDialog;
 
     public ClienteCadastroPresenter(ClienteCadastroContrato.ClienteCadastroView view, Context context) {
         this.view = view;
         this.context = context;
         this.cliente = new Cliente();
+        this.dadosCidades = context.getResources().getStringArray(R.array.cidades);
     }
 
     @Override
@@ -84,6 +87,7 @@ public class ClienteCadastroPresenter implements ClienteCadastroContrato.Cliente
                 cliente.setUf(spUfCliente.getSelectedItem().toString().toUpperCase());
                 cliente.setNome(nome);
                 cliente.setCidade(cidade);
+                getLatLongByCidade();
                 cadastrar(cliente);
             } else {
                 Utils.showMessage(context, context.getString(R.string.cliente_validacao), 0);
@@ -98,11 +102,35 @@ public class ClienteCadastroPresenter implements ClienteCadastroContrato.Cliente
             ufs = context.getResources().getStringArray(R.array.estados);
             ArrayAdapter<String> adapterUfs = new ArrayAdapter<>(Objects.requireNonNull(context),
                     android.R.layout.simple_spinner_item, ufs);
-            adapterUfs.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+
             spUfCliente.setAdapter(adapterUfs);
         } catch (Exception ex) {
             Utils.showMessage(context, context.getString(R.string.erro_carregar_dados_cadastro_clientes), 0);
         }
+    }
+
+    private void getLatLongByCidade() {
+
+        String cidade = cliente.getCidade();
+        String uf = cliente.getUf();
+        double lat = 0.0;
+        double lng = 0.0;
+
+        for (String dadoCidade: dadosCidades) {
+            String[] dados = dadoCidade.trim().split("\\|");
+            String cidadeNome = dados[2];
+            String ufNome = dados[3];
+
+            if (ufNome.trim().equals(uf)) {
+                if (cidadeNome.trim().equals(cidade)){
+                    lat = Double.valueOf(dados[0]);
+                    lng = Double.valueOf(dados[1]);
+                    break;
+                }
+            }
+        }
+        cliente.setLatitude(lat);
+        cliente.setLongitude(lng);
     }
 
     @SuppressLint("StaticFieldLeak")
