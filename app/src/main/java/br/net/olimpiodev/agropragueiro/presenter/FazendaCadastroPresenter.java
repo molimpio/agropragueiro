@@ -152,7 +152,7 @@ public class FazendaCadastroPresenter implements FazendaCadastroContrato.Fazenda
             new AsyncTask<Void, Void, List<ChaveValor>>() {
                 @Override
                 protected List<ChaveValor> doInBackground(Void... voids) {
-                    return db.clienteDao().getClientesDropDown(true);
+                    return db.clienteDao().getClientesDropDown();
                 }
 
                 @Override

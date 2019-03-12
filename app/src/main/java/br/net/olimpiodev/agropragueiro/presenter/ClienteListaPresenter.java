@@ -31,7 +31,7 @@ public class ClienteListaPresenter implements ClienteListaContrato.ClienteListaP
                 @Override
                 protected List<Cliente> doInBackground(Void... voids) {
                     AppDatabase db = Room.databaseBuilder(context, AppDatabase.class, AppDatabase.DB_NAME).build();
-                    return db.clienteDao().getClientes(true);
+                    return db.clienteDao().getClientes();
                 }
 
                 @Override

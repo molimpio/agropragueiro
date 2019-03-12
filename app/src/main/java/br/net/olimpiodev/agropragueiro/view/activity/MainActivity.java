@@ -1,16 +1,11 @@
 package br.net.olimpiodev.agropragueiro.view.activity;
 
-import android.annotation.SuppressLint;
-import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Point;
-import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -22,32 +17,22 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
-import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.overlay.Marker;
-import org.osmdroid.views.overlay.Polyline;
+import org.osmdroid.views.MapView;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import br.net.olimpiodev.agropragueiro.AppDatabase;
 import br.net.olimpiodev.agropragueiro.R;
+import br.net.olimpiodev.agropragueiro.contracts.MainContrato;
 import br.net.olimpiodev.agropragueiro.model.Usuario;
+import br.net.olimpiodev.agropragueiro.presenter.MainPresenter;
 import br.net.olimpiodev.agropragueiro.utils.Utils;
 import br.net.olimpiodev.agropragueiro.view.activity.Lista.AmostragemListaActivity;
 import br.net.olimpiodev.agropragueiro.view.activity.Lista.ClienteListaActivity;
 import br.net.olimpiodev.agropragueiro.view.activity.Lista.FazendaListaActivity;
 import br.net.olimpiodev.agropragueiro.view.activity.Lista.TalhaoListaActivity;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
-import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-
-    private MapView map = null;
+        implements NavigationView.OnNavigationItemSelectedListener,
+        MainContrato.MainView {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,93 +54,14 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        getUsuario();
+        MapView map = (MapView) findViewById(R.id.map_ol);
 
-        map = (MapView) findViewById(R.id.map_ol);
-        map.setTileSource(TileSourceFactory.HIKEBIKEMAP);
-
-        map.setMultiTouchControls(true);
-
-        IMapController mapController = map.getController();
-        mapController.setZoom(9.5);
-
-        GeoPoint startPoint = new GeoPoint(-22.72, -47.64);
-        mapController.setCenter(startPoint);
-
-        Marker startMarker = new Marker(map);
-        startMarker.setPosition(startPoint);
-        startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        startMarker.setIcon(getResources().getDrawable(R.drawable.pushpin));
-        startMarker.setTitle("Start point");
-        map.getOverlays().add(startMarker);
-
-//        GpsMyLocationProvider prov= new GpsMyLocationProvider(getApplicationContext());
-//        prov.addLocationSource(LocationManager.NETWORK_PROVIDER);
-//        MyLocationNewOverlay locationOverlay = new MyLocationNewOverlay(prov, map);
-//        locationOverlay.enableMyLocation();
-//        map.getOverlayManager().add(locationOverlay);
-//
-//        Polyline line = new Polyline();
-//        List<GeoPoint> geoPoints = new ArrayList<>();
-//        GeoPoint p1 = new GeoPoint(-22.73799858866614, -47.67298959195614);
-//        GeoPoint p2 = new GeoPoint(-22.73816309313967, -47.671602219343185);
-//        GeoPoint p3 = new GeoPoint(-22.739501076119957, -47.670938707888126);
-//        GeoPoint p4 = new GeoPoint(-22.740295139790017, -47.67222985625266);
-//
-//        geoPoints.add(p1);
-//        geoPoints.add(p2);
-//        geoPoints.add(p3);
-//        geoPoints.add(p4);
-//
-//        line.setPoints(geoPoints);
-//        line.setGeodesic(true);
-//        map.getOverlayManager().add(line);
-//        mapController.setCenter(startPoint);
+        MainContrato.MainPresenter presenter = new MainPresenter(this, MainActivity.this, map);
+        presenter.getUsuario();
+        presenter.getClientesFromMapa();
     }
 
-//    public static void drawRoute(Context context, MapView map, List<Point> points) {
-//        Polyline line = new Polyline();
-//
-//        line.setSubDescription(Polyline.class.getCanonicalName());
-//        line.setWidth(15f);
-//        line.setColor(ContextCompat.getColor(context, R.color.colorAccent));
-//
-//        List<GeoPoint> geoPoints = new ArrayList<>();
-//
-//        for(Point point : points) {
-//
-//            geoPoints.add(point.Position);
-//        }
-//
-//        line.setPoints(geoPoints);
-//        line.setGeodesic(true);
-//        map.getOverlayManager().add(line);
-//    }
-
-    @SuppressLint("StaticFieldLeak")
-    private void getUsuario() {
-        try {
-            new AsyncTask<Void, Void, List<Usuario>>() {
-                @Override
-                protected List<Usuario> doInBackground(Void... voids) {
-                    AppDatabase db = Room.databaseBuilder(getApplicationContext(),
-                            AppDatabase.class, AppDatabase.DB_NAME).build();
-
-                    return db.usuarioDao().getUsuario();
-                }
-
-                @Override
-                protected void onPostExecute(List<Usuario> usuarios) {
-                    setUsuario(usuarios.get(0));
-
-                }
-            }.execute();
-        } catch (Exception ex) {
-            Utils.showMessage(getApplicationContext(), getString(R.string.erro_info_usuario), 0);
-        }
-    }
-
-    private void setUsuario(Usuario usuario) {
+    public void setUsuario(Usuario usuario) {
         try {
             NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
             View headerView = navigationView.getHeaderView(0);
@@ -206,7 +112,7 @@ public class MainActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         int id = item.getItemId();
 

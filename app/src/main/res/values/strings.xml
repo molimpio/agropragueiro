@@ -176,6 +176,7 @@
     <string name="erro_abrir_lista_fazendas_cliente">Erro ao abrir lista de fazendas do cliente</string>
     <string name="erro_abrir_opcoes_cliente">Erro abrir opções do cliente</string>
     <string name="cliente_erro_cadastro">O nome deve ter mais que 4 caracteres e a cidade mais que 2</string>
+    <string name="erro_carregar_clientes_mapa">Erro ao carregar clientes no mapa</string>
 
     <!-- erros fazenda -->
     <string name="erro_get_fazendas">Erro ao buscar fazendas</string>

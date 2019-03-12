@@ -18,12 +18,15 @@ public interface ClienteDao {
     @Update
     void update(Cliente... cliente);
 
-    @Query("SELECT * FROM cliente WHERE ativo = :ativo ORDER BY nome ASC")
-    List<Cliente> getClientes(boolean ativo);
+    @Query("SELECT * FROM cliente WHERE ativo = 1 ORDER BY nome ASC")
+    List<Cliente> getClientes();
 
-    @Query("SELECT c.id AS chave, c.nome AS valor FROM cliente AS c WHERE ativo = :ativo")
-    List<ChaveValor> getClientesDropDown(boolean ativo);
+    @Query("SELECT c.id AS chave, c.nome AS valor FROM cliente AS c WHERE ativo = 1")
+    List<ChaveValor> getClientesDropDown();
 
     @Query("SELECT * FROM cliente WHERE id = :clienteId")
     Cliente getClienteById(int clienteId);
+
+    @Query("SELECT id, GROUP_CONCAT(nome, '\r') AS nome, uf, cidade, latitude, longitude, usuario_id FROM cliente WHERE ativo = 1 AND latitude <> 0.0 GROUP BY cidade")
+    List<Cliente> getClientesFromMapa();
 }

@@ -145,7 +145,7 @@ public class ClienteCadastroPresenter implements ClienteCadastroContrato.Cliente
 
                     if (cliente.getId() == 0) db.clienteDao().insert(cliente);
                     else db.clienteDao().update(cliente);
-                    return db.clienteDao().getClientes(true);
+                    return db.clienteDao().getClientes();
                 }
 
                 @Override
