@@ -5,12 +5,17 @@ import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.infowindow.InfoWindow;
 
 import java.util.List;
 
@@ -105,14 +110,59 @@ public class MainPresenter implements MainContrato.MainPresenter {
                 mapController.setCenter(startPoint);
 
                 Marker startMarker = new Marker(mapView);
+
                 startMarker.setPosition(startPoint);
                 startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
                 startMarker.setIcon(context.getResources().getDrawable(R.drawable.pushpin));
                 startMarker.setTitle(c.getNome());
+
+                InfoWindow infoWindow = new MyInfoWindow(R.layout.popup, mapView, c.getNome(), c.getCidade());
+                startMarker.setInfoWindow(infoWindow);
                 mapView.getOverlays().add(startMarker);
             }
         } catch (Exception ex) {
             Utils.showMessage(context, context.getString(R.string.erro_carregar_clientes_mapa), 0);
+        }
+    }
+
+    private class MyInfoWindow extends InfoWindow {
+
+        private String nome;
+        private String cidade;
+        private String titleMarker;
+
+        private MyInfoWindow(int layoutResId, MapView mapView, String nomeCliente, String cidade) {
+            super(layoutResId, mapView);
+            this.nome = nomeCliente;
+            this.cidade = cidade;
+            this.titleMarker = "";
+        }
+
+        public void onClose() {
+
+        }
+
+        public void onOpen(Object arg0) {
+            Button btTempo = (Button) mView.findViewById(R.id.bt_tooltip);
+            TextView txtTitle = (TextView) mView.findViewById(R.id.tv_tooltip);
+            LinearLayout popup = mView.findViewById(R.id.tooltip_layout);
+
+            Marker marker = (Marker) arg0;
+
+            if (titleMarker.isEmpty()) {
+                titleMarker = marker.getTitle();
+                popup.setVisibility(View.VISIBLE);
+            } else {
+                if (titleMarker.equals(marker.getTitle())) {
+                    popup.setVisibility(View.INVISIBLE);
+                    titleMarker = "";
+                }
+            }
+
+            txtTitle.setText(nome);
+            btTempo.setOnClickListener(v -> {
+                Log.i("marker", "clicou" + cidade);
+            });
         }
     }
 }
