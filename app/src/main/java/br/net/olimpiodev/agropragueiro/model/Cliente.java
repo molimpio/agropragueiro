@@ -3,6 +3,8 @@ package br.net.olimpiodev.agropragueiro.model;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
 import java.io.Serializable;
@@ -11,7 +13,8 @@ import java.io.Serializable;
         foreignKeys = @ForeignKey(
                 entity = Usuario.class, parentColumns = "id",
                 childColumns = "usuario_id"
-        )
+        ),
+        indices = {@Index("id"), @Index("usuario_id")}
 )
 public class Cliente implements Serializable {
     private static final long serialVersionUID = 1L;

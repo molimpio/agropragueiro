@@ -3,6 +3,7 @@ package br.net.olimpiodev.agropragueiro.model;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
 import java.io.Serializable;
@@ -15,7 +16,8 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
         foreignKeys = @ForeignKey(
                 entity = PontoAmostragem.class, parentColumns = "id",
                 childColumns = "ponto_amostragem_id", onUpdate = CASCADE
-        )
+        ),
+        indices = {@Index("id"), @Index("ponto_amostragem_id")}
 )
 public class PontoAmostragemRegistro implements Serializable {
     private static final long serialVersionUID = 1L;

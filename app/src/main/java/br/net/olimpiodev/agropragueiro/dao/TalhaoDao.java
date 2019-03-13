@@ -31,9 +31,4 @@ public interface TalhaoDao {
             "WHERE t.ativo = :ativo ORDER BY f.nome ASC, t.nome ASC")
     List<TalhaoFazenda> getTalhoesFazenda(boolean ativo);
 
-    @Query("SELECT t.id AS idTalhao, t.nome AS nomeTalhao, t.areaHa, f.nome AS nomeFazenda, " +
-            "f.id AS idFazenda FROM talhao AS t INNER JOIN fazenda AS f ON f.id = t.fazenda_id " +
-            "WHERE t.ativo = :ativo AND t.fazenda_id = :fazendaId")
-    List<TalhaoFazenda> getTalhoesByFazendaID(boolean ativo, int fazendaId);
-
 }

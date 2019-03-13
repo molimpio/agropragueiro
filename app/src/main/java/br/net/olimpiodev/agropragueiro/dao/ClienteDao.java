@@ -27,6 +27,7 @@ public interface ClienteDao {
     @Query("SELECT * FROM cliente WHERE id = :clienteId")
     Cliente getClienteById(int clienteId);
 
-    @Query("SELECT id, GROUP_CONCAT(nome, '\r') AS nome, uf, cidade, latitude, longitude, usuario_id FROM cliente WHERE ativo = 1 AND latitude <> 0.0 GROUP BY cidade")
+    @Query("SELECT id, GROUP_CONCAT(nome, '\r') AS nome, uf, cidade, latitude, longitude, " +
+            "ativo, sincronizado, usuario_id FROM cliente WHERE ativo = 1 AND latitude <> 0.0 GROUP BY cidade")
     List<Cliente> getClientesFromMapa();
 }
