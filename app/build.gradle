@@ -39,4 +39,5 @@ dependencies {
     implementation 'br.com.livroandroid:android-utils:5.0.1'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'org.osmdroid:osmdroid-android:6.0.3'
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
 }

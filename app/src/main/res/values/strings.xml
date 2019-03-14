@@ -245,4 +245,10 @@
     <string name="erro_view_fotos">Erro ao exibir fotos</string>
     <string name="erro_buscar_fotos">Erro ao buscar fotos</string>
 
+    <!-- previsao tempo -->
+    <string name="erro_previsao_local">Erro ao buscar previsão tempo local</string>
+    <string name="erro_previsao_srv">Erro ao buscar previsão tempo servidor</string>
+    <string name="erro_salvar_previsao_local">Erro ao salvar previsão tempo</string>
+    <string name="erro_buscar_previsao_srv">Erro ao consultar previsão tempo do servidor</string>
+
 </resources>
