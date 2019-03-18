@@ -27,4 +27,10 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="backgroundViewLogin">
+        <item name="android:alpha">0.6</item>
+        <item name="android:scaleType">fitXY</item>
+        <item name="android:src">@drawable/fundo</item>
+    </style>
+
 </resources>
