@@ -163,6 +163,21 @@
     <!-- usuario -->
     <string name="erro_info_usuario">Erro ao buscar informações do usuário</string>
 
+    <!-- previsao tempo -->
+    <string name="previsao_tempo">Prev. Tempo</string>
+    <string name="buscando_dados">Buscando dados, aguarde…</string>
+    <string name="dados_previsao_param">dados_previsao_param</string>
+    <string name="storm">storm</string>
+    <string name="rain">rain</string>
+    <string name="snow">snow</string>
+    <string name="hail">hail</string>
+    <string name="fog">fog</string>
+    <string name="clear_day">clear_day</string>
+    <string name="clear_night">clear_night</string>
+    <string name="cloud">cloud</string>
+    <string name="cloudly_day">cloudly_day</string>
+    <string name="cloudly_night">cloudly_night</string>
+
     <!-- erros cliente -->
     <string name="erro_get_clientes">Erro ao buscar clientes</string>
     <string name="erro_adapter_clientes">Erro ao listar clientes</string>
@@ -241,14 +256,16 @@
     <string name="erro_abrir_lista_pontos">Erro ao abrir lista de pontos</string>
     <string name="erro_param_pontos">Erro ao ler parametros na view pontos</string>
 
-    <!-- fotos -->
+    <!-- erro fotos -->
     <string name="erro_view_fotos">Erro ao exibir fotos</string>
     <string name="erro_buscar_fotos">Erro ao buscar fotos</string>
 
-    <!-- previsao tempo -->
+    <!-- erro previsao tempo -->
     <string name="erro_previsao_local">Erro ao buscar previsão tempo local</string>
     <string name="erro_previsao_srv">Erro ao buscar previsão tempo servidor</string>
     <string name="erro_salvar_previsao_local">Erro ao salvar previsão tempo</string>
     <string name="erro_buscar_previsao_srv">Erro ao consultar previsão tempo do servidor</string>
+    <string name="erro_exibir_dados_previsao">Erro ao exibir dados de Previsão Tempo</string>
+    <string name="erro_view_previsao_tempo">Erro ao exibir previsão do tempo</string>
 
 </resources>
