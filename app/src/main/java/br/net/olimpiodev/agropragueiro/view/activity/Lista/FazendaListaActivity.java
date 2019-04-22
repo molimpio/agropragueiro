@@ -53,7 +53,7 @@ public class FazendaListaActivity extends AppCompatActivity
 
     private void setupView() {
         try {
-            Objects.requireNonNull(getSupportActionBar()).setTitle(getString(R.string.previsao_tempo));
+            Objects.requireNonNull(getSupportActionBar()).setTitle(getString(R.string.fazendas));
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
             rvFazendas = findViewById(R.id.rv_fazendas);

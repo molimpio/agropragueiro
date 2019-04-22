@@ -49,10 +49,10 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     private void showActivity(Usuario usuario) {
         if (usuario != null) {
-//            Intent mainIntent = new Intent(this, MainActivity.class);
-//            startActivity(mainIntent);
-            Intent loginIntent = new Intent(this, LoginActivity.class);
-            startActivity(loginIntent);
+            Intent mainIntent = new Intent(this, MainActivity.class);
+            startActivity(mainIntent);
+//            Intent loginIntent = new Intent(this, LoginActivity.class);
+//            startActivity(loginIntent);
         } else {
             Intent loginIntent = new Intent(this, LoginActivity.class);
             startActivity(loginIntent);
