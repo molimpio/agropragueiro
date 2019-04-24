@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -169,7 +170,7 @@ public class MapaPontosPresenter implements MapaPontosContrato.MapaPontosPresent
                     marcador.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
                     marcador.snippet(pontoAmostragemId + "-comdados");
                 }
-
+                mapa.addMarker(marcador);
                 adicionarPontos(ponto, pontoAmostragemId);
             }
         } catch (JSONException e) {
