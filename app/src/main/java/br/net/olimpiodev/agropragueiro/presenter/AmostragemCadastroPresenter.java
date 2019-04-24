@@ -6,6 +6,7 @@ import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -87,12 +88,17 @@ public class AmostragemCadastroPresenter implements AmostragemCadastroContrato.A
             amostragemView = amostragemTalhao;
             getTalhoes();
 
-            if (amostragemTalhao.getQtdePontos() == 0) {
+            if (amostragemTalhao != null) {
+                if (amostragemTalhao.getQtdePontos() == 0) {
+                    spTalhao.setEnabled(true);
+                    spTalhao.setClickable(true);
+                } else if (amostragemTalhao.getQtdePontos() > 0) {
+                    spTalhao.setEnabled(false);
+                    spTalhao.setClickable(false);
+                }
+            } else {
                 spTalhao.setEnabled(true);
                 spTalhao.setClickable(true);
-            } else if (amostragemTalhao.getQtdePontos() > 0) {
-                spTalhao.setEnabled(false);
-                spTalhao.setClickable(false);
             }
 
             alertDialogBuilder.setView(dialogView);
