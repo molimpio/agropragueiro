@@ -42,7 +42,6 @@ import retrofit2.Retrofit;
 public class MainPresenter implements MainContrato.MainPresenter {
 
     private static final String URL_BASE = "https://api.hgbrasil.com/";
-    private static final String KEY = "6ff81ae8";
     private MainContrato.MainView view;
     private Context context;
     private AppDatabase db;
@@ -230,6 +229,8 @@ public class MainPresenter implements MainContrato.MainPresenter {
                     builder.baseUrl(URL_BASE);
                     retrofit = builder.build();
                     PrevisaoTempoApi previsaoTempoApi = retrofit.create(PrevisaoTempoApi.class);
+
+                    String KEY = context.getString(R.string.previsao_tempo_key);
 
                     Call<ResponseBody> getDadosPrevisaoBody = previsaoTempoApi.getPrevisaoTempo(KEY, cidadeUf);
                     getDadosPrevisaoBody.enqueue(new Callback<ResponseBody>() {

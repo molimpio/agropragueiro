@@ -1,5 +1,6 @@
 <resources>
-    <string name="google_maps_key">AIzaSyDMCmN4yHxqB3nK-yfwetS6v4RoiK8Vl34</string>
+    <string name="google_maps_key"></string>
+    <string name="previsao_tempo_key"></string>
     <string name="app_name">Agropragueiro</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
